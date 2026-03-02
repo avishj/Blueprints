@@ -1,11 +1,11 @@
 site_name: myapp
 site_description: myapp documentation.
-site_url: https://username.github.io/myapp/
-repo_url: https://github.com/username/myapp
-repo_name: username/myapp
+site_url: https://avishj.github.io/myapp/
+repo_url: https://github.com/avishj/myapp
+repo_name: avishj/myapp
 edit_uri: edit/main/docs/
 
-copyright: Copyright &copy; 2025 myapp contributors
+copyright: Copyright &copy; 2026&ndash;present myapp contributors
 
 theme:
   name: material
