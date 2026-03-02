@@ -26,3 +26,17 @@ This stack is for building command line tools, scripts and automation utilities 
 1. Typer - CLI framework.
 2. rich - Terminal output formatting.
 3. pydantic-settings - Typed configuration.
+
+## CI
+
+1. actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+2. astral-sh/setup-uv@5a095e7a2014a4212f075830d4f7277575a9d098 # v7.3.1
+3. github/codeql-action@45580472a5bb82c4681c4ac726cfdb60060c2ee1 # v3.32.4
+4. actions/dependency-review-action@05fe4576374b728f0c523d6a13d64c25081e0803 # v4.8.3
+5. ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3
+6. anchore/sbom-action@17ae1740179002c89186b61233e0f892c3118b11 # v0.23.0
+7. aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # 0.34.1
+8. gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9
+9. actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+10. actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecc0c4c32 # v4.1.0
+11. slsa-framework/slsa-github-generator@f7dd8c54c2067bafc12ca7a55595d5ee9b75204a # v2.1.0
