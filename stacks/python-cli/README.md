@@ -41,7 +41,7 @@ This stack is for building command line tools, scripts and automation utilities 
 10. ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3 - Supply chain scoring.
 11. anchore/sbom-action@17ae1740179002c89186b61233e0f892c3118b11 # v0.23.0 - SBOM generation.
 12. aquasecurity/trivy-action@e368e328979b113139d6f9068e03accaed98a518 # 0.34.1 - Vulnerability scanner.
-13. actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecc0c4c32 # v4.1.0 - SLSA provenance.
+13. actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0 - Build and SBOM attestation.
 14. slsa-framework/slsa-github-generator@f7dd8c54c2067bafc12ca7a55595d5ee9b75204a # v2.1.0 - SLSA build attestation.
 15. pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0 - PyPI publishing.
 16. docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0 - Buildx setup.
