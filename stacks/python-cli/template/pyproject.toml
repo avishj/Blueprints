@@ -29,11 +29,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/username/myapp"
-Documentation = "https://username.github.io/myapp"
-Repository = "https://github.com/username/myapp"
-Changelog = "https://github.com/username/myapp/blob/main/CHANGELOG.md"
-Issues = "https://github.com/username/myapp/issues"
+Homepage = "https://github.com/avishj/myapp"
+Documentation = "https://avishj.github.io/myapp"
+Repository = "https://github.com/avishj/myapp"
+Changelog = "https://github.com/avishj/myapp/blob/main/CHANGELOG.md"
+Issues = "https://github.com/avishj/myapp/issues"
 
 [project.scripts]
 myapp = "myapp.cli:app"
@@ -41,7 +41,7 @@ myapp = "myapp.cli:app"
 [tool.uv]
 python-preference = "managed"
 
-[tool.uv.dev-dependencies]
+[dependency-groups]
 dev = [
     "pytest>=8",
     "pytest-cov>=6",
@@ -125,8 +125,6 @@ ignore = [
     "D213",   # multi-line-summary-second-line (conflicts with D212)
     "COM812", # missing trailing comma (conflicts with formatter)
     "ISC001", # implicit string concatenation (conflicts with formatter)
-    "ANN101", # missing type annotation for self
-    "ANN102", # missing type annotation for cls
 ]
 
 [tool.ruff.lint.per-file-ignores]
