@@ -35,7 +35,7 @@ docs:
 docs-build:
     uv run mkdocs build --strict
 
-ci: lint typecheck cov complexity
+ci: lint typecheck cov complexity semgrep
 
 clean:
-    rm -rf build/ dist/ *.egg-info/ .pytest_cache/ .coverage htmlcov/ coverage.xml results.xml site/ .ty/
+    rm -rf build/ dist/ *.egg-info/ .pytest_cache/ .ruff_cache/ .coverage htmlcov/ coverage.xml results.xml site/ .ty/

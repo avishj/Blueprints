@@ -18,6 +18,9 @@ coverage.xml
 htmlcov/
 results.xml
 
+# Linting
+.ruff_cache/
+
 # Type checking
 .ty/
 
