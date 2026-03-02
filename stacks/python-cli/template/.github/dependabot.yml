@@ -1,0 +1,80 @@
+version: 2
+
+registries: {}
+
+updates:
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+      day: sunday
+      time: "00:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 15
+    reviewers: []
+    assignees: []
+    labels: ["deps", "python"]
+    allow:
+      - dependency-type: all
+    ignore: []
+    commit-message:
+      prefix: "deps:"
+      include: scope
+    insecure-external-code-execution: deny
+    versioning-strategy: increase
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+      major:
+        update-types:
+          - major
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: sunday
+      time: "00:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 15
+    reviewers: []
+    assignees: []
+    labels: ["deps", "ci"]
+    allow:
+      - dependency-type: all
+    ignore: []
+    commit-message:
+      prefix: "deps:"
+      include: scope
+    groups:
+      actions-minor-patch:
+        update-types:
+          - minor
+          - patch
+      actions-major:
+        update-types:
+          - major
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: sunday
+      time: "00:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 10
+    reviewers: []
+    assignees: []
+    labels: ["deps", "docker"]
+    allow:
+      - dependency-type: all
+    ignore: []
+    commit-message:
+      prefix: "deps:"
+      include: scope
+    groups:
+      docker-all:
+        patterns:
+          - "*"
