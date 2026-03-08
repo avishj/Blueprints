@@ -4,6 +4,7 @@ from typing import Annotated
 
 import typer
 from rich.console import Console
+from rich.markup import escape
 
 from myapp import __version__
 
@@ -45,4 +46,4 @@ def hello(
     name: Annotated[str, typer.Argument(help="Name to greet.")],
 ) -> None:
     """Greet someone."""
-    console.print(f"Hello, [bold]{name}[/bold]!")
+    console.print(f"Hello, [bold]{escape(name)}[/bold]!")
