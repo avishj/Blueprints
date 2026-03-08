@@ -158,6 +158,11 @@ addopts = [
     "--strict-config",
     "-ra",
 ]
+markers = [
+    "unit: fast isolated tests with no external dependencies",
+    "integration: tests exercising multiple components together (e.g. CliRunner)",
+    "e2e: end-to-end tests invoking the installed CLI via subprocess",
+]
 filterwarnings = ["error"]
 xfail_strict = true
 
