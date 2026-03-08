@@ -245,7 +245,7 @@ jobs:
           deny-licenses: SSPL-1.0, BUSL-1.1
 
   ci-passed:
-    name: CI passed
+    name: CI Passed
     if: always()
     needs: [lint, test, complexity, semgrep, gitleaks, dependency-review]
     runs-on: ubuntu-latest
