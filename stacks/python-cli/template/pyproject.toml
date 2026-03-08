@@ -52,6 +52,7 @@ dev = [
     "complexipy>=5",
     "semgrep>=1",
     "pre-commit>=4",
+    "ty>=0.0.21",
 ]
 
 [tool.hatch.build.targets.wheel]
