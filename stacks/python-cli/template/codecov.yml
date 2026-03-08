@@ -20,3 +20,32 @@ coverage:
     changes:
       default:
         enabled: true
+
+flags:
+  unit:
+    paths:
+      - src/myapp/
+    carryforward: false
+    statuses:
+      - type: project
+        target: auto
+      - type: patch
+        target: 70%
+  integration:
+    paths:
+      - src/myapp/
+    carryforward: false
+    statuses:
+      - type: project
+        target: auto
+      - type: patch
+        target: 70%
+  e2e:
+    paths:
+      - src/myapp/
+    carryforward: false
+    statuses:
+      - type: project
+        target: auto
+      - type: patch
+        target: 70%
