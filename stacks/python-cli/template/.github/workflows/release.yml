@@ -247,7 +247,7 @@ jobs:
 
   github-release:
     name: GitHub Release
-    needs: [build, publish-pypi, docker]
+    needs: [build, publish-pypi, sbom, docker]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
