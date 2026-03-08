@@ -15,7 +15,7 @@ permissions: {}
 
 jobs:
   lint:
-    name: Lint, format & type check
+    name: Lint, Format & Type Check
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -154,7 +154,7 @@ jobs:
           disable_search: true
 
   complexity:
-    name: Cognitive complexity
+    name: Cognitive Complexity
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -219,7 +219,7 @@ jobs:
           category: semgrep
 
   gitleaks:
-    name: Secret scan
+    name: Secret Scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -242,7 +242,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   dependency-review:
-    name: Dependency review
+    name: Dependency Review
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: github.event_name == 'pull_request'
@@ -272,7 +272,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, test, complexity, semgrep, gitleaks, dependency-review]
+    needs: [lint, actionlint, test, complexity, semgrep, gitleaks, dependency-review]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
