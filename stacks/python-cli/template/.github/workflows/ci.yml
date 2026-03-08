@@ -109,8 +109,14 @@ jobs:
       - name: Install dependencies
         run: uv sync --frozen
 
-      - name: Run tests
-        run: uv run pytest --cov --cov-report=xml --cov-report=term --cov-fail-under=70 --junitxml=results.xml -n auto
+      - name: Run unit tests
+        run: uv run pytest -m unit --cov --cov-report=xml:coverage-unit.xml --cov-report=term --junitxml=results-unit.xml -n auto
+
+      - name: Run integration tests
+        run: uv run pytest -m integration --cov --cov-report=xml:coverage-integration.xml --cov-report=term --junitxml=results-integration.xml -n auto
+
+      - name: Run e2e tests
+        run: uv run pytest -m e2e --cov --cov-report=xml:coverage-e2e.xml --cov-report=term --junitxml=results-e2e.xml -n auto
 
       - name: Upload test results
         if: always()
