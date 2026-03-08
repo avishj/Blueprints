@@ -14,7 +14,7 @@ A CLI application.
 
 ## Features
 
-- Subcommand based CLI built with [Typer](https://typer.tiangolo.com/)
+- Subcommand-based CLI built with [Typer](https://typer.tiangolo.com/)
 - Rich terminal output via [Rich](https://rich.readthedocs.io/)
 - Typed configuration from environment variables and `.env` files via [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/)
 - Fully typed with [PEP 561](https://peps.python.org/pep-0561/) `py.typed` marker
