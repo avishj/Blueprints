@@ -13,7 +13,7 @@ updates:
     open-pull-requests-limit: 15
     reviewers: []
     assignees: []
-    labels: ["deps", "python"]
+    labels: ["dependencies"]
     allow:
       - dependency-type: all
     ignore: []
@@ -41,7 +41,7 @@ updates:
     open-pull-requests-limit: 15
     reviewers: []
     assignees: []
-    labels: ["deps", "ci"]
+    labels: ["dependencies", "ci"]
     allow:
       - dependency-type: all
     ignore: []
@@ -67,7 +67,7 @@ updates:
     open-pull-requests-limit: 10
     reviewers: []
     assignees: []
-    labels: ["deps", "docker"]
+    labels: ["dependencies"]
     allow:
       - dependency-type: all
     ignore: []
