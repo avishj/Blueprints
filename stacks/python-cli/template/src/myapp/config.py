@@ -12,7 +12,6 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    debug: bool = False
     verbose: bool = False
 
 

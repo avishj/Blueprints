@@ -7,6 +7,7 @@ from rich.console import Console
 from rich.markup import escape
 
 from myapp import __version__
+from myapp.config import settings
 
 app = typer.Typer(
     name="myapp",
@@ -37,8 +38,13 @@ def main(
             is_eager=True,
         ),
     ] = False,
+    verbose: Annotated[
+        bool,
+        typer.Option("--verbose", "-v", help="Enable verbose output."),
+    ] = settings.verbose,
 ) -> None:
     """Run the myapp CLI."""
+    settings.verbose = verbose
 
 
 @app.command()
@@ -46,4 +52,6 @@ def hello(
     name: Annotated[str, typer.Argument(help="Name to greet.")],
 ) -> None:
     """Greet someone."""
+    if settings.verbose:
+        console.print(f"[dim]greeting name={escape(name)}[/dim]")
     console.print(f"Hello, [bold]{escape(name)}[/bold]!")
