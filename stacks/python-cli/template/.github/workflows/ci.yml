@@ -118,6 +118,11 @@ jobs:
       - name: Run e2e tests
         run: uv run pytest -m e2e --cov --cov-report=xml:coverage-e2e.xml --cov-report=term --junitxml=results-e2e.xml -n auto
 
+      - name: Check combined coverage
+        run: |
+          uv run coverage combine
+          uv run coverage report --fail-under=70
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
