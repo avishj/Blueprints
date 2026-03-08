@@ -54,7 +54,7 @@ This stack is for building command-line tools, scripts and automation utilities 
 
 ## Project structure
 
-```
+```text
 template/
 ├── .github/
 │   ├── ISSUE_TEMPLATE/
