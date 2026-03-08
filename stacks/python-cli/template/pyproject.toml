@@ -52,6 +52,7 @@ dev = [
     "complexipy>=5",
     "semgrep>=1",
     "pre-commit>=4",
+    "ruff>=0.15.5",
     "ty>=0.0.21",
 ]
 
