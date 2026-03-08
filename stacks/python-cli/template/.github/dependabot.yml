@@ -20,7 +20,6 @@ updates:
     commit-message:
       prefix: "deps:"
       include: scope
-    insecure-external-code-execution: deny
     versioning-strategy: increase
     groups:
       minor-and-patch:
