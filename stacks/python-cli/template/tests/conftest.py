@@ -1,7 +1,9 @@
 """Shared test fixtures."""
 
+from collections.abc import Callable
+
 import pytest
-from typer.testing import CliRunner
+from typer.testing import CliRunner, Result
 
 from myapp.cli import app
 
@@ -13,8 +15,8 @@ def runner() -> CliRunner:
 
 
 @pytest.fixture
-def invoke(runner: CliRunner):
+def invoke(runner: CliRunner) -> Callable[..., Result]:
     """Invoke the CLI app."""
-    def _invoke(*args: str):
+    def _invoke(*args: str) -> Result:
         return runner.invoke(app, list(args))
     return _invoke
