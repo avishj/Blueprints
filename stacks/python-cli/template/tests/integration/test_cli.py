@@ -24,3 +24,4 @@ def test_hello(invoke):
 def test_no_args(invoke):
     result = invoke()
     assert result.exit_code == 0
+    assert "Usage" in result.output
