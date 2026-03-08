@@ -49,3 +49,11 @@ flags:
         target: auto
       - type: patch
         target: 70%
+
+comment:
+  layout: "header, diff, flags, files, footer"
+  behavior: default
+  require_changes: false
+
+github_checks:
+  annotations: true
