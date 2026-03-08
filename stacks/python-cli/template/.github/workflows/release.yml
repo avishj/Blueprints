@@ -207,7 +207,7 @@ jobs:
 
   trivy:
     name: Trivy Scan
-    needs: [docker]
+    needs: [build, docker]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
