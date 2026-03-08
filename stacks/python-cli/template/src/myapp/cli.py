@@ -38,7 +38,7 @@ def main(
         ),
     ] = False,
 ) -> None:
-    """myapp CLI."""
+    """Run the myapp CLI."""
 
 
 @app.command()
