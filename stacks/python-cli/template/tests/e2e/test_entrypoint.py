@@ -1,7 +1,6 @@
 """End-to-end tests invoking the CLI as a subprocess."""
 
 import subprocess
-import sys
 
 import pytest
 
@@ -11,7 +10,7 @@ pytestmark = pytest.mark.e2e
 
 def _run(*args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, "-m", "myapp", *args],
+        ["myapp", *args],
         capture_output=True,
         text=True,
         check=False,
