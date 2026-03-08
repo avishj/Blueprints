@@ -108,16 +108,24 @@ jobs:
         run: uv sync --frozen
 
       - name: Run unit tests
-        run: uv run pytest -m unit --cov --cov-append --cov-report=xml:coverage-unit.xml --cov-report=term --junitxml=results-unit.xml -n auto
+        run: uv run pytest -m unit --cov --cov-report=xml:coverage-unit.xml --cov-report=term --junitxml=results-unit.xml -n auto
+        env:
+          COVERAGE_FILE: .coverage.unit
 
       - name: Run integration tests
-        run: uv run pytest -m integration --cov --cov-append --cov-report=xml:coverage-integration.xml --cov-report=term --junitxml=results-integration.xml -n auto
+        run: uv run pytest -m integration --cov --cov-report=xml:coverage-integration.xml --cov-report=term --junitxml=results-integration.xml -n auto
+        env:
+          COVERAGE_FILE: .coverage.integration
 
       - name: Run e2e tests
-        run: uv run pytest -m e2e --cov --cov-append --cov-report=xml:coverage-e2e.xml --cov-report=term --junitxml=results-e2e.xml -n auto
+        run: uv run pytest -m e2e --cov --cov-report=xml:coverage-e2e.xml --cov-report=term --junitxml=results-e2e.xml -n auto
+        env:
+          COVERAGE_FILE: .coverage.e2e
 
       - name: Check combined coverage
-        run: uv run coverage report --fail-under=70
+        run: |
+          uv run coverage combine
+          uv run coverage report --fail-under=70
 
       - name: Upload test results
         if: always()
