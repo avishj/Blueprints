@@ -78,9 +78,18 @@ template/
 │       ├── config.py
 │       └── py.typed
 ├── tests/
+│   ├── e2e/
+│   │   ├── __init__.py
+│   │   └── test_entrypoint.py
+│   ├── integration/
+│   │   ├── __init__.py
+│   │   └── test_cli.py
+│   ├── unit/
+│   │   ├── __init__.py
+│   │   ├── test_config.py
+│   │   └── test_version.py
 │   ├── __init__.py
-│   ├── conftest.py
-│   └── test_cli.py
+│   └── conftest.py
 ├── .dockerignore
 ├── .editorconfig
 ├── .gitattributes
