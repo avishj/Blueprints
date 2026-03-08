@@ -30,5 +30,4 @@ tests/
 .pre-commit-config.yaml
 CHANGELOG.md
 LICENSE
-README.md
 mkdocs.yml
