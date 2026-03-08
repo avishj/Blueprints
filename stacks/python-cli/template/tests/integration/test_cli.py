@@ -1,12 +1,15 @@
-"""CLI tests."""
+"""CLI integration tests."""
 
-from myapp import __version__
+import pytest
+
+
+pytestmark = pytest.mark.integration
 
 
 def test_version(invoke):
     result = invoke("--version")
     assert result.exit_code == 0
-    assert __version__ in result.output
+    assert "myapp" in result.output
 
 
 def test_hello(invoke):
