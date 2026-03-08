@@ -35,7 +35,6 @@ jobs:
           results_file: scorecard.sarif
           results_format: sarif
           publish_results: true
-          repo_token: ${{ secrets.SCORECARD_TOKEN }}
 
       - name: Upload SARIF
         uses: github/codeql-action@45580472a5bb82c4681c4ac726cfdb60060c2ee1 # v3.32.4
