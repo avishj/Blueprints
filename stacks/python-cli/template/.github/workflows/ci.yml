@@ -214,8 +214,6 @@ jobs:
 
       - name: Run Semgrep
         run: semgrep scan --config=auto --sarif --output=semgrep.sarif .
-        env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
       - name: Upload SARIF
         if: always()
