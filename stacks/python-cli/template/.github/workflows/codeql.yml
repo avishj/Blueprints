@@ -7,7 +7,7 @@ on:
     branches: [main]
     types: [opened, synchronize, reopened]
   schedule:
-    - cron: "0 0 * * 0" # midnight sunday
+    - cron: "0 0 * * 0"
 
 concurrency:
   group: codeql-${{ github.ref }}
