@@ -128,15 +128,32 @@ jobs:
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: test-results-${{ matrix.os }}-${{ matrix.python-version }}
-          path: results.xml
+          path: results-*.xml
           retention-days: 90
 
-      - name: Upload coverage
-        if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-latest'
+      - name: Upload unit coverage
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
-          files: coverage.xml
+          files: coverage-unit.xml
+          flags: unit
           fail_ci_if_error: true
+          disable_search: true
+
+      - name: Upload integration coverage
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        with:
+          files: coverage-integration.xml
+          flags: integration
+          fail_ci_if_error: true
+          disable_search: true
+
+      - name: Upload e2e coverage
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        with:
+          files: coverage-e2e.xml
+          flags: e2e
+          fail_ci_if_error: true
+          disable_search: true
 
   complexity:
     name: Cognitive complexity
