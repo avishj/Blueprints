@@ -33,10 +33,14 @@ repos:
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
 
-  - repo: https://github.com/astral-sh/ty
-    rev: "0.0.21"
+  - repo: local
     hooks:
       - id: ty
+        name: ty check
+        entry: uv run ty check src/ tests/
+        language: system
+        types: [python]
+        pass_filenames: false
 
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.25
