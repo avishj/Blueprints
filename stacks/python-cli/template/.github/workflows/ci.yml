@@ -222,6 +222,42 @@ jobs:
           sarif_file: semgrep.sarif
           category: semgrep
 
+  trivy:
+    name: Trivy Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@a90bcbc6539c36a85cdfeb73f7e2f433735f215b # v2.15.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          scanners: vuln,misconfig,secret
+          severity: LOW,MEDIUM,HIGH,CRITICAL
+          vuln-type: os,library
+          format: sarif
+          output: trivy.sarif
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@45580472a5bb82c4681c4ac726cfdb60060c2ee1 # v3.32.4
+        with:
+          sarif_file: trivy.sarif
+          category: trivy
+
   gitleaks:
     name: Secret Scan
     runs-on: ubuntu-latest
@@ -276,7 +312,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, test, complexity, semgrep, gitleaks, dependency-review]
+    needs: [lint, actionlint, test, complexity, semgrep, trivy, gitleaks, dependency-review]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
