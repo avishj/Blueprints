@@ -12,7 +12,7 @@ lint-fix:
     uv run ruff format .
 
 typecheck:
-    uv run ty check src/
+    uv run ty check src/ tests/
 
 test *args:
     uv run pytest -n auto {{ args }}
