@@ -15,11 +15,10 @@ This stack is for building command-line tools, scripts, and automation utilities
 7. just - Task runner.
 8. pre-commit - Git hook framework.
 9. complexipy - Cognitive complexity checker.
-10. Semgrep - Static analysis (SAST).
-11. commitizen - Conventional commits and versioning.
-12. Gitleaks - Secret scanner.
-13. mkdocs-material - Documentation site generator.
-14. editorconfig - Editor consistency config.
+10. commitizen - Conventional commits and versioning.
+11. Gitleaks - Secret scanner.
+12. mkdocs-material - Documentation site generator.
+13. editorconfig - Editor consistency config.
 
 ## Libraries
 

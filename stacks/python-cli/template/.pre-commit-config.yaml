@@ -49,17 +49,6 @@ repos:
       - id: complexipy
         args: [--max-complexity, "15"]
 
-  - repo: https://github.com/returntocorp/semgrep
-    rev: v1.154.0
-    hooks:
-      - id: semgrep
-        args:
-          - --disable-version-check
-          - --quiet
-          - --skip-unknown-extensions
-          - --config=p/python
-          - --config=p/security-audit
-
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.13.9
     hooks:
