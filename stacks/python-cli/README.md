@@ -49,8 +49,9 @@ This stack is for building command-line tools, scripts, and automation utilities
 18. docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0 - Registry login.
 19. docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0 - Container build and push.
 20. docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 - Container tags and labels.
-21. Dependabot - Automated dependency updates (repo config).
-22. GitHub secret scanning - Push protection (repo setting).
+21. zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2 - Workflow security scanner.
+22. Dependabot - Automated dependency updates (repo config).
+23. GitHub secret scanning - Push protection (repo setting).
 
 ## Project structure
 
