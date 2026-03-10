@@ -100,6 +100,28 @@ jobs:
         with:
           dockerfile: Dockerfile
 
+  lychee:
+    name: Link Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: {}
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0
+        with:
+          fail: true
+          jobSummary: true
+
   test:
     name: Test (Python ${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -286,7 +308,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, hadolint, test, complexity, security, codeql, markdownlint, dependency-review]
+    needs: [lint, actionlint, hadolint, lychee, test, complexity, security, codeql, markdownlint, dependency-review]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
