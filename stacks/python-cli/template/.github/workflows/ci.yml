@@ -18,8 +18,7 @@ jobs:
     name: Lint, Format & Type Check
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: read
+    permissions: {}
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
@@ -60,8 +59,7 @@ jobs:
     name: Lint Workflows
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: read
+    permissions: {}
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
@@ -85,8 +83,7 @@ jobs:
     name: Lint Dockerfile
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: read
+    permissions: {}
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
@@ -107,8 +104,7 @@ jobs:
     name: Test (Python ${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
-    permissions:
-      contents: read
+    permissions: {}
     strategy:
       fail-fast: false
       matrix:
@@ -192,7 +188,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: read
       security-events: write
     steps:
       - name: Harden runner
@@ -237,9 +232,7 @@ jobs:
     name: CodeQL
     uses: ./.github/workflows/_codeql.yml
     permissions:
-      contents: read
       security-events: write
-      actions: read
 
   dependency-review:
     name: Dependency Review
@@ -273,8 +266,7 @@ jobs:
     name: Lint Markdown
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: read
+    permissions: {}
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
