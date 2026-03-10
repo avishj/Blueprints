@@ -225,6 +225,22 @@ jobs:
           sarif_file: complexipy.sarif
           category: complexipy
 
+  security:
+    name: Security Scans
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      contents: read
+      security-events: write
+    secrets: inherit
+
+  codeql:
+    name: CodeQL
+    uses: ./.github/workflows/_codeql.yml
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
