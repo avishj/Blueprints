@@ -4,7 +4,7 @@ default_language_version:
 
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # v6.0.0
     hooks:
       - id: check-added-large-files
         args: [--maxkb=500]
@@ -27,7 +27,7 @@ repos:
         args: [--markdown-linebreak-ext=md]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.5
+    rev: b969e2851312ca2b24bbec879ba4954341d1bd12 # v0.15.5
     hooks:
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix]
@@ -43,27 +43,27 @@ repos:
         pass_filenames: false
 
   - repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.25
+    rev: 4b2e70d08cb2ccd26d1fba73588de41c7a5d50b7 # v0.25
     hooks:
       - id: validate-pyproject
 
   - repo: https://github.com/rohaquinlop/complexipy-pre-commit
-    rev: v5.1.0
+    rev: 8fe242b9a4c977ceaaed057e3851f4b2ff54e69b # v5.1.0
     hooks:
       - id: complexipy
         args: [--max-complexity, "15"]
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.13.9
+    rev: 4fbeae7861663ecf4b4989211eba41c1a3fb1227 # v4.13.9
     hooks:
       - id: commitizen
 
   - repo: https://github.com/crate-ci/typos
-    rev: v1.44.0
+    rev: 631208b7aac2daa8b707f55e7331f9112b0e062d # v1.44.0
     hooks:
       - id: typos
 
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.30.0
+    rev: 6eaad039603a4de39fddd1cf5f727391efe9974e # v8.30.0
     hooks:
       - id: gitleaks
