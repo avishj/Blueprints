@@ -35,7 +35,7 @@ This stack is for building command-line tools, scripts, and automation utilities
 5. astral-sh/setup-uv@5a095e7a2014a4212f075830d4f7277575a9d098 # v7.3.1 - Install uv.
 6. raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8 # v2.1.2 - Workflow file linter.
 7. codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2 - Coverage upload.
-8. github/codeql-action@e03543dad62555ecf6606aabe9724fd07e1cd632 # v3.32.6 - Semantic SAST.
+8. github/codeql-action@0d579ffd059c29b07949a3cce3983f0780820c98 # v4.32.6 - Semantic SAST.
 9. actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0 - PR dependency gate.
 10. gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9 - Secret scanner.
 11. ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3 - Supply chain scoring.
