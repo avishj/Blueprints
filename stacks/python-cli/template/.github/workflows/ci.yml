@@ -50,6 +50,9 @@ jobs:
       - name: Type check
         run: uv run ty check src/ tests/
 
+      - name: Validate pyproject.toml
+        run: uvx validate-pyproject pyproject.toml
+
       - name: Spell check
         uses: crate-ci/typos@631208b7aac2daa8b707f55e7331f9112b0e062d # v1.44.0
 
