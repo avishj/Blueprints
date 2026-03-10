@@ -10,7 +10,7 @@ Thanks for your interest in contributing!
    Install [`just`](https://github.com/casey/just) if not already available, then:
 
    ```bash
-   git clone https://github.com/<your-username>/myapp.git
+   git clone https://github.com/avishj/myapp.git
    cd myapp
    uv sync
    pre-commit install
