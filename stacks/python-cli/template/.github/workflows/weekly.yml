@@ -47,6 +47,14 @@ jobs:
           path: scorecard.sarif
           retention-days: 90
 
+  trivy-image:
+    name: Trivy Image Scan
+    uses: ./.github/workflows/_trivy-image.yml
+    with:
+      image-ref: ghcr.io/${{ github.repository }}:latest
+    permissions:
+      security-events: write
+
   security:
     name: Security Scans
     uses: ./.github/workflows/_security.yml
