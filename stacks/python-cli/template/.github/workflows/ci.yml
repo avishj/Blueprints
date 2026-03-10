@@ -365,10 +365,32 @@ jobs:
           vulnerability-check: true
           deny-licenses: SSPL-1.0, BUSL-1.1
 
+  markdownlint:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Run markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101 # v22.0.0
+        with:
+          globs: "**/*.md"
+
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, hadolint, test, complexity, semgrep, trivy, gitleaks, zizmor, dependency-review]
+    needs: [lint, actionlint, hadolint, test, complexity, semgrep, trivy, gitleaks, zizmor, markdownlint, dependency-review]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
