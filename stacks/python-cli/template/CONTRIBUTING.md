@@ -7,6 +7,8 @@ Thanks for your interest in contributing!
 1. Fork the repository
 2. Clone your fork and set up the dev environment:
 
+   Install [`just`](https://github.com/casey/just) if not already available, then:
+
    ```bash
    git clone https://github.com/<your-username>/myapp.git
    cd myapp
