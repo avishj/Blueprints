@@ -58,6 +58,11 @@ repos:
     hooks:
       - id: commitizen
 
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.44.0
+    hooks:
+      - id: typos
+
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.0
     hooks:
