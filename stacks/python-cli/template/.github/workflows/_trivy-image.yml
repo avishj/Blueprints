@@ -23,10 +23,16 @@ jobs:
         with:
           egress-policy: audit
 
+      - name: Lowercase image ref
+        id: lower
+        run: echo "image-ref=${IMAGE_REF,,}" >> "$GITHUB_OUTPUT"
+        env:
+          IMAGE_REF: ${{ inputs.image-ref }}
+
       - name: Run Trivy
         uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
         with:
-          image-ref: ${{ inputs.image-ref }}
+          image-ref: ${{ steps.lower.outputs.image-ref }}
           format: sarif
           output: trivy.sarif
           severity: LOW,MEDIUM,HIGH,CRITICAL
