@@ -2,7 +2,6 @@
 .github/
 .venv/
 .vscode/
-.idea/
 .pytest_cache/
 .coverage
 .coverage.*
