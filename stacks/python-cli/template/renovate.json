@@ -1,0 +1,51 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":enablePreCommit"
+  ],
+  "timezone": "America/New_York",
+  "schedule": ["* 0 * * 0"],
+  "osvVulnerabilityAlerts": true,
+  "osvVulnerabilitySeverityThreshold": "LOW",
+  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "vulnerabilityAlerts": {
+    "labels": ["security"]
+  },
+  "configMigration": true,
+  "platformCommit": "enabled",
+  "rollbackPrs": true,
+  "separateMultipleMajor": true,
+  "prConcurrentLimit": 15,
+  "prHourlyLimit": 4,
+  "labels": ["dependencies"],
+  "rangeStrategy": "auto",
+  "semanticCommitType": "deps",
+  "semanticCommitScope": "",
+  "lockFileMaintenance": {
+    "schedule": ["* 0 * * 0"]
+  },
+  "packageRules": [
+    {
+      "description": "Label major updates",
+      "matchUpdateTypes": ["major"],
+      "labels": ["dependencies"]
+    },
+    {
+      "description": "Label and pin GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "labels": ["dependencies", "ci"],
+      "pinDigests": true
+    },
+    {
+      "description": "Dockerfile updates",
+      "matchManagers": ["dockerfile"],
+      "labels": ["dependencies"]
+    },
+    {
+      "description": "Pre-commit hook updates",
+      "matchManagers": ["pre-commit"],
+      "labels": ["dependencies"]
+    }
+  ]
+}
