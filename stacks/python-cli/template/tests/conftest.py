@@ -3,20 +3,27 @@
 from collections.abc import Callable
 
 import pytest
-from typer.testing import CliRunner, Result
 
 from myapp.cli import app
 
 
-@pytest.fixture
-def runner() -> CliRunner:
-    """Create a CLI test runner."""
-    return CliRunner()
+class CliResult:
+    """Captures exit code and stdout from a cyclopts app invocation."""
+
+    def __init__(self, exit_code: int, output: str) -> None:
+        self.exit_code = exit_code
+        self.output = output
 
 
 @pytest.fixture
-def invoke(runner: CliRunner) -> Callable[..., Result]:
-    """Invoke the CLI app."""
-    def _invoke(*args: str) -> Result:
-        return runner.invoke(app, list(args))
+def invoke(capsys: pytest.CaptureFixture[str]) -> Callable[..., CliResult]:
+    """Invoke the CLI app and return a result with exit_code and output."""
+    def _invoke(*args: str) -> CliResult:
+        try:
+            app.meta(list(args))
+            captured = capsys.readouterr()
+            return CliResult(exit_code=0, output=captured.out)
+        except SystemExit as exc:
+            captured = capsys.readouterr()
+            return CliResult(exit_code=exc.code or 0, output=captured.out)
     return _invoke
