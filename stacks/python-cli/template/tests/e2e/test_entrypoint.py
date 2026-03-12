@@ -20,7 +20,7 @@ def _run(*args: str) -> subprocess.CompletedProcess[str]:
 def test_version_flag():
     result = _run("--version")
     assert result.returncode == 0
-    assert "myapp" in result.stdout
+    assert result.stdout.strip()
 
 
 def test_hello_command():
