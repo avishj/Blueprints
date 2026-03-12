@@ -22,7 +22,7 @@ This stack is for building command-line tools, scripts, and automation utilities
 
 ## Libraries
 
-1. Typer - CLI framework.
+1. Cyclopts - CLI framework.
 2. rich - Terminal output formatting.
 3. pydantic-settings - Typed configuration.
 
