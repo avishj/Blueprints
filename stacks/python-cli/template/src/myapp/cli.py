@@ -2,56 +2,44 @@
 
 from typing import Annotated
 
-import typer
+from cyclopts import App, Parameter
 from rich.console import Console
 from rich.markup import escape
 
 from myapp import __version__
 from myapp.config import settings
 
-app = typer.Typer(
+app = App(
     name="myapp",
     help="myapp CLI.",
-    no_args_is_help=True,
-    rich_markup_mode="rich",
-    add_completion=False,
+    version=__version__,
+    version_flags=["--version", "-V"],
 )
 console = Console()
 
 
-def version_callback(value: bool) -> None:  # noqa: FBT001
-    """Print version and exit."""
-    if value:
-        console.print(f"myapp {__version__}")
-        raise typer.Exit
+@app.command
+def hello(name: str) -> None:
+    """Greet someone.
+
+    Parameters
+    ----------
+    name:
+        Name to greet.
+    """
+    if settings.verbose:
+        console.print(f"[dim]greeting name={escape(name)}[/dim]")
+    console.print(f"Hello, [bold]{escape(name)}[/bold]!")
 
 
-@app.callback()
+@app.meta.default
 def main(
-    _version: Annotated[
-        bool,
-        typer.Option(
-            "--version",
-            "-V",
-            help="Show version and exit.",
-            callback=version_callback,
-            is_eager=True,
-        ),
-    ] = False,
+    *tokens: Annotated[str, Parameter(show=False, allow_leading_hyphen=True)],
     verbose: Annotated[
         bool,
-        typer.Option("--verbose", "-v", help="Enable verbose output."),
+        Parameter("--verbose", help="Enable verbose output."),
     ] = settings.verbose,
 ) -> None:
     """Run the myapp CLI."""
     settings.verbose = verbose
-
-
-@app.command()
-def hello(
-    name: Annotated[str, typer.Argument(help="Name to greet.")],
-) -> None:
-    """Greet someone."""
-    if settings.verbose:
-        console.print(f"[dim]greeting name={escape(name)}[/dim]")
-    console.print(f"Hello, [bold]{escape(name)}[/bold]!")
+    app(tokens)
