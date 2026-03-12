@@ -43,3 +43,8 @@ def main(
     """Run the myapp CLI."""
     settings.verbose = verbose
     app(tokens)
+
+
+def entrypoint() -> None:
+    """Package entrypoint for console_scripts."""
+    app.meta()

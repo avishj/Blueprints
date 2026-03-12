@@ -36,7 +36,7 @@ Changelog = "https://github.com/avishj/myapp/blob/main/CHANGELOG.md"
 Issues = "https://github.com/avishj/myapp/issues"
 
 [project.scripts]
-myapp = "myapp.cli:app"
+myapp = "myapp.cli:entrypoint"
 
 [tool.uv]
 python-preference = "managed"

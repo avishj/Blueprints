@@ -2,4 +2,4 @@
 
 from myapp.cli import app
 
-app()
+app.meta()
