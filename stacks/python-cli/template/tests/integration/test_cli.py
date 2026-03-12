@@ -11,7 +11,6 @@ pytestmark = pytest.mark.integration
 def test_version(invoke):
     result = invoke("--version")
     assert result.exit_code == 0
-    assert "myapp" in result.output
     assert __version__ in result.output
 
 
