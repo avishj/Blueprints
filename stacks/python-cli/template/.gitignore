@@ -24,6 +24,9 @@ results.xml
 # Type checking
 .ty/
 
+# SonarCloud
+.scannerwork/
+
 # Docs
 site/
 
