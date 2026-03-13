@@ -45,6 +45,16 @@ Thanks for your interest in contributing!
 - **Add tests** for new functionality.
 - **Follow existing code style** enforced by pre-commit hooks and CI.
 
+## IDE Integration
+
+Install [SonarQube for IDE](https://www.sonarsource.com/products/sonarlint/) for real-time code quality feedback. Connect it to SonarCloud in **Connected Mode** to sync the project's quality profile and rules:
+
+1. Install the SonarQube for IDE extension for your editor
+2. Add a SonarCloud connection using your token
+3. Bind your local project to the SonarCloud project
+
+This gives you the same rules that run in CI directly in your editor, catching issues before you even commit.
+
 ## Reporting Bugs
 
 Open a [GitHub issue](https://github.com/avishj/myapp/issues/new/choose) using the appropriate template.
