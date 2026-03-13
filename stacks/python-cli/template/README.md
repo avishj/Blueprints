@@ -9,6 +9,7 @@
 [![License](https://img.shields.io/github/license/avishj/myapp)](LICENSE)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/avishj/myapp/badge)](https://scorecard.dev/viewer/?uri=github.com/avishj/myapp)
 [![Docker](https://img.shields.io/docker/v/avishj/myapp?label=docker)](https://hub.docker.com/r/avishj/myapp)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=${SONAR_PROJECT_KEY}&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=${SONAR_PROJECT_KEY})
 
 A CLI application.
 
