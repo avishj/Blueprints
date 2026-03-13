@@ -43,6 +43,9 @@ labels:
   - name: security
     color: "b60205"
     description: "Security vulnerability or improvement"
+  - name: tooling
+    color: "c5def5"
+    description: "Developer tooling and config changes"
 
 branches:
   - name: main
