@@ -29,13 +29,9 @@ site/
 
 # IDE
 .vscode/
-.idea/
-*.swp
-*~
 
 # OS
 .DS_Store
-Thumbs.db
 
 # Environment
 .env
