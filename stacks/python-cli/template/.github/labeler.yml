@@ -1,0 +1,48 @@
+bug:
+  - head-branch: ['^fix']
+
+feature:
+  - head-branch: ['^feat']
+
+refactor:
+  - head-branch: ['^refactor']
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - docs/**
+          - '**/*.md'
+          - mkdocs.yml
+          - LICENSE
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - pyproject.toml
+          - uv.lock
+          - renovate.json
+
+security:
+  - changed-files:
+      - any-glob-to-any-file:
+          - SECURITY.md
+          - .github/workflows/_security.yml
+          - .github/workflows/_codeql.yml
+
+tooling:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .editorconfig
+          - .gitattributes
+          - .gitignore
+          - .dockerignore
+          - .pre-commit-config.yaml
+          - codecov.yml
+          - sonar-project.properties
+          - Dockerfile
+          - justfile
+          - CODEOWNERS
