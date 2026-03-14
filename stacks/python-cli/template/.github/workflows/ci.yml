@@ -254,6 +254,38 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+  package:
+    name: Package Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: {}
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@6ee6290f1cbc4156c0bdd66691b2c144ef8df19a # v7.4.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+          python-version: "3.13"
+
+      - name: Build package
+        run: uv build
+
+      - name: Check metadata
+        run: uvx twine check dist/*
+
+      - name: Verify entry point
+        run: uv run --with dist/*.whl --no-project -- myapp --help
+
   complexity:
     name: Cognitive Complexity
     runs-on: ubuntu-latest
@@ -357,7 +389,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, hadolint, lychee, test, complexity, security, codeql, markdownlint, dependency-review, sonarcloud]
+    needs: [lint, actionlint, hadolint, lychee, test, complexity, security, codeql, markdownlint, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
