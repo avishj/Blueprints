@@ -82,10 +82,10 @@ jobs:
           pyflakes: true
           flags: "-color"
 
-  hadolint:
-    name: Lint Dockerfile
+  docker:
+    name: Docker Lint, Build & Validate
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     permissions: {}
     steps:
       - name: Harden runner
@@ -102,6 +102,12 @@ jobs:
         uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5 # v3.3.0
         with:
           dockerfile: Dockerfile
+
+      - name: Build image
+        run: docker build -t myapp:ci .
+
+      - name: Verify entry point
+        run: docker run --rm myapp:ci --help
 
   lychee:
     name: Link Check
@@ -389,7 +395,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, hadolint, lychee, test, complexity, security, codeql, markdownlint, dependency-review, sonarcloud, package]
+    needs: [lint, actionlint, docker, lychee, test, complexity, security, codeql, markdownlint, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
