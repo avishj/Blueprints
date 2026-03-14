@@ -256,6 +256,15 @@
 
 ### Section 7 — Container (`Dockerfile`, `.dockerignore`)
 
+**`Dockerfile`:**
+
+- [ ] Copy 1:1 from template — multi-stage build (uv → builder → runtime), non-root user, cache-friendly dep install
+- [ ] `ENTRYPOINT` changed to app name (not `myapp`) — only required change
+
+**`.dockerignore`:**
+
+- [ ] Copy 1:1 from template — excludes `.git/`, `.venv/`, tests, docs, build artifacts, config files not needed at runtime
+
 ### Section 8 — Dev Tooling & Root Config
 
 ### Section 9 — Install & Local Validation
