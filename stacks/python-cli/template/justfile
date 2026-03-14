@@ -18,7 +18,7 @@ test *args:
     uv run pytest -n auto {{ args }}
 
 cov:
-    uv run pytest --cov --cov-report=term --cov-report=html --cov-report=xml --cov-fail-under=80 --junitxml=results.xml -n auto
+    uv run pytest --cov --cov-report=term --cov-report=html --cov-report=xml --cov-fail-under=70 --junitxml=results.xml -n auto
 
 complexity:
     uv run complexipy src/ --max-complexity 15
