@@ -205,7 +205,7 @@
 - [ ] `build` job — verifies tag is on main, builds sdist+wheel, attests build provenance, uploads dist artifact
 - [ ] `publish-pypi` job — environment `url` uses app name (not `pypi.org/p/myapp`); uses trusted publishing with attestations
 - [ ] `sbom` job — generates SPDX SBOM, attests it, uploads artifact
-- [ ] `docker` job — matrix publishes to both `ghcr.io` and `docker.io`; builds multi-platform (`linux/amd64`, `linux/arm64`); semver tag patterns, build provenance attestation
+- [ ] `docker` job — matrix publishes to both `ghcr.io` and `docker.io`; builds multi-platform (`linux/amd64`, `linux/arm64`); semver tag patterns, build provenance attestation, post-push entry-point verification (pulls by digest, runs `--help`)
 - [ ] `trivy` job — calls `_trivy-image.yml` to scan the newly pushed GHCR image
 - [ ] `github-release` job — creates GitHub release with dist and SBOM artifacts, `--generate-notes --verify-tag`
 
