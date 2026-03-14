@@ -125,6 +125,59 @@
 
 ### Section 4 — Docs & Community
 
+**`docs/index.md`:**
+
+- [ ] Heading, description, install command, and quick-start command all use app name (no `myapp`)
+- [ ] Structure matches template (Installation + Quick start sections at minimum)
+
+**`mkdocs.yml`:**
+
+- [ ] `site_name`, `site_description` use app name (no `myapp`)
+- [ ] `site_url`, `repo_url`, `repo_name` point to correct owner/repo
+- [ ] `copyright` has correct year and project name
+- [ ] `watch` path points to `src/<app>` (not `src/myapp`)
+- [ ] `edit_uri` is `edit/main/docs/`
+- [ ] All remaining config (theme, plugins, markdown_extensions, nav) matches template exactly
+
+**`README.md` (template):**
+
+- [ ] All badge URLs use correct owner/repo (no `myapp` remnants in GitHub, PyPI, Docker, Scorecard URLs)
+- [ ] `${SONAR_PROJECT_KEY}` in SonarCloud badge replaced with actual key
+- [ ] Description updated (not `"A CLI application."`)
+- [ ] Features section retained (Cyclopts, Rich, pydantic-settings, py.typed, Python 3.13+)
+- [ ] Install commands use app name (uv, pip, docker)
+- [ ] Usage examples updated for actual commands (demo `hello` command replaced)
+- [ ] Development section: clone URL, `cd` dir use correct repo name
+- [ ] Common tasks table matches template (`just lint`, `just typecheck`, etc.)
+- [ ] Configuration section: env var prefix and table use `<APP>_` (not `MYAPP_`), rows updated for actual settings
+- [ ] Documentation link points to correct GitHub Pages URL
+- [ ] License section matches `pyproject.toml` license choice
+- [ ] Star History chart URL uses correct owner/repo
+
+**`CONTRIBUTING.md`:**
+
+- [ ] Clone URL and `cd` dir use correct repo name (no `myapp`)
+- [ ] Issues link at bottom uses correct owner/repo
+- [ ] All remaining content (workflow steps, guidelines, IDE integration, security ref) matches template
+
+**`SECURITY.md`:**
+
+- [ ] Advisory link uses correct owner/repo (no `myapp`)
+- [ ] Rest of file matches template exactly
+
+**`CHANGELOG.md`:**
+
+- [ ] File exists — copy 1:1 from template (commitizen manages content)
+
+**`LICENSE`:**
+
+- [ ] File present — copy 1:1 from template (AGPL-3.0) unless a different license is chosen
+- [ ] If license changed: replace file entirely, and update `pyproject.toml` license field, classifiers, README badge, and README footer to match
+
+**`CODEOWNERS`:**
+
+- [ ] File exists with `* @<owner>` or another valid ownership entry
+
 ### Section 5 — CI/CD Workflows (`.github/workflows/`)
 
 ### Section 6 — GitHub Config (`.github/` non-workflow)
