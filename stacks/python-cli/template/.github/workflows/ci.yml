@@ -162,20 +162,24 @@ jobs:
       - name: Install dependencies
         run: uv sync --frozen
 
+      - name: Set matrix prefix
+        id: prefix
+        run: echo "value=${{ matrix.os }}-py${{ matrix.python-version }}" >> "$GITHUB_OUTPUT"
+
       - name: Run unit tests
-        run: uv run pytest -m unit --cov --cov-report=xml:coverage-unit.xml --cov-report=term --junitxml=results-unit.xml -n auto
+        run: uv run pytest -m unit --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-unit.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-unit.xml -n auto
         env:
-          COVERAGE_FILE: .coverage.unit
+          COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.unit
 
       - name: Run integration tests
-        run: uv run pytest -m integration --cov --cov-report=xml:coverage-integration.xml --cov-report=term --junitxml=results-integration.xml -n auto
+        run: uv run pytest -m integration --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-integration.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-integration.xml -n auto
         env:
-          COVERAGE_FILE: .coverage.integration
+          COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.integration
 
       - name: Run e2e tests
-        run: uv run pytest -m e2e --cov --cov-report=xml:coverage-e2e.xml --cov-report=term --junitxml=results-e2e.xml -n auto
+        run: uv run pytest -m e2e --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-e2e.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-e2e.xml -n auto
         env:
-          COVERAGE_FILE: .coverage.e2e
+          COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.e2e
 
       - name: Check combined coverage
         run: |
@@ -201,7 +205,7 @@ jobs:
       - name: Upload unit coverage
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
-          files: coverage-unit.xml
+          files: coverage-${{ steps.prefix.outputs.value }}-unit.xml
           flags: unit
           fail_ci_if_error: true
           disable_search: true
@@ -209,7 +213,7 @@ jobs:
       - name: Upload integration coverage
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
-          files: coverage-integration.xml
+          files: coverage-${{ steps.prefix.outputs.value }}-integration.xml
           flags: integration
           fail_ci_if_error: true
           disable_search: true
@@ -217,7 +221,7 @@ jobs:
       - name: Upload e2e coverage
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
-          files: coverage-e2e.xml
+          files: coverage-${{ steps.prefix.outputs.value }}-e2e.xml
           flags: e2e
           fail_ci_if_error: true
           disable_search: true
