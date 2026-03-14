@@ -45,6 +45,38 @@
 
 ### Section 2 — Source Code (`src/<yourapp>/`)
 
+- [ ] Directory renamed from `src/myapp/` to `src/<app>/`
+- [ ] `py.typed` marker file exists (empty file, copy 1:1)
+
+**`__init__.py`:**
+
+- [ ] Module docstring updated to app name
+- [ ] `__version__` variable defined (commitizen manages this)
+
+**`__main__.py`:**
+
+- [ ] Docstring references app name (`Allow running as \`python -m <app>\``)
+- [ ] Imports `app` from `<app>.cli` (no `myapp` remnants)
+- [ ] Calls `app.meta()`
+
+**`cli.py`:**
+
+- [ ] Imports `__version__` from `<app>` and `settings` from `<app>.config`
+- [ ] `App()` created with `name=`, `help=`, `version=__version__`, `version_flags=["--version", "-V"]`
+- [ ] `console = Console()` instantiated
+- [ ] `@app.meta.default` function exists — wires `--verbose` flag to `settings.verbose` and calls `app(tokens)`
+- [ ] `entrypoint()` function exists — calls `app.meta()` (this is the `console_scripts` target)
+- [ ] No `myapp` strings remain in `App(name=...)`, `App(help=...)`, or docstrings
+- [ ] Demo command (`hello`) may be replaced, but at least one `@app.command` should exist
+
+**`config.py`:**
+
+- [ ] `Settings` class extends `BaseSettings` with `SettingsConfigDict`
+- [ ] `env_prefix` set to `<APP>_` (uppercase app name + underscore, not `MYAPP_`)
+- [ ] `env_file` and `env_file_encoding` settings present
+- [ ] `verbose: bool = False` field exists (used by CLI `--verbose` flag)
+- [ ] Module-level `settings = Settings()` instance exported
+
 ### Section 3 — Tests
 
 ### Section 4 — Docs & Community
