@@ -32,6 +32,13 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Verify tag is on main
+        run: |
+          if ! git branch --contains "$GITHUB_SHA" | grep -qE '(^|\s)main$'; then
+            echo "::error::Tag must point to a commit on the main branch."
+            exit 1
+          fi
+
       - name: Install uv
         uses: astral-sh/setup-uv@6ee6290f1cbc4156c0bdd66691b2c144ef8df19a # v7.4.0
         with:
