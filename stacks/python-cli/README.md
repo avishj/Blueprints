@@ -61,13 +61,18 @@ template/
 │   │   ├── bug_report.yml
 │   │   └── feature_request.yml
 │   ├── workflows/
+│   │   ├── _codeql.yml
+│   │   ├── _security.yml
+│   │   ├── _trivy-image.yml
 │   │   ├── ci.yml
-│   │   ├── codeql.yml
 │   │   ├── docs.yml
+│   │   ├── labeler.yml
 │   │   ├── release.yml
-│   │   └── scorecard.yml
-│   ├── dependabot.yml
-│   └── PULL_REQUEST_TEMPLATE.md
+│   │   └── weekly.yml
+│   ├── FUNDING.yml
+│   ├── labeler.yml
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   └── settings.yml
 ├── docs/
 │   └── index.md
 ├── src/
@@ -96,10 +101,16 @@ template/
 ├── .gitignore
 ├── .pre-commit-config.yaml
 ├── CHANGELOG.md
+├── CODEOWNERS
+├── CONTRIBUTING.md
 ├── Dockerfile
 ├── LICENSE
 ├── README.md
+├── SECURITY.md
+├── codecov.yml
 ├── justfile
 ├── mkdocs.yml
-└── pyproject.toml
+├── pyproject.toml
+├── renovate.json
+└── sonar-project.properties
 ```
