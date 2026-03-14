@@ -2,7 +2,7 @@ repository:
   name: myapp
   description: A CLI application. Change This
   homepage: https://avishj.github.io/myapp
-  topics: python, cli, typer, change-this
+  topics: python, cli, cyclopts, change-this
 
   private: false
   has_issues: true
