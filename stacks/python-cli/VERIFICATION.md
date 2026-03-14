@@ -224,6 +224,36 @@
 
 ### Section 6 — GitHub Config (`.github/` non-workflow)
 
+**`settings.yml`:**
+
+- [ ] `repository.name` uses app name (not `myapp`)
+- [ ] `repository.description` updated (not still `"A CLI application. Change This"`)
+- [ ] `repository.homepage` points to correct GitHub Pages URL (no `myapp`)
+- [ ] `repository.topics` updated (keep `python`, `cli`, `cyclopts`; replace `change-this` with relevant topics)
+- [ ] All remaining settings (merge strategy, branch protection, labels, status checks) match template exactly
+
+**`FUNDING.yml`:**
+
+- [ ] `github` entry uses correct owner username
+
+**`ISSUE_TEMPLATE/bug_report.yml`:**
+
+- [ ] Version field description references app's `--version` command (not `myapp --version`)
+- [ ] Reproduction steps placeholder uses app name (not `myapp ...`)
+- [ ] All remaining fields and structure match template
+
+**`ISSUE_TEMPLATE/feature_request.yml`:**
+
+- [ ] Copy 1:1 from template
+
+**`PULL_REQUEST_TEMPLATE.md`:**
+
+- [ ] Copy 1:1 from template
+
+**`labeler.yml` (config):**
+
+- [ ] Copy 1:1 from template — defines labels for `bug`, `feature`, `refactor`, `documentation`, `ci`, `dependencies`, `security`, `tooling` based on branch patterns and changed files
+
 ### Section 7 — Container (`Dockerfile`, `.dockerignore`)
 
 ### Section 8 — Dev Tooling & Root Config
