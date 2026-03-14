@@ -180,6 +180,48 @@
 
 ### Section 5 — CI/CD Workflows (`.github/workflows/`)
 
+**Reusable workflows (copy 1:1 from template):**
+
+- [ ] `_codeql.yml` — CodeQL analysis with `security-and-quality` queries, paths-ignore for docs/tests, threat models configured
+- [ ] `_security.yml` — Semgrep SAST, Trivy filesystem scan, Gitleaks secret scan, zizmor workflow security scan
+- [ ] `_trivy-image.yml` — reusable Trivy container image scan with SARIF upload
+
+**`ci.yml`:**
+
+- [ ] All 13 jobs present: `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `dependency-review`, `markdownlint`, `ci-passed`
+- [ ] `docker` job — `docker build -t` and `docker run --rm` image name uses app name (not `myapp`)
+- [ ] `package` job — `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
+- [ ] `test` job — matrix: Python `3.13` + `3.14` (add newer versions as needed) × `ubuntu` + `macos` + `windows`; runs all 3 test tiers separately with per-tier coverage uploads to Codecov (flags: `unit`, `integration`, `e2e`)
+- [ ] `ci-passed` gate job — `needs` lists all 12 other jobs
+- [ ] `lint` job — ruff check, ruff format, ty check, validate-pyproject, mkdocs build --strict, typos spell check
+- [ ] `sonarcloud` job — downloads test results and coverage artifacts, runs SonarCloud scan
+- [ ] `complexity` job — complexipy with max-complexity 15 and SARIF upload
+- [ ] `dependency-review` job — PR-only, `fail-on-severity: moderate`, license and vuln checks, SSPL/BUSL denied
+- [ ] All remaining jobs (`actionlint`, `lychee`, `markdownlint`, `security`, `codeql`) match template exactly
+
+**`release.yml`:**
+
+- [ ] Triggered on `v*` tags only
+- [ ] `build` job — verifies tag is on main, builds sdist+wheel, attests build provenance, uploads dist artifact
+- [ ] `publish-pypi` job — environment `url` uses app name (not `pypi.org/p/myapp`); uses trusted publishing with attestations
+- [ ] `sbom` job — generates SPDX SBOM, attests it, uploads artifact
+- [ ] `docker` job — matrix publishes to both `ghcr.io` and `docker.io`; builds multi-platform (`linux/amd64`, `linux/arm64`); semver tag patterns, build provenance attestation
+- [ ] `trivy` job — calls `_trivy-image.yml` to scan the newly pushed GHCR image
+- [ ] `github-release` job — creates GitHub release with dist and SBOM artifacts, `--generate-notes --verify-tag`
+
+**`docs.yml`:**
+
+- [ ] Copy 1:1 from template — builds mkdocs with `--strict`, deploys to GitHub Pages
+- [ ] Triggers on push to `main` for `docs/**`, `mkdocs.yml`, `src/**` paths + `workflow_dispatch`
+
+**`weekly.yml`:**
+
+- [ ] Copy 1:1 from template — runs OpenSSF Scorecard, Trivy image scan (`:latest`), security scans, CodeQL on schedule (`cron: "0 0 * * 0"`) + `workflow_dispatch`
+
+**`labeler.yml`:**
+
+- [ ] Copy 1:1 from template — runs `actions/labeler` on `pull_request_target` with `sync-labels: true`
+
 ### Section 6 — GitHub Config (`.github/` non-workflow)
 
 ### Section 7 — Container (`Dockerfile`, `.dockerignore`)
