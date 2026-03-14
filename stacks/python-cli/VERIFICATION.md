@@ -79,6 +79,50 @@
 
 ### Section 3 — Tests
 
+**Directory structure:**
+
+- [ ] `tests/__init__.py` exists (empty)
+- [ ] `tests/unit/__init__.py`, `tests/integration/__init__.py`, `tests/e2e/__init__.py` exist (empty)
+- [ ] All three test tiers present: `unit/`, `integration/`, `e2e/`
+
+**`conftest.py`:**
+
+- [ ] `CliResult` helper class exists with `exit_code` and `output` attrs
+- [ ] `invoke` fixture exists — wraps `app.meta()` calls with capsys capture and SystemExit handling
+- [ ] Imports `app` from `<app>.cli` (no `myapp` remnants)
+
+**`unit/test_version.py`:**
+
+- [ ] `pytestmark = pytest.mark.unit` set
+- [ ] Imports `__version__` from `<app>` (no `myapp`)
+- [ ] Tests that `__version__` is a string and valid semver — these are mandatory, not demo
+
+**`unit/test_config.py`:**
+
+- [ ] `pytestmark = pytest.mark.unit` set
+- [ ] Imports `Settings` from `<app>.config` (no `myapp`)
+- [ ] Tests default values, env prefix loading, and that unprefixed env vars are ignored
+- [ ] All env var references use `<APP>_` prefix (not `MYAPP_`)
+
+**`integration/test_cli.py`:**
+
+- [ ] `pytestmark = pytest.mark.integration` set
+- [ ] Imports `__version__` from `<app>` (no `myapp`)
+- [ ] Uses `invoke` fixture from conftest
+- [ ] `test_version` — mandatory: asserts `--version` exits 0 and output contains `__version__`
+- [ ] `test_no_args` — mandatory: asserts bare invocation exits 0 and shows usage
+- [ ] `test_hello` — demo (replace with actual command tests)
+
+**`e2e/test_entrypoint.py`:**
+
+- [ ] `pytestmark = pytest.mark.e2e` set
+- [ ] `_run()` helper invokes the CLI binary via `subprocess.run` — command name must be app name (not `myapp`)
+- [ ] `test_version_flag` — mandatory: subprocess `--version` exits 0
+- [ ] `test_no_args_shows_help` — mandatory: bare invocation exits 0 with usage output
+- [ ] `test_invalid_command` — mandatory: unknown subcommand exits non-zero
+- [ ] `test_hello_command` — demo (replace with actual command tests)
+- [ ] No `myapp` string remnants in subprocess calls or assertions
+
 ### Section 4 — Docs & Community
 
 ### Section 5 — CI/CD Workflows (`.github/workflows/`)
