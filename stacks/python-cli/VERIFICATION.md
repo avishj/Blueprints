@@ -267,6 +267,25 @@
 
 ### Section 8 — Dev Tooling & Root Config
 
+**Copy 1:1 from template (no changes needed):**
+
+- [ ] `justfile` — all recipes: `lint`, `lint-fix`, `typecheck`, `test`, `cov`, `complexity`, `semgrep`, `build`, `docs`, `docs-build`, `ci`, `clean`
+- [ ] `.pre-commit-config.yaml` — all 8 repos: pre-commit-hooks, ruff, ty (local), validate-pyproject, complexipy, commitizen, typos, gitleaks
+- [ ] `.editorconfig` — indent/charset/line-ending rules for `*`, `*.yml/yaml`, `*.json`, `*.md`
+- [ ] `.gitattributes` — line-ending normalization, diff drivers, linguist overrides
+- [ ] `.gitignore` — Python, dist, venv, testing, linting, type-checking, SonarCloud, docs, IDE, OS, env file patterns
+- [ ] `renovate.json` — best-practices config, OSV vulnerability alerts, package rules for GHA/Dockerfile/pre-commit
+
+**`codecov.yml`:**
+
+- [ ] Copy 1:1 from template, then update all 3 flag `paths` entries (`unit`, `integration`, `e2e`) from `src/myapp/` to `src/<app>/`
+- [ ] All remaining config (precision, range, status targets, comment layout, github_checks) unchanged
+
+**`sonar-project.properties`:**
+
+- [ ] `${SONAR_PROJECT_KEY}`, `${SONAR_ORG}`, `${PROJECT_NAME}` replaced with actual values
+- [ ] All remaining config (python version, sources/tests paths, coverage/test report patterns, quality gate, encoding) matches template exactly
+
 ### Section 9 — Install & Local Validation
 
 ## User Scope
