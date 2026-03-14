@@ -288,6 +288,85 @@
 
 ### Section 9 — Install & Local Validation
 
+> Run everything at least once after migration — some checks may initially fail if code was ported from a different setup. The goal is to surface all issues early, then fix until everything passes.
+
+**Environment setup:**
+
+- [ ] `uv sync` — venv created, all deps installed
+- [ ] `uv lock` — `uv.lock` generated
+- [ ] `pre-commit install` — pre-commit and commit-msg hooks active
+
+**Quality gates (via justfile):**
+
+- [ ] `just lint` — ruff check + format
+- [ ] `just lint-fix` — auto-fix lint issues if any
+- [ ] `just typecheck` — ty check on src/ and tests/
+- [ ] `just test` — all unit, integration, and e2e tests
+- [ ] `just cov` — coverage report, must reach ≥ 70%
+- [ ] `just complexity` — cognitive complexity ≤ 15
+- [ ] `just semgrep` — SAST scan
+- [ ] `just build` — sdist + wheel built successfully
+- [ ] `just docs` — mkdocs serves without errors
+- [ ] `just docs-build` — mkdocs strict build passes
+- [ ] `just ci` — full composite gate (lint + typecheck + cov + complexity + semgrep)
+
+**Pre-commit hooks:**
+
+- [ ] `pre-commit run --all-files` — all hooks pass (ruff, ty, validate-pyproject, complexipy, typos, gitleaks)
+
+### Section 10 — Global Grep Sanity Check
+
+- [ ] `grep -r "myapp"` — zero hits (template app name fully replaced)
+- [ ] `grep -r "MYAPP_"` — zero hits (env prefix replaced)
+- [ ] `grep -r "Your Name\|you@example.com"` — zero hits (author placeholders replaced)
+- [ ] `grep -r "Change This\|change-this"` — zero hits (settings.yml placeholders replaced)
+- [ ] `grep -r "A CLI application"` — zero hits (template description replaced)
+- [ ] `grep -r '\${'` — zero hits (all `${...}` placeholders like `SONAR_PROJECT_KEY`, `SONAR_ORG`, `PROJECT_NAME` resolved)
+- [ ] `grep -r "avishj"` — zero hits if owner is different; expected hits if owner is `avishj`
+
 ## User Scope
 
-### Section 10 — Manual GitHub Settings & Secrets
+> Cross-reference with [SETUP.md](SETUP.md) and verify all setup steps relevant to your environment are completed. Sections 1–10 above cover file-level verification (AI scope); the items below require manual human action.
+
+### Section 11 — Prerequisites & Local Tools
+
+- [ ] Python 3.13+ installed and available on `PATH`
+- [ ] [uv](https://docs.astral.sh/uv/getting-started/installation/) installed
+- [ ] [just](https://github.com/casey/just#installation) installed
+- [ ] [pre-commit](https://pre-commit.com/#install) installed
+- [ ] [Docker](https://docs.docker.com/get-docker/) installed (for container builds and CI docker job)
+- [ ] Git configured with commit signing (required by commitizen / sign-off workflow)
+
+### Section 12 — GitHub Repository Setup
+
+**Create and configure the repo:**
+
+- [ ] Create GitHub repo — public, default branch `main`
+- [ ] Go to **Settings → Pages** → set Source to **GitHub Actions**
+
+**Add secrets** (Settings → Secrets and variables → Actions → New repository secret):
+
+- [ ] `CODECOV_TOKEN` — get from [codecov.io](https://codecov.io) after adding the repo
+- [ ] `SONAR_TOKEN` — get from [sonarcloud.io](https://sonarcloud.io) after creating the project
+- [ ] `DOCKERHUB_USERNAME` — Docker Hub username (only if publishing to Docker Hub)
+- [ ] `DOCKERHUB_TOKEN` — Docker Hub access token (only if publishing to Docker Hub)
+
+**Create environment** (Settings → Environments → New environment):
+
+- [ ] Create environment named `pypi`
+- [ ] In the `pypi` environment, configure [trusted publisher](https://docs.pypi.org/trusted-publishers/) on PyPI: set repository owner, repo name, workflow `release.yml`, and environment `pypi`
+
+**Enable security features** (Settings → Code security):
+
+- [ ] Enable **secret scanning** with **push protection**
+- [ ] Enable **Dependabot security updates** (supplements Renovate for GitHub-native security advisories)
+
+**Install the [Renovate GitHub App](https://github.com/apps/renovate):**
+
+- [ ] Grant Renovate access to the repo for automated dependency updates (the `renovate.json` config is already in the template)
+
+**First push:**
+
+- [ ] Push to `main` and verify the CI workflow passes
+- [ ] Verify docs deploy to GitHub Pages successfully
+- [ ] Verify Renovate creates its onboarding PR
