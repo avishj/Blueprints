@@ -32,6 +32,7 @@ security:
           - SECURITY.md
           - .github/workflows/_security.yml
           - .github/workflows/_codeql.yml
+          - .github/workflows/_trivy-image.yml
 
 tooling:
   - changed-files:
