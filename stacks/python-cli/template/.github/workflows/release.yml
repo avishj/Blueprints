@@ -215,6 +215,9 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
+      - name: Verify published image
+        run: docker run --rm ${{ matrix.image }}@${{ steps.push.outputs.digest }} --help
+
   trivy:
     name: Trivy Image Scan
     needs: [build, docker]
