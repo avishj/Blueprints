@@ -29,7 +29,7 @@
     {
       "description": "Label major updates",
       "matchUpdateTypes": ["major"],
-      "labels": ["dependencies"]
+      "addLabels": ["major"]
     },
     {
       "description": "Label and pin GitHub Actions updates",
