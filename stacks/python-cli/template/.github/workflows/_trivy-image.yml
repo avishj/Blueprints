@@ -25,7 +25,10 @@ jobs:
 
       - name: Lowercase image ref
         id: lower
-        run: echo "image-ref=${IMAGE_REF,,}" >> "$GITHUB_OUTPUT"
+        run: |
+          repo="${IMAGE_REF%%:*}"
+          tag="${IMAGE_REF#*:}"
+          echo "image-ref=${repo,,}:${tag}" >> "$GITHUB_OUTPUT"
         env:
           IMAGE_REF: ${{ inputs.image-ref }}
 
