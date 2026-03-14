@@ -164,6 +164,7 @@ jobs:
 
       - name: Set matrix prefix
         id: prefix
+        shell: bash
         run: echo "value=${{ matrix.os }}-py${{ matrix.python-version }}" >> "$GITHUB_OUTPUT"
 
       - name: Run unit tests
