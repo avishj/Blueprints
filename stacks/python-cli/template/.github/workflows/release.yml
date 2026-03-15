@@ -65,7 +65,7 @@ jobs:
 
       - name: Verify tag is on main
         run: |
-          if ! git branch -r --contains "$GITHUB_SHA" | grep -qE 'origin/main$'; then
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" origin/main; then
             echo "::error::Tag must point to a commit on the main branch."
             exit 1
           fi
