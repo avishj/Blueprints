@@ -251,7 +251,7 @@ jobs:
 
       - name: Sign image
         run: |
-          cosign sign --yes \
+          cosign sign --yes --recursive \
             -a repo=${{ github.repository }} \
             -a workflow=${{ github.workflow }} \
             -a ref=${{ github.ref }} \
