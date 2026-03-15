@@ -1,6 +1,6 @@
 # Setup
 
-### Prerequisites
+## Prerequisites
 
 - [ ] Python 3.13+ installed
 - [ ] [uv](https://docs.astral.sh/uv/getting-started/installation/) installed
@@ -9,12 +9,12 @@
 - [ ] [Docker](https://docs.docker.com/get-docker/) installed (for container builds)
 - [ ] Git configured with signing (for commitizen / sign-off)
 
-### Scaffold
+## Scaffold
 
 - [ ] Copy `template/` contents into a new repo root
 - [ ] Rename `src/myapp/` directory > `src/<yourapp>/`
 
-### Replace `myapp` > `<yourapp>`
+## Replace `myapp` > `<yourapp>`
 
 **pyproject.toml:**
 
@@ -53,7 +53,7 @@
 - [ ] `docs/index.md` — heading, description, install/usage commands
 - [ ] `README.md` (template) — env var prefix table (`<YOURAPP>_` entries)
 
-### Replace `avishj` > `<owner>`
+## Replace `avishj` > `<owner>`
 
 - [ ] `pyproject.toml` — all `project.urls` (Homepage, Documentation, Repository, Changelog, Issues)
 - [ ] `mkdocs.yml` — `site_url`, `repo_url`, `repo_name`
@@ -64,12 +64,12 @@
 - [ ] `CODEOWNERS` — `* @<owner>`
 - [ ] `.github/settings.yml` — `repository.homepage`
 
-### Replace `${...}` placeholders
+## Replace `${...}` placeholders
 
 - [ ] `sonar-project.properties` — `${SONAR_PROJECT_KEY}`, `${SONAR_ORG}`, `${PROJECT_NAME}`
 - [ ] `README.md` (template) — `${SONAR_PROJECT_KEY}` in SonarCloud badge
 
-### Replace other placeholders
+## Replace other placeholders
 
 - [ ] `pyproject.toml` — `project.description` ("A CLI application.")
 - [ ] `pyproject.toml` — `project.authors` (`Your Name`, `you@example.com`)
@@ -81,13 +81,13 @@
 - [ ] `README.md` (template) — license badge and footer link (if license changed)
 - [ ] `mkdocs.yml` — `copyright` year
 
-### Install & initialize
+## Install & initialize
 
 - [ ] Run `uv sync` — creates venv and installs all deps
 - [ ] Run `uv lock` — generates `uv.lock`
 - [ ] Run `pre-commit install` — installs git hooks (pre-commit + commit-msg)
 
-### Validate locally
+## Validate locally
 
 - [ ] `just lint` — ruff check + format passes
 - [ ] `just typecheck` — ty check passes
@@ -97,7 +97,7 @@
 - [ ] `just build` — sdist + wheel built successfully
 - [ ] `just docs` — mkdocs serves without errors
 
-### GitHub repo settings
+## GitHub repo settings
 
 - [ ] Create GitHub repo (public, default branch `main`)
 - [ ] Enable GitHub Pages (source: GitHub Actions) for docs
