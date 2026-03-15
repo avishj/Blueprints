@@ -246,6 +246,17 @@ jobs:
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0
+
+      - name: Sign image
+        run: |
+          cosign sign --yes \
+            -a repo=${{ github.repository }} \
+            -a workflow=${{ github.workflow }} \
+            -a ref=${{ github.ref }} \
+            "${{ matrix.image }}@${{ steps.push.outputs.digest }}"
+
       - name: Verify published image
         run: docker run --rm ${{ matrix.image }}@${{ steps.push.outputs.digest }} --help
 
