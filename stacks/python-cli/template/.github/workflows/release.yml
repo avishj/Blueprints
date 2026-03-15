@@ -99,7 +99,8 @@ jobs:
 
   publish-pypi:
     name: Publish to PyPI
-    needs: [build]
+    needs: [build, check]
+    if: needs.check.outputs.pypi != 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -271,7 +272,11 @@ jobs:
 
   github-release:
     name: GitHub Release
-    needs: [build, publish-pypi, sbom, docker]
+    needs: [build, publish-pypi, sbom, docker, check]
+    if: >-
+      needs.check.outputs.release != 'true'
+      && !contains(needs.*.result, 'failure')
+      && !contains(needs.*.result, 'cancelled')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
