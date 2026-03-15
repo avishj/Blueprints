@@ -12,18 +12,18 @@
 ### Scaffold
 
 - [ ] Copy `template/` contents into a new repo root
-- [ ] Rename `src/myapp/` directory → `src/<yourapp>/`
+- [ ] Rename `src/myapp/` directory > `src/<yourapp>/`
 
-### Replace `myapp` → `<yourapp>`
+### Replace `myapp` > `<yourapp>`
 
 **pyproject.toml:**
 
 - [ ] `project.name`
 - [ ] `project.scripts` — key and module path (`<yourapp> = "<yourapp>.cli:entrypoint"`)
-- [ ] `tool.hatch.build.targets.wheel.packages` → `["src/<yourapp>"]`
-- [ ] `tool.ruff.lint.isort.known-first-party` → `["<yourapp>"]`
-- [ ] `tool.coverage.run.source` → `["<yourapp>"]`
-- [ ] `tool.commitizen.version_files` → `"src/<yourapp>/__init__.py:__version__"`
+- [ ] `tool.hatch.build.targets.wheel.packages` > `["src/<yourapp>"]`
+- [ ] `tool.ruff.lint.isort.known-first-party` > `["<yourapp>"]`
+- [ ] `tool.coverage.run.source` > `["<yourapp>"]`
+- [ ] `tool.commitizen.version_files` > `"src/<yourapp>/__init__.py:__version__"`
 
 **Source code:**
 
@@ -43,7 +43,7 @@
 **Config files:**
 
 - [ ] `mkdocs.yml` — `site_name`, `site_description`, `copyright`, `watch` path (`src/<yourapp>`)
-- [ ] `codecov.yml` — all `paths` entries under flags → `src/<yourapp>/`
+- [ ] `codecov.yml` — all `paths` entries under flags > `src/<yourapp>/`
 - [ ] `Dockerfile` — `ENTRYPOINT ["<yourapp>"]`
 - [ ] `.github/workflows/ci.yml` — `docker build -t` and `docker run --rm` image name
 - [ ] `.github/workflows/release.yml` — `pypi.org/p/<yourapp>` environment URL
@@ -53,7 +53,7 @@
 - [ ] `docs/index.md` — heading, description, install/usage commands
 - [ ] `README.md` (template) — env var prefix table (`<YOURAPP>_` entries)
 
-### Replace `avishj` → `<owner>`
+### Replace `avishj` > `<owner>`
 
 - [ ] `pyproject.toml` — all `project.urls` (Homepage, Documentation, Repository, Changelog, Issues)
 - [ ] `mkdocs.yml` — `site_url`, `repo_url`, `repo_name`

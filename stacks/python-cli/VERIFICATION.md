@@ -258,7 +258,7 @@
 
 **`Dockerfile`:**
 
-- [ ] Copy 1:1 from template — multi-stage build (uv → builder → runtime), non-root user, cache-friendly dep install
+- [ ] Copy 1:1 from template — multi-stage build (uv > builder > runtime), non-root user, cache-friendly dep install
 - [ ] `ENTRYPOINT` changed to app name (not `myapp`) — only required change
 
 **`.dockerignore`:**
@@ -342,21 +342,21 @@
 **Create and configure the repo:**
 
 - [ ] Create GitHub repo — public, default branch `main`
-- [ ] Go to **Settings → Pages** → set Source to **GitHub Actions**
+- [ ] Go to **Settings > Pages** > set Source to **GitHub Actions**
 
-**Add secrets** (Settings → Secrets and variables → Actions → New repository secret):
+**Add secrets** (Settings > Secrets and variables > Actions > New repository secret):
 
 - [ ] `CODECOV_TOKEN` — get from [codecov.io](https://codecov.io) after adding the repo
 - [ ] `SONAR_TOKEN` — get from [sonarcloud.io](https://sonarcloud.io) after creating the project
 - [ ] `DOCKERHUB_USERNAME` — Docker Hub username (only if publishing to Docker Hub)
 - [ ] `DOCKERHUB_TOKEN` — Docker Hub access token (only if publishing to Docker Hub)
 
-**Create environment** (Settings → Environments → New environment):
+**Create environment** (Settings > Environments > New environment):
 
 - [ ] Create environment named `pypi`
 - [ ] In the `pypi` environment, configure [trusted publisher](https://docs.pypi.org/trusted-publishers/) on PyPI: set repository owner, repo name, workflow `release.yml`, and environment `pypi`
 
-**Enable security features** (Settings → Code security):
+**Enable security features** (Settings > Code security):
 
 - [ ] Enable **secret scanning** with **push protection**
 - [ ] Enable **Dependabot security updates** (supplements Renovate for GitHub-native security advisories)
