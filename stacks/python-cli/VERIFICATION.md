@@ -361,6 +361,12 @@
 - [ ] Enable **secret scanning** with **push protection**
 - [ ] Enable **Dependabot security updates** (supplements Renovate for GitHub-native security advisories)
 
+**Enable release immutability:**
+
+- [ ] Create **tag ruleset** — Settings > Rules > Rulesets > New ruleset > set target to tags matching `v*` > check "Block tag updates" and "Block tag deletions" > save
+- [ ] Enable **GHCR immutable tags** — go to the repo's Packages page > select the container package > Package settings > Tag immutability > enable
+- [ ] Enable **Docker Hub immutable tags** — Docker Hub > Repositories > select repo > Settings > General > Tag Mutability > set to "All tags immutable" > save
+
 **Install the [Renovate GitHub App](https://github.com/apps/renovate):**
 
 - [ ] Grant Renovate access to the repo for automated dependency updates (the `renovate.json` config is already in the template)
