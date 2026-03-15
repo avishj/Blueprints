@@ -356,6 +356,11 @@ jobs:
           name: sbom
           path: sbom/
 
+      - name: Verify build attestations
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh attestation verify dist/* --repo "${{ github.repository }}"
+
       - name: Collect image digests
         id: digests
         run: |
