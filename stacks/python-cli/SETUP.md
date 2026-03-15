@@ -108,6 +108,6 @@
 - [ ] Enable secret scanning with push protection
 - [ ] Enable Dependabot security updates
 - [ ] Enable release immutability: Settings > scroll to "Releases" section > select "Enable release immutability" (only applies to future releases)
-- [ ] Enable GHCR immutable tags: go to the repo's Packages page > select the container package > Package settings > Tag immutability > enable
-- [ ] Enable Docker Hub immutable tags: Docker Hub > Repositories > select repo > Settings > General > Tag Mutability > set to "All tags immutable" > save
+- [ ] Enable Docker Hub immutable tags: Docker Hub > Repositories > select repo > Settings > General > Tag Mutability > select "Specific tags are immutable" > set regex to `^\d+\.\d+\.\d+$` > save (protects exact semver; keeps `latest`/major/minor mutable)
+- [ ] GHCR immutable tags: not supported yet; Cosign signatures and attestations provide integrity
 - [ ] Push and verify CI workflow passes
