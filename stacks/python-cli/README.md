@@ -50,8 +50,9 @@ This stack is for building command-line tools, scripts, and automation utilities
 20. docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 - Container tags and labels.
 21. zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2 - Workflow security scanner.
 22. sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0 - Container image signing.
-23. Dependabot - Automated dependency updates (repo config).
-24. GitHub secret scanning - Push protection (repo setting).
+23. Renovate - Automated dependency updates (primary, via `renovate.json`).
+24. Dependabot - Urgent security advisories only (GitHub-native repo setting).
+25. GitHub secret scanning - Push protection (repo setting).
 
 ## Project structure
 
