@@ -93,7 +93,8 @@ jobs:
       - name: Verify changelog entry exists
         run: |
           V="${GITHUB_REF#refs/tags/v}"
-          if ! grep -qE "^##\s.*${V}" CHANGELOG.md; then
+          VE=$(printf '%s' "$V" | sed 's/\./\\./g')
+          if ! grep -qE "^##\s.*${VE}(\s|$)" CHANGELOG.md; then
             echo "::error::CHANGELOG.md missing entry for version $V"
             exit 1
           fi
@@ -378,7 +379,8 @@ jobs:
         id: changelog
         run: |
           V="${{ needs.build.outputs.version }}"
-          awk "/^## .*${V}/{found=1; next} /^## /{if(found) exit} found" CHANGELOG.md > notes.md
+          VE=$(printf '%s' "$V" | sed 's/\./\\./g')
+          awk "/^## .*${VE}([[:space:]]|$)/{found=1; next} /^## /{if(found) exit} found" CHANGELOG.md > notes.md
 
       - name: Create GitHub release
         env:
