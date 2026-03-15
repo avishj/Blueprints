@@ -334,6 +334,12 @@ jobs:
         with:
           egress-policy: audit
 
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+          sparse-checkout: CHANGELOG.md
+
       - name: Download dist
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
@@ -354,21 +360,49 @@ jobs:
           DH=$(curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V" | jq -r '.digest // "n/a"' 2>/dev/null || echo "n/a")
           { echo "ghcr=$GHCR"; echo "dockerhub=$DH"; } >> "$GITHUB_OUTPUT"
 
+      - name: Extract changelog
+        id: changelog
+        run: |
+          V="${{ needs.build.outputs.version }}"
+          awk "/^## .*${V}/{found=1; next} /^## /{if(found) exit} found" CHANGELOG.md > notes.md
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          NOTES=$(gh api repos/${{ github.repository }}/releases/generate-notes \
+          V="${{ needs.build.outputs.version }}"
+
+          GENERATED=$(gh api repos/${{ github.repository }}/releases/generate-notes \
             -f tag_name="${{ github.ref_name }}" --jq '.body')
 
-          NOTES="${NOTES}
+          cat >> notes.md <<EOF
+
+          ---
+
+          ${GENERATED}
+
+          ## Install (uv recommended)
+
+          \`\`\`
+          uv add myapp==${V}
+          \`\`\`
+
+          or
+
+          \`\`\`
+          pip install myapp==${V}
+          \`\`\`
+
+          - [PyPI](https://pypi.org/project/myapp/${V}/)
 
           ## Docker Images
+
           - \`ghcr.io/${{ github.repository }}@${{ steps.digests.outputs.ghcr }}\`
-          - \`docker.io/${{ github.repository }}@${{ steps.digests.outputs.dockerhub }}\`"
+          - \`docker.io/${{ github.repository }}@${{ steps.digests.outputs.dockerhub }}\`
+          EOF
 
           gh release create "${{ github.ref_name }}" \
             --repo "${{ github.repository }}" \
             --verify-tag \
-            --notes "$NOTES" \
+            --notes-file notes.md \
             dist/* sbom/*
