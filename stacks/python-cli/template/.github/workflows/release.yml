@@ -325,9 +325,12 @@ jobs:
     name: GitHub Release
     needs: [build, publish-pypi, sbom, docker, check]
     if: >-
-      needs.check.outputs.release != 'true'
-      && !contains(needs.*.result, 'failure')
-      && !contains(needs.*.result, 'cancelled')
+      always()
+      && needs.check.outputs.release != 'true'
+      && needs.build.result == 'success'
+      && needs.sbom.result == 'success'
+      && needs.docker.result == 'success'
+      && (needs.publish-pypi.result == 'success' || needs.check.outputs.pypi == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -365,8 +368,10 @@ jobs:
         id: digests
         run: |
           V="${{ needs.build.outputs.version }}"
-          GHCR=$(docker manifest inspect "ghcr.io/${{ github.repository }}:$V" -q 2>/dev/null || echo "n/a")
-          DH=$(curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V" | jq -r '.digest // "n/a"' 2>/dev/null || echo "n/a")
+          GHCR=$(docker buildx imagetools inspect "ghcr.io/${{ github.repository }}:$V" 2>/dev/null | awk '/^Digest:/{print $2}')
+          DH=$(curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V" | jq -r '.digest // empty' 2>/dev/null)
+          echo "ghcr=${GHCR:-n/a}" >> "$GITHUB_OUTPUT"
+          echo "dockerhub=${DH:-n/a}" >> "$GITHUB_OUTPUT"
           { echo "ghcr=$GHCR"; echo "dockerhub=$DH"; } >> "$GITHUB_OUTPUT"
 
       - name: Extract changelog
