@@ -291,9 +291,12 @@ jobs:
             -a ref=${{ github.ref }} \
             "${{ matrix.image }}@${{ steps.push.outputs.digest }}"
 
-      - name: Verify cosign signature
+      - name: Verify image signature & attestations
         if: '!steps.skip.outputs.published'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          IMAGE="${{ matrix.image }}@${{ steps.push.outputs.digest }}"
           cosign verify \
             --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/release.yml@${{ github.ref }}" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
@@ -302,7 +305,8 @@ jobs:
             --certificate-github-workflow-ref "${{ github.ref }}" \
             --certificate-github-workflow-sha "${{ github.sha }}" \
             --certificate-github-workflow-trigger "${{ github.event_name }}" \
-            "${{ matrix.image }}@${{ steps.push.outputs.digest }}"
+            "$IMAGE"
+          gh attestation verify "oci://$IMAGE" --repo "${{ github.repository }}"
 
       - name: Verify published image
         if: '!steps.skip.outputs.published'
