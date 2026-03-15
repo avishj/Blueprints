@@ -1,18 +1,18 @@
 """Shared test fixtures."""
 
 from collections.abc import Callable
+from typing import NamedTuple
 
 import pytest
 
 from myapp.cli import app
 
 
-class CliResult:
+class CliResult(NamedTuple):
     """Captures exit code and stdout from a cyclopts app invocation."""
 
-    def __init__(self, exit_code: int, output: str) -> None:
-        self.exit_code = exit_code
-        self.output = output
+    exit_code: int
+    output: str
 
 
 @pytest.fixture
