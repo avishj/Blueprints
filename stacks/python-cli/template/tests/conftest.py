@@ -25,5 +25,6 @@ def invoke(capsys: pytest.CaptureFixture[str]) -> Callable[..., CliResult]:
             return CliResult(exit_code=0, output=captured.out)
         except SystemExit as exc:
             captured = capsys.readouterr()
-            return CliResult(exit_code=exc.code if isinstance(exc.code, int) else 1, output=captured.out)
+            code = exc.code if isinstance(exc.code, int) else (0 if exc.code is None else 1)
+            return CliResult(exit_code=code, output=captured.out)
     return _invoke
