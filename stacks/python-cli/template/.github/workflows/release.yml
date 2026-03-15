@@ -316,12 +316,29 @@ jobs:
           name: sbom
           path: sbom/
 
+      - name: Collect image digests
+        id: digests
+        run: |
+          V="${{ needs.build.outputs.version }}"
+          GHCR=$(docker manifest inspect "ghcr.io/${{ github.repository }}:$V" -q 2>/dev/null || echo "n/a")
+          DH=$(curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V" | jq -r '.digest // "n/a"' 2>/dev/null || echo "n/a")
+          { echo "ghcr=$GHCR"; echo "dockerhub=$DH"; } >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          NOTES=$(gh api repos/${{ github.repository }}/releases/generate-notes \
+            -f tag_name="${{ github.ref_name }}" --jq '.body')
+
+          NOTES="${NOTES}
+
+          ## Docker Images
+          - \`ghcr.io/${{ github.repository }}@${{ steps.digests.outputs.ghcr }}\`
+          - \`docker.io/${{ github.repository }}@${{ steps.digests.outputs.dockerhub }}\`"
+
           gh release create "${{ github.ref_name }}" \
             --repo "${{ github.repository }}" \
-            --generate-notes \
             --verify-tag \
+            --notes "$NOTES" \
             dist/* sbom/*
