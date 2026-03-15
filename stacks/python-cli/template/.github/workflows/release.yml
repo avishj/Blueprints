@@ -90,6 +90,14 @@ jobs:
             exit 1
           fi
 
+      - name: Verify changelog entry exists
+        run: |
+          V="${GITHUB_REF#refs/tags/v}"
+          if ! grep -qE "^##\s.*${V}" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md missing entry for version $V"
+            exit 1
+          fi
+
       - name: Build sdist and wheel
         run: uv build
 
