@@ -174,7 +174,7 @@ jobs:
 
   docker:
     name: Docker (${{ matrix.registry }})
-    needs: [build]
+    needs: [build, check]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
@@ -189,25 +189,36 @@ jobs:
             image: ghcr.io/${{ github.repository }}
             username: ${{ github.actor }}
             password_secret: GITHUB_TOKEN
+            check_key: ghcr
           - registry: docker.io
             image: docker.io/${{ github.repository }}
             username: DOCKERHUB_USERNAME
             password_secret: DOCKERHUB_TOKEN
+            check_key: dockerhub
     steps:
+      - name: Check if already published
+        id: skip
+        if: needs.check.outputs[matrix.check_key] == 'true'
+        run: echo "published=true" >> "$GITHUB_OUTPUT"
+
       - name: Harden runner
+        if: '!steps.skip.outputs.published'
         uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
         with:
           egress-policy: audit
 
       - name: Checkout
+        if: '!steps.skip.outputs.published'
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
 
       - name: Set up Docker Buildx
+        if: '!steps.skip.outputs.published'
         uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
 
       - name: Log in to ${{ matrix.registry }}
+        if: '!steps.skip.outputs.published'
         uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
         with:
           registry: ${{ matrix.registry }}
@@ -215,6 +226,7 @@ jobs:
           password: ${{ secrets[matrix.password_secret] }}
 
       - name: Extract metadata
+        if: '!steps.skip.outputs.published'
         id: meta
         uses: docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0
         with:
@@ -227,6 +239,7 @@ jobs:
             type=raw,value=latest
 
       - name: Build and push
+        if: '!steps.skip.outputs.published'
         id: push
         uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0
         with:
@@ -241,6 +254,7 @@ jobs:
           sbom: true
 
       - name: Attest build provenance
+        if: '!steps.skip.outputs.published'
         uses: actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0
         with:
           subject-name: ${{ matrix.image }}
@@ -248,9 +262,11 @@ jobs:
           push-to-registry: true
 
       - name: Install Cosign
+        if: '!steps.skip.outputs.published'
         uses: sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0
 
       - name: Sign image
+        if: '!steps.skip.outputs.published'
         run: |
           cosign sign --yes --recursive \
             -a repo=${{ github.repository }} \
@@ -259,6 +275,7 @@ jobs:
             "${{ matrix.image }}@${{ steps.push.outputs.digest }}"
 
       - name: Verify published image
+        if: '!steps.skip.outputs.published'
         run: docker run --rm ${{ matrix.image }}@${{ steps.push.outputs.digest }} --help
 
   trivy:
