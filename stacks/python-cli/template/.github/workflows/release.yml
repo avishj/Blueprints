@@ -283,6 +283,19 @@ jobs:
             -a ref=${{ github.ref }} \
             "${{ matrix.image }}@${{ steps.push.outputs.digest }}"
 
+      - name: Verify cosign signature
+        if: '!steps.skip.outputs.published'
+        run: |
+          cosign verify \
+            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/release.yml@${{ github.ref }}" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            --certificate-github-workflow-name "${{ github.workflow }}" \
+            --certificate-github-workflow-repository "${{ github.repository }}" \
+            --certificate-github-workflow-ref "${{ github.ref }}" \
+            --certificate-github-workflow-sha "${{ github.sha }}" \
+            --certificate-github-workflow-trigger "${{ github.event_name }}" \
+            "${{ matrix.image }}@${{ steps.push.outputs.digest }}"
+
       - name: Verify published image
         if: '!steps.skip.outputs.published'
         run: docker run --rm ${{ matrix.image }}@${{ steps.push.outputs.digest }} --help
