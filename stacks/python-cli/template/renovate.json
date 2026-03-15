@@ -5,7 +5,7 @@
     ":enablePreCommit"
   ],
   "timezone": "America/New_York",
-  "schedule": ["* 0 * * 0"],
+  "schedule": ["0 0 * * 0"],
   "osvVulnerabilityAlerts": true,
   "osvVulnerabilitySeverityThreshold": "LOW",
   "dependencyDashboardOSVVulnerabilitySummary": "all",
@@ -23,7 +23,7 @@
   "semanticCommitType": "deps",
   "semanticCommitScope": "",
   "lockFileMaintenance": {
-    "schedule": ["* 0 * * 0"]
+    "schedule": ["0 0 * * 0"]
   },
   "packageRules": [
     {
