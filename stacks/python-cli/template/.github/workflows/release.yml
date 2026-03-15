@@ -369,11 +369,10 @@ jobs:
         id: digests
         run: |
           V="${{ needs.build.outputs.version }}"
-          GHCR=$(docker buildx imagetools inspect "ghcr.io/${{ github.repository }}:$V" 2>/dev/null | awk '/^Digest:/{print $2}')
+          GHCR=$(docker buildx imagetools inspect "ghcr.io/${{ github.repository }}:$V" --format '{{json .Manifest}}' 2>/dev/null | jq -r '.digest // empty')
           DH=$(curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V" | jq -r '.digest // empty' 2>/dev/null)
           echo "ghcr=${GHCR:-n/a}" >> "$GITHUB_OUTPUT"
           echo "dockerhub=${DH:-n/a}" >> "$GITHUB_OUTPUT"
-          { echo "ghcr=$GHCR"; echo "dockerhub=$DH"; } >> "$GITHUB_OUTPUT"
 
       - name: Extract changelog
         id: changelog
