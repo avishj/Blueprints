@@ -11,6 +11,37 @@ concurrency:
 permissions: {}
 
 jobs:
+  check:
+    name: Check Published State
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      pypi: ${{ steps.check.outputs.pypi }}
+      ghcr: ${{ steps.check.outputs.ghcr }}
+      dockerhub: ${{ steps.check.outputs.dockerhub }}
+      release: ${{ steps.check.outputs.release }}
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - name: Check all targets
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.ref_name }}
+        run: |
+          V="${VERSION#v}"
+          exists() { "$@" > /dev/null 2>&1 && echo true || echo false; }
+
+          echo "pypi=$(exists curl -sf "https://pypi.org/pypi/myapp/$V/json")" >> "$GITHUB_OUTPUT"
+          echo "ghcr=$(exists docker manifest inspect "ghcr.io/${{ github.repository }}:$V")" >> "$GITHUB_OUTPUT"
+          echo "dockerhub=$(exists curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V")" >> "$GITHUB_OUTPUT"
+          echo "release=$(exists gh release view "$VERSION" --repo "${{ github.repository }}")" >> "$GITHUB_OUTPUT"
+
   build:
     name: Build Distribution
     runs-on: ubuntu-latest
