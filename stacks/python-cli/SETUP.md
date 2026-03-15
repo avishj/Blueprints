@@ -51,7 +51,7 @@
 - [ ] `.github/settings.yml` — `repository.name`
 - [ ] `CONTRIBUTING.md` — clone URL repo name, `cd` directory name
 - [ ] `docs/index.md` — heading, description, install/usage commands
-- [ ] `README.md` (template) — env var prefix table (`<YOURAPP>_` entries)
+- [ ] `README.md` (template) — heading, all badge URLs, install commands (`uv`, `pip`, `docker`), usage examples, clone URL, `cd` dir, env var prefix table (`<YOURAPP>_` entries), docs link, star history chart
 
 ## Replace `avishj` > `<owner>`
 
