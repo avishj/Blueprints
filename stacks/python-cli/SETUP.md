@@ -107,7 +107,7 @@
 - [ ] Create GitHub environment: `pypi` (with trusted publisher configured)
 - [ ] Enable secret scanning with push protection
 - [ ] Enable Dependabot security updates
-- [ ] Create tag ruleset: Settings > Rules > Rulesets > New ruleset > set target to tags matching `v*` > check "Block tag updates" and "Block tag deletions" > save
+- [ ] Enable release immutability: Settings > scroll to "Releases" section > select "Enable release immutability" (only applies to future releases)
 - [ ] Enable GHCR immutable tags: go to the repo's Packages page > select the container package > Package settings > Tag immutability > enable
 - [ ] Enable Docker Hub immutable tags: Docker Hub > Repositories > select repo > Settings > General > Tag Mutability > set to "All tags immutable" > save
 - [ ] Push and verify CI workflow passes
