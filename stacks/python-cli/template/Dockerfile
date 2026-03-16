@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 # v0.10.10
 FROM ghcr.io/astral-sh/uv:0.10.10@sha256:cbe0a44ba994e327b8fe7ed72beef1aaa7d2c4c795fd406d1dbf328bacb2f1c5 AS uv
 

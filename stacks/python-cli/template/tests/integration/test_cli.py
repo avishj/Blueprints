@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 """CLI integration tests."""
 
 import pytest

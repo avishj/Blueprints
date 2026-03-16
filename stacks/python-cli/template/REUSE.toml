@@ -1,14 +1,13 @@
 version = 1
 
 [[annotations]]
-path = ["*.md", "docs/**", "*.yml", "*.yaml", "*.json", "*.toml", "*.cfg", "*.ini", "*.txt", "*.lock"]
-precedence = "closest"
-SPDX-FileCopyrightText = "2025 Your Name <you@example.com>"
+path = ["*.json", "*.lock"]
+SPDX-FileCopyrightText = "2026 Avish J <avish.j@pm.me>"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
-path = [".gitignore", ".gitattributes", ".editorconfig", ".dockerignore"]
-SPDX-FileCopyrightText = "2025 Your Name <you@example.com>"
+path = "src/myapp/py.typed"
+SPDX-FileCopyrightText = "2026 Avish J <avish.j@pm.me>"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
 
 [[annotations]]
