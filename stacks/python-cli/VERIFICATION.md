@@ -174,17 +174,23 @@
 - [ ] File present — copy 1:1 from template (AGPL-3.0) unless a different license is chosen
 - [ ] If license changed: replace file entirely, and update `pyproject.toml` license field, classifiers, README badge, and README footer to match
 
+**Inline SPDX headers (all commentable files):**
+
+- [ ] Every commentable file (`.py`, `.yml`, `.yaml`, `.toml`, `.md`, `.properties`, `Dockerfile`, `justfile`, `CODEOWNERS`, dotfiles) has `SPDX-FileCopyrightText` and `SPDX-License-Identifier` in a comment header
+- [ ] Copyright holder and year are updated (not `Avish J <avish.j@pm.me>` unless that is the actual holder)
+- [ ] License identifier matches the project license (AGPL-3.0-or-later unless changed)
+
 **`REUSE.toml`:**
 
 - [ ] `version = 1` present
-- [ ] All `[[annotations]]` tables have `path`, `SPDX-FileCopyrightText`, and `SPDX-License-Identifier`
-- [ ] `SPDX-FileCopyrightText` entries use actual copyright holder (not `Your Name <you@example.com>`)
+- [ ] Covers only uncommentable files: `*.json`, `*.lock`, `src/myapp/py.typed`
+- [ ] `SPDX-FileCopyrightText` entries use actual copyright holder (not `Avish J <avish.j@pm.me>`)
 - [ ] `SPDX-License-Identifier` entries match the project license (AGPL-3.0-or-later unless changed)
-- [ ] Coverage: all uncommentable/config files (`.gitignore`, `.editorconfig`, etc.) are covered by at least one `[[annotations]]` table
+- [ ] `LICENSES/**` annotation present with FSF copyright
 
 **`LICENSES/` directory:**
 
-- [ ] `LICENSES/AGPL-3.0-or-later.txt` exists with full license text (run `reuse download AGPL-3.0-or-later` if placeholder)
+- [ ] `LICENSES/AGPL-3.0-or-later.txt` exists with full license text (not a placeholder)
 - [ ] If license changed: corresponding `LICENSES/<SPDX-ID>.txt` file exists, old one removed
 - [ ] No extra license files for licenses not used by any file
 
@@ -334,7 +340,7 @@
 
 - [ ] `grep -r --exclude=VERIFICATION.md "myapp"` — zero hits (template app name fully replaced)
 - [ ] `grep -r --exclude=VERIFICATION.md "MYAPP_"` — zero hits (env prefix replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md "Your Name\|you@example.com"` — zero hits (author placeholders replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md "Avish J\|avish.j@pm.me"` — zero hits if author is different; expected hits if author is Avish J
 - [ ] `grep -r --exclude=VERIFICATION.md "Change This\|change-this"` — zero hits (settings.yml placeholders replaced)
 - [ ] `grep -r --exclude=VERIFICATION.md "A CLI application"` — zero hits (template description replaced)
 - [ ] `grep -r --exclude=VERIFICATION.md '\${'` — zero hits (all `${...}` placeholders like `SONAR_PROJECT_KEY`, `SONAR_ORG`, `PROJECT_NAME` resolved)
