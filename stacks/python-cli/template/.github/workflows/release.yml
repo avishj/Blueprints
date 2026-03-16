@@ -380,6 +380,9 @@ jobs:
           VE=$(printf '%s' "$V" | sed 's/\./\\./g')
           awk "/^## .*${VE}([[:space:]]|$)/{found=1; next} /^## /{if(found) exit} found" CHANGELOG.md > notes.md
 
+      - name: Generate checksums
+        run: sha256sum dist/* sbom/* > SHA256SUMS
+
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -419,4 +422,4 @@ jobs:
             --repo "${{ github.repository }}" \
             --verify-tag \
             --notes-file notes.md \
-            dist/* sbom/*
+            dist/* sbom/* SHA256SUMS
