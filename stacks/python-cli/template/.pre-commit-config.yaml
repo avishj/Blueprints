@@ -21,6 +21,7 @@ repos:
       - id: check-symlinks
       - id: check-illegal-windows-names
       - id: check-vcs-permalinks
+        exclude: pyproject\.toml
       - id: destroyed-symlinks
       - id: detect-private-key
       - id: end-of-file-fixer
