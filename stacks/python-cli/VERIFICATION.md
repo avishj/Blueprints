@@ -328,9 +328,13 @@
 - [ ] `just complexity` — cognitive complexity ≤ 15
 - [ ] `just semgrep` — SAST scan
 - [ ] `just build` — sdist + wheel built successfully
+- [ ] `just validate` — validate-pyproject passes
+- [ ] `just package-check` — build + twine check + entry point smoke test
 - [ ] `just docs` — mkdocs serves without errors
 - [ ] `just docs-build` — mkdocs strict build passes
-- [ ] `just ci` — full composite gate (lint + typecheck + cov + complexity + semgrep)
+- [ ] `just reuse-check` — REUSE/SPDX compliance passes
+- [ ] `just pre-commit` — all pre-commit hooks pass
+- [ ] `just ci` — full composite gate (pre-commit + lint + typecheck + cov + complexity + semgrep + validate + docs-build + package-check + reuse-check)
 
 **Pre-commit hooks:**
 
