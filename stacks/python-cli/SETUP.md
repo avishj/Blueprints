@@ -69,6 +69,13 @@
 - [ ] `sonar-project.properties` — `${SONAR_PROJECT_KEY}`, `${SONAR_ORG}`, `${PROJECT_NAME}`
 - [ ] `README.md` (template) — `${SONAR_PROJECT_KEY}` in SonarCloud badge
 
+## Replace REUSE placeholders
+
+- [ ] `REUSE.toml` — replace `Your Name <you@example.com>` with actual copyright holder in all `SPDX-FileCopyrightText` entries
+- [ ] `REUSE.toml` — replace `2025` with actual year in all `SPDX-FileCopyrightText` entries
+- [ ] `REUSE.toml` — if license changed from AGPL-3.0-or-later, update all `SPDX-License-Identifier` entries
+- [ ] `LICENSES/` — run `reuse download AGPL-3.0-or-later` to populate the license text (or replace with your license: `reuse download <SPDX-ID>`)
+
 ## Replace other placeholders
 
 - [ ] `pyproject.toml` — `project.description` ("A CLI application.")

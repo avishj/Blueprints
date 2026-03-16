@@ -174,6 +174,20 @@
 - [ ] File present — copy 1:1 from template (AGPL-3.0) unless a different license is chosen
 - [ ] If license changed: replace file entirely, and update `pyproject.toml` license field, classifiers, README badge, and README footer to match
 
+**`REUSE.toml`:**
+
+- [ ] `version = 1` present
+- [ ] All `[[annotations]]` tables have `path`, `SPDX-FileCopyrightText`, and `SPDX-License-Identifier`
+- [ ] `SPDX-FileCopyrightText` entries use actual copyright holder (not `Your Name <you@example.com>`)
+- [ ] `SPDX-License-Identifier` entries match the project license (AGPL-3.0-or-later unless changed)
+- [ ] Coverage: all uncommentable/config files (`.gitignore`, `.editorconfig`, etc.) are covered by at least one `[[annotations]]` table
+
+**`LICENSES/` directory:**
+
+- [ ] `LICENSES/AGPL-3.0-or-later.txt` exists with full license text (run `reuse download AGPL-3.0-or-later` if placeholder)
+- [ ] If license changed: corresponding `LICENSES/<SPDX-ID>.txt` file exists, old one removed
+- [ ] No extra license files for licenses not used by any file
+
 **`CODEOWNERS`:**
 
 - [ ] File exists with `* @<owner>` or another valid ownership entry
@@ -188,15 +202,16 @@
 
 **`ci.yml`:**
 
-- [ ] All 13 jobs present: `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `dependency-review`, `markdownlint`, `ci-passed`
+- [ ] All 14 jobs present: `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `dependency-review`, `reuse`, `markdownlint`, `ci-passed`
 - [ ] `docker` job — `docker build -t` and `docker run --rm` image name uses app name (not `myapp`)
 - [ ] `package` job — `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
 - [ ] `test` job — matrix: Python `3.13` + `3.14` (add newer versions as needed) × `ubuntu` + `macos` + `windows`; runs all 3 test tiers separately with per-tier coverage uploads to Codecov (flags: `unit`, `integration`, `e2e`)
-- [ ] `ci-passed` gate job — `needs` lists all 12 other jobs
+- [ ] `ci-passed` gate job — `needs` lists all 13 other jobs
 - [ ] `lint` job — ruff check, ruff format, ty check, validate-pyproject, mkdocs build --strict, typos spell check
 - [ ] `sonarcloud` job — downloads test results and coverage artifacts, runs SonarCloud scan
 - [ ] `complexity` job — complexipy with max-complexity 15 and SARIF upload
 - [ ] `dependency-review` job — PR-only, `fail-on-severity: moderate`, license and vuln checks, SSPL/BUSL denied
+- [ ] `reuse` job — runs `fsfe/reuse-action` with `--include-submodules lint`, no permissions needed
 - [ ] All remaining jobs (`actionlint`, `lychee`, `markdownlint`, `security`, `codeql`) match template exactly
 
 **`release.yml`:**
@@ -271,7 +286,7 @@
 **Copy 1:1 from template (no changes needed):**
 
 - [ ] `justfile` — all recipes: `lint`, `lint-fix`, `typecheck`, `test`, `cov`, `complexity`, `semgrep`, `build`, `docs`, `docs-build`, `ci`, `clean`
-- [ ] `.pre-commit-config.yaml` — all 8 repos: pre-commit-hooks, ruff, ty (local), validate-pyproject, complexipy, commitizen, typos, gitleaks
+- [ ] `.pre-commit-config.yaml` — all 9 repos: pre-commit-hooks, ruff, ty (local), validate-pyproject, complexipy, commitizen, typos, reuse, gitleaks
 - [ ] `.editorconfig` — indent/charset/line-ending rules for `*`, `*.yml/yaml`, `*.json`, `*.md`
 - [ ] `.gitattributes` — line-ending normalization, diff drivers, linguist overrides
 - [ ] `.gitignore` — Python, dist, venv, testing, linting, type-checking, SonarCloud, docs, IDE, OS, env file patterns
@@ -313,7 +328,7 @@
 
 **Pre-commit hooks:**
 
-- [ ] `pre-commit run --all-files` — all hooks pass (ruff, ty, validate-pyproject, complexipy, typos, gitleaks)
+- [ ] `pre-commit run --all-files` — all hooks pass (ruff, ty, validate-pyproject, complexipy, typos, reuse, gitleaks)
 
 ### Section 10 — Global Grep Sanity Check
 
