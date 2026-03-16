@@ -36,13 +36,17 @@ validate:
 build:
     uv build
 
+package-check: build
+    uvx twine check dist/*
+    uv run --with dist/*.whl --no-project -- myapp --help
+
 docs:
     uv run mkdocs serve
 
 docs-build:
     uv run mkdocs build --strict
 
-ci: lint typecheck cov complexity semgrep validate docs-build
+ci: lint typecheck cov complexity semgrep validate docs-build package-check
 
 clean:
     rm -rf build/ dist/ *.egg-info/ .pytest_cache/ .ruff_cache/ .coverage htmlcov/ coverage.xml results.xml site/ .ty/
