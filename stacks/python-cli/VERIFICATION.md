@@ -183,7 +183,7 @@
 **`REUSE.toml`:**
 
 - [ ] `version = 1` present
-- [ ] Covers only uncommentable files: `*.json`, `*.lock`, `src/myapp/py.typed`
+- [ ] Covers only uncommentable files: `*.json`, `*.lock`, `src/myapp/py.typed` (replace `myapp` with your actual package name)
 - [ ] `SPDX-FileCopyrightText` entries use actual copyright holder (not `Avish J <avish.j@pm.me>`)
 - [ ] `SPDX-License-Identifier` entries match the project license (AGPL-3.0-or-later unless changed)
 - [ ] `LICENSES/**` annotation present with FSF copyright
