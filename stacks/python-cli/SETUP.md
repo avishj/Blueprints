@@ -80,7 +80,7 @@
 ## Replace other placeholders
 
 - [ ] `pyproject.toml` — `project.description` ("A CLI application.")
-- [ ] `pyproject.toml` — `project.authors` (`Your Name`, `you@example.com`)
+- [ ] `pyproject.toml` — `project.authors` (if author is not `Avish J <avish.j@pm.me>`)
 - [ ] `pyproject.toml` — `project.keywords` (empty list)
 - [ ] `pyproject.toml` — `project.license` (if not AGPL-3.0)
 - [ ] `pyproject.toml` — `project.classifiers` license classifier (if license changed)
