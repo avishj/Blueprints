@@ -71,13 +71,17 @@ pre-commit install
 ### Common tasks
 
 ```bash
-just lint        # lint and format check
-just typecheck   # run type checker
-just test        # run tests
-just cov         # run tests with coverage
-just ci          # run all quality gates
-just docs        # serve docs locally
-just clean       # remove build artifacts
+just lint           # lint and format check
+just typecheck      # run type checker
+just test           # run tests
+just cov            # run tests with coverage
+just validate       # validate pyproject.toml
+just package-check  # build + twine check + entry point smoke
+just reuse-check    # REUSE/SPDX compliance
+just pre-commit     # run all pre-commit hooks
+just docs           # serve docs locally
+just ci             # run all quality gates
+just clean          # remove build artifacts
 ```
 
 ## Configuration
