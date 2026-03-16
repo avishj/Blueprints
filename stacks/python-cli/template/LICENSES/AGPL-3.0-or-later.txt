@@ -1,0 +1,2 @@
+This file is a placeholder. Replace with the full AGPL-3.0-or-later license text.
+You can download it with: reuse download AGPL-3.0-or-later
