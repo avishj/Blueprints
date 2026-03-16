@@ -30,6 +30,9 @@ complexity:
 semgrep:
     uv run semgrep scan --config=auto .
 
+validate:
+    uvx validate-pyproject pyproject.toml
+
 build:
     uv build
 
@@ -39,7 +42,7 @@ docs:
 docs-build:
     uv run mkdocs build --strict
 
-ci: lint typecheck cov complexity semgrep
+ci: lint typecheck cov complexity semgrep validate docs-build
 
 clean:
     rm -rf build/ dist/ *.egg-info/ .pytest_cache/ .ruff_cache/ .coverage htmlcov/ coverage.xml results.xml site/ .ty/
