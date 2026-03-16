@@ -380,6 +380,27 @@ jobs:
           vulnerability-check: true
           deny-licenses: SSPL-1.0, BUSL-1.1
 
+  reuse:
+    name: REUSE Compliance
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@58077d3c7e43986b6b15fba718e8ea69e387dfcc # v2.15.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: REUSE lint
+        uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6.0.0
+        with:
+          args: --include-submodules lint
+
   markdownlint:
     name: Lint Markdown
     runs-on: ubuntu-latest
@@ -404,7 +425,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, docker, lychee, test, complexity, security, codeql, markdownlint, dependency-review, sonarcloud, package]
+    needs: [lint, actionlint, docker, lychee, test, complexity, security, codeql, reuse, markdownlint, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
