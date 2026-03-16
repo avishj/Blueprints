@@ -102,8 +102,13 @@
 - [ ] `just test` — all tests pass
 - [ ] `just cov` — coverage ≥ 70%
 - [ ] `just complexity` — no function exceeds max complexity (15)
+- [ ] `just validate` — validate-pyproject passes
 - [ ] `just build` — sdist + wheel built successfully
+- [ ] `just package-check` — build + twine check + entry point smoke test
 - [ ] `just docs` — mkdocs serves without errors
+- [ ] `just docs-build` — mkdocs strict build passes
+- [ ] `just reuse-check` — REUSE/SPDX compliance passes
+- [ ] `just pre-commit` — all pre-commit hooks pass
 
 ## GitHub repo settings
 
