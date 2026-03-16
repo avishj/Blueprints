@@ -13,7 +13,7 @@ description = "A CLI application."
 readme = "README.md"
 license = "AGPL-3.0-or-later"
 requires-python = ">=3.13"
-authors = [{ name = "Your Name", email = "you@example.com" }]
+authors = [{ name = "Avish J", email = "avish.j@pm.me" }]
 keywords = []
 classifiers = [
     "Development Status :: 3 - Alpha",
