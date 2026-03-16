@@ -19,6 +19,7 @@ This stack is for building command-line tools, scripts, and automation utilities
 11. Gitleaks - Secret scanner.
 12. mkdocs-material - Documentation site generator.
 13. editorconfig - Editor consistency config.
+14. REUSE - SPDX license/copyright compliance checker.
 
 ## Libraries
 
@@ -53,6 +54,7 @@ This stack is for building command-line tools, scripts, and automation utilities
 23. Renovate - Automated dependency updates (primary, via `renovate.json`).
 24. Dependabot - Urgent security advisories only (GitHub-native repo setting).
 25. GitHub secret scanning - Push protection (repo setting).
+26. fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6.0.0 - REUSE/SPDX compliance check.
 
 ## Project structure
 
@@ -107,7 +109,10 @@ template/
 ├── CONTRIBUTING.md
 ├── Dockerfile
 ├── LICENSE
+├── LICENSES/
+│   └── AGPL-3.0-or-later.txt
 ├── README.md
+├── REUSE.toml
 ├── SECURITY.md
 ├── codecov.yml
 ├── justfile
