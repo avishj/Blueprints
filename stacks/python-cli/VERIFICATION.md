@@ -148,7 +148,7 @@
 - [ ] Install commands use app name (uv, pip, docker)
 - [ ] Usage examples updated for actual commands (demo `hello` command replaced)
 - [ ] Development section: clone URL, `cd` dir use correct repo name
-- [ ] Common tasks table matches template (`just lint`, `just typecheck`, etc.)
+- [ ] Common tasks table matches template (`just lint`, `just typecheck`, `just validate`, `just package-check`, `just reuse-check`, `just pre-commit`, etc.)
 - [ ] Configuration section: env var prefix and table use `<APP>_` (not `MYAPP_`), rows updated for actual settings
 - [ ] Documentation link points to correct GitHub Pages URL
 - [ ] License section matches `pyproject.toml` license choice
