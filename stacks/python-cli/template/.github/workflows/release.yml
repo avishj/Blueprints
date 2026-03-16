@@ -385,7 +385,9 @@ jobs:
           awk "/^## .*${VE}([[:space:]]|$)/{found=1; next} /^## /{if(found) exit} found" CHANGELOG.md > notes.md
 
       - name: Generate checksums
-        run: sha256sum dist/* sbom/* > SHA256SUMS
+        run: |
+          (cd dist && sha256sum *) > SHA256SUMS
+          (cd sbom && sha256sum *) >> SHA256SUMS
 
       - name: Create GitHub release
         env:
