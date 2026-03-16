@@ -46,7 +46,10 @@ docs:
 docs-build:
     uv run mkdocs build --strict
 
-ci: lint typecheck cov complexity semgrep validate docs-build package-check
+reuse-check:
+    uvx reuse lint
+
+ci: lint typecheck cov complexity semgrep validate docs-build package-check reuse-check
 
 clean:
     rm -rf build/ dist/ *.egg-info/ .pytest_cache/ .ruff_cache/ .coverage htmlcov/ coverage.xml results.xml site/ .ty/
