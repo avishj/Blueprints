@@ -1,0 +1,36 @@
+# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+name: OSV-Scanner
+
+on:
+  workflow_call:
+    inputs:
+      scan-mode:
+        description: "Scan mode: 'ci' for PR differential scanning, 'weekly' for full repository scan"
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  scan-ci:
+    if: inputs.scan-mode == 'ci'
+    name: OSV CI Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      security-events: write
+    steps:
+      - run: echo "OSV CI scan"
+
+  scan-weekly:
+    if: inputs.scan-mode == 'weekly'
+    name: OSV Weekly Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      security-events: write
+    steps:
+      - run: echo "OSV weekly scan"
