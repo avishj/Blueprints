@@ -72,3 +72,11 @@ jobs:
     uses: ./.github/workflows/_codeql.yml
     permissions:
       security-events: write
+
+  osv-scanner:
+    name: OSV-Scanner
+    uses: ./.github/workflows/_osv-scanner.yml
+    with:
+      scan-mode: weekly
+    permissions:
+      security-events: write
