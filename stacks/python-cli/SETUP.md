@@ -45,6 +45,7 @@
 - [ ] `mkdocs.yml` — `site_name`, `site_description`, `copyright`, `watch` path (`src/<yourapp>`)
 - [ ] `codecov.yml` — all `paths` entries under flags > `src/<yourapp>/`
 - [ ] `Dockerfile` — `ENTRYPOINT ["<yourapp>"]`
+- [ ] `justfile` — entry point in `package-check` (`myapp --help`)
 - [ ] `.github/workflows/ci.yml` — `docker build -t` and `docker run --rm` image name, `package` job entry-point verification
 - [ ] `.github/workflows/release.yml` — `pypi.org/p/<yourapp>` environment URL, `check` job PyPI URL
 - [ ] `.github/ISSUE_TEMPLATE/bug_report.yml` — version command, reproduction steps
