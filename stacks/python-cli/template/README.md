@@ -7,7 +7,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 # myapp
 
 [![CI](https://github.com/avishj/myapp/actions/workflows/ci.yml/badge.svg)](https://github.com/avishj/myapp/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/avishj/myapp/actions/workflows/codeql.yml/badge.svg)](https://github.com/avishj/myapp/actions/workflows/codeql.yml)
+[![CodeQL](https://github.com/avishj/myapp/actions/workflows/_codeql.yml/badge.svg)](https://github.com/avishj/myapp/actions/workflows/_codeql.yml)
 [![codecov](https://codecov.io/gh/avishj/myapp/branch/main/graph/badge.svg)](https://codecov.io/gh/avishj/myapp)
 [![PyPI](https://img.shields.io/pypi/v/myapp)](https://pypi.org/project/myapp/)
 [![Downloads](https://img.shields.io/pypi/dm/myapp)](https://pypi.org/project/myapp/)
