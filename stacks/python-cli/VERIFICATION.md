@@ -203,16 +203,18 @@
 **Reusable workflows (copy 1:1 from template):**
 
 - [ ] `_codeql.yml` — CodeQL analysis with `security-and-quality` queries, paths-ignore for docs/tests, threat models configured
+- [ ] `_osv-scanner.yml` — OSV dependency vulnerability scanner with CI differential scanning and weekly full-repo scanning modes, SARIF upload
 - [ ] `_security.yml` — Semgrep SAST, Trivy filesystem scan, Gitleaks secret scan, zizmor workflow security scan
 - [ ] `_trivy-image.yml` — reusable Trivy container image scan with SARIF upload
 
 **`ci.yml`:**
 
-- [ ] All 14 jobs present: `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `dependency-review`, `reuse`, `markdownlint`, `ci-passed`
+- [ ] All 15 jobs present: `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `osv-scanner`, `dependency-review`, `reuse`, `markdownlint`, `ci-passed`
 - [ ] `docker` job — `docker build -t` and `docker run --rm` image name uses app name (not `myapp`)
 - [ ] `package` job — `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
 - [ ] `test` job — matrix: Python `3.13` + `3.14` (add newer versions as needed) × `ubuntu` + `macos` + `windows`; runs all 3 test tiers separately with per-tier coverage uploads to Codecov (flags: `unit`, `integration`, `e2e`)
-- [ ] `ci-passed` gate job — `needs` lists all 13 other jobs
+- [ ] `ci-passed` gate job — `needs` lists all 14 other jobs
+- [ ] `osv-scanner` job — calls `_osv-scanner.yml` with `scan-mode: ci`, `security-events: write` permission
 - [ ] `lint` job — ruff check, ruff format, ty check, validate-pyproject, mkdocs build --strict, typos spell check
 - [ ] `sonarcloud` job — downloads test results and coverage artifacts, runs SonarCloud scan
 - [ ] `complexity` job — complexipy with max-complexity 15 and SARIF upload
@@ -238,7 +240,7 @@
 
 **`weekly.yml`:**
 
-- [ ] Copy 1:1 from template — runs OpenSSF Scorecard, Trivy image scan (`:latest`), security scans, CodeQL on schedule (`cron: "0 0 * * 0"`) + `workflow_dispatch`
+- [ ] Copy 1:1 from template — runs OpenSSF Scorecard, Trivy image scan (`:latest`), security scans, CodeQL, OSV-Scanner (weekly mode) on schedule (`cron: "0 0 * * 0"`) + `workflow_dispatch`
 
 **`labeler.yml`:**
 
