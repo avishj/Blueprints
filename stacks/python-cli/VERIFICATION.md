@@ -18,7 +18,7 @@
 
 **Dev dependencies:**
 
-- [ ] `[dependency-groups]` `dev` contains all 11 template deps (versions may differ, none removed)
+- [ ] `[dependency-groups]` `dev` contains all 10 template deps (versions may differ, none removed)
 
 **Tooling config — must match template exactly:**
 
