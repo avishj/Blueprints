@@ -28,15 +28,16 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
           # Do persist credentials, as we need it for the git checkout later
-      - name: "Checkout target branch"
+      - name: Checkout target branch
         run: |
           git checkout $GITHUB_BASE_REF
           git submodule update --recursive
-      - name: "Run scanner on existing code"
+      - name: Run scanner on existing code
         uses: google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3
         continue-on-error: true
         with:
@@ -45,12 +46,12 @@ jobs:
             --output=old-results.json
             -r
             ./
-      - name: "Checkout current branch"
+      - name: Checkout current branch
         # Use -f in case any changes were made by osv-scanner (there should be no changes)
         run: |
           git checkout -f $GITHUB_SHA
           git submodule update --recursive
-      - name: "Run scanner on new code"
+      - name: Run scanner on new code
         uses: google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3
         with:
           scan-args: |-
@@ -59,7 +60,7 @@ jobs:
             -r
             ./
         continue-on-error: true
-      - name: "Run osv-scanner-reporter"
+      - name: Run osv-scanner-reporter
         uses: google/osv-scanner-action/osv-reporter-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3
         with:
           scan-args: |-
@@ -68,39 +69,39 @@ jobs:
             --new=new-results.json
             --gh-annotations=true
             --fail-on-vuln=true
-      - name: "Upload artifact"
+      - name: Upload artifact
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: CI OSV SARIF
           path: results.sarif
           retention-days: 90
-      - name: "Upload old scan json results"
+      - name: Upload old scan json results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: CI OSV Old JSON
           path: old-results.json
           retention-days: 90
-      - name: "Upload new scan json results"
+      - name: Upload new scan json results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: CI OSV New JSON
           path: new-results.json
           retention-days: 90
-      - name: "Upload to code-scanning"
-        id: "upload_artifact"
+      - name: Upload to code-scanning
+        id: upload_artifact
         if: ${{ !cancelled() }}
         uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
         with:
           sarif_file: results.sarif
-      - name: "Print Code Scanning PR URL"
+      - name: Print Code Scanning PR URL
         if: ${{ !cancelled() }}
         run: |
           echo "View the OSV-Scanner results for this PR in the 'Security' tab, using the following link:"
           echo "${{ github.server_url }}/${{ github.repository }}/security/code-scanning?query=pr%3A${{ github.event.pull_request.number }}"
-      - name: "Error troubleshooter"
+      - name: Error troubleshooter
         if: ${{ always() && steps.upload_artifact.outcome == 'failure' }}
         run: |
           echo "::error::Artifact upload failed. This is most likely caused by a error during scanning earlier in the workflow."
@@ -119,10 +120,11 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           persist-credentials: false
-      - name: "Run scanner"
+      - name: Run scanner
         uses: google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3
         with:
           scan-args: |-
@@ -131,7 +133,7 @@ jobs:
             -r
             ./
         continue-on-error: true
-      - name: "Run osv-scanner-reporter"
+      - name: Run osv-scanner-reporter
         uses: google/osv-scanner-action/osv-reporter-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3
         with:
           scan-args: |-
@@ -139,27 +141,27 @@ jobs:
             --new=results.json
             --gh-annotations=false
             --fail-on-vuln=true
-      - name: "Upload artifact"
-        id: "upload_artifact"
+      - name: Upload artifact
+        id: upload_artifact
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: Weekly OSV SARIF
           path: results.sarif
           retention-days: 90
-      - name: "Upload to code-scanning"
+      - name: Upload to code-scanning
         if: ${{ !cancelled() }}
         uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
         with:
           sarif_file: results.sarif
-      - name: "Print Code Scanning URL"
+      - name: Print Code Scanning URL
         if: ${{ !cancelled() }}
         run: |
           echo "View the OSV-Scanner results in the 'Security' tab, using the following link:"
           echo "${{ github.server_url }}/${{ github.repository }}/security/code-scanning?query=is%3Aopen+branch%3A${GITHUB_REF_NAME}+tool%3Aosv-scanner"
         env:
           GITHUB_REF_NAME: ${{ github.ref_name }}
-      - name: "Error troubleshooter"
+      - name: Error troubleshooter
         if: ${{ always() && steps.upload_artifact.outcome == 'failure' }}
         run: |
           echo "::error::Artifact upload failed. This is most likely caused by a error during scanning earlier in the workflow."
