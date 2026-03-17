@@ -21,6 +21,9 @@ This stack is for building command-line tools, scripts, and automation utilities
 13. mkdocs-material - Documentation site generator.
 14. editorconfig - Editor consistency config.
 15. REUSE - SPDX license/copyright compliance checker.
+16. semgrep - Static application security testing.
+17. validate-pyproject - pyproject.toml validation.
+18. twine - Package validation.
 
 ## Libraries
 
