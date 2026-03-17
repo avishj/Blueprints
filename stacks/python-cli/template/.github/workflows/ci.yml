@@ -356,6 +356,14 @@ jobs:
     permissions:
       security-events: write
 
+  osv-scanner:
+    name: OSV-Scanner
+    uses: ./.github/workflows/_osv-scanner.yml
+    with:
+      scan-mode: ci
+    permissions:
+      security-events: write
+
   dependency-review:
     name: Dependency Review
     runs-on: ubuntu-latest
@@ -429,7 +437,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, docker, lychee, test, complexity, security, codeql, reuse, markdownlint, dependency-review, sonarcloud, package]
+    needs: [lint, actionlint, docker, lychee, test, complexity, security, codeql, osv-scanner, reuse, markdownlint, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
