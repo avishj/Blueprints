@@ -17,9 +17,10 @@ This stack is for building command-line tools, scripts, and automation utilities
 9. complexipy - Cognitive complexity checker.
 10. commitizen - Conventional commits and versioning.
 11. Gitleaks - Secret scanner.
-12. mkdocs-material - Documentation site generator.
-13. editorconfig - Editor consistency config.
-14. REUSE - SPDX license/copyright compliance checker.
+12. OSV-Scanner - Dependency vulnerability scanner.
+13. mkdocs-material - Documentation site generator.
+14. editorconfig - Editor consistency config.
+15. REUSE - SPDX license/copyright compliance checker.
 
 ## Libraries
 
@@ -51,10 +52,12 @@ This stack is for building command-line tools, scripts, and automation utilities
 20. docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 - Container tags and labels.
 21. zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2 - Workflow security scanner.
 22. sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0 - Container image signing.
-23. Renovate - Automated dependency updates (primary, via `renovate.json`).
-24. Dependabot - Urgent security advisories only (GitHub-native repo setting).
-25. GitHub secret scanning - Push protection (repo setting).
-26. fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6.0.0 - REUSE/SPDX compliance check.
+23. google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3 - Dependency vulnerability scanner.
+24. google/osv-scanner-action/osv-reporter-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3 - Vulnerability scan reporter.
+25. fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6.0.0 - REUSE/SPDX compliance check.
+26. Renovate - Automated dependency updates (primary, via `renovate.json`).
+27. Dependabot - Urgent security advisories only (GitHub-native repo setting).
+28. GitHub secret scanning - Push protection (repo setting).
 
 ## Project structure
 
@@ -66,6 +69,7 @@ template/
 │   │   └── feature_request.yml
 │   ├── workflows/
 │   │   ├── _codeql.yml
+│   │   ├── _osv-scanner.yml
 │   │   ├── _security.yml
 │   │   ├── _trivy-image.yml
 │   │   ├── ci.yml
