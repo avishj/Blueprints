@@ -28,7 +28,7 @@ complexity:
     uv run complexipy src/ --max-complexity 15
 
 semgrep:
-    uv run semgrep scan --config=auto .
+    uvx semgrep scan --config=auto .
 
 validate:
     uvx validate-pyproject pyproject.toml
