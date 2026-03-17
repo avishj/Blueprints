@@ -231,7 +231,7 @@
 - [ ] `sbom` job — generates SPDX SBOM, attests it, uploads artifact
 - [ ] `docker` job — copy 1:1 from template, then replace `myapp` in the entry-point verification step with app name. Verify the following are present and unchanged: matrix publishes to both `ghcr.io` and `docker.io`, multi-platform build (`linux/amd64`, `linux/arm64`), semver tag patterns, BuildKit provenance and SBOM (`provenance: true`, `sbom: true`), `actions/attest` build provenance attestation, Cosign keyless signing with `--recursive` and annotations (repo, workflow, ref), post-push entry-point verification (pulls by digest, runs `--help`)
 - [ ] `trivy` job — calls `_trivy-image.yml` to scan the newly pushed GHCR image
-- [ ] `github-release` job — creates GitHub release with dist and SBOM artifacts, `--generate-notes --verify-tag`; SHA256SUMS uses flat filenames (no `dist/` or `sbom/` prefixes) so `sha256sum -c` works on downloaded assets
+- [ ] `github-release` job — creates GitHub release with dist and SBOM artifacts, `--notes-file notes.md --verify-tag` (workflow extracts changelog entry, fetches auto-generated notes via `gh api repos/.../releases/generate-notes`, combines them into notes.md); SHA256SUMS uses flat filenames (no `dist/` or `sbom/` prefixes) so `sha256sum -c` works on downloaded assets
 
 **`docs.yml`:**
 
