@@ -71,7 +71,7 @@
 
 ## Replace REUSE / SPDX placeholders
 
-- [ ] All commentable files contain inline `SPDX-FileCopyrightText` and `SPDX-License-Identifier` headers — update copyright holder and year in each (search `Avish J <avish.j@pm.me>`)
+- [ ] All commentable files contain inline `SPDX-FileCopyrightText` and `SPDX-License-Identifier` headers — update copyright holder and year in each (search `Avish J <avish.j@pm.me>`). This includes `.pre-commit-config.yaml`, `.editorconfig`, `.gitattributes`, `justfile`, etc.
 - [ ] `REUSE.toml` — replace `Avish J <avish.j@pm.me>` with actual copyright holder in all `SPDX-FileCopyrightText` entries (covers `*.json`, `*.lock`, `py.typed`)
 - [ ] `REUSE.toml` — replace `2026` with actual year in all `SPDX-FileCopyrightText` entries
 - [ ] `REUSE.toml` — if license changed from AGPL-3.0-or-later, update all `SPDX-License-Identifier` entries and inline headers
