@@ -30,7 +30,7 @@ jobs:
       - name: Lowercase image ref
         id: lower
         run: |
-          name="${IMAGE_REF%[:@]*}"
+          name="${IMAGE_REF%%[:@]*}"
           suffix="${IMAGE_REF#"$name"}"
           echo "image-ref=${name,,}${suffix}" >> "$GITHUB_OUTPUT"
         env:
