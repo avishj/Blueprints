@@ -344,13 +344,13 @@
 
 ### Section 10 — Global Grep Sanity Check
 
-- [ ] `grep -r --exclude=VERIFICATION.md "myapp"` — zero hits (template app name fully replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md "MYAPP_"` — zero hits (env prefix replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md "Avish J\|avish.j@pm.me"` — zero hits if author is different; expected hits if author is Avish J
-- [ ] `grep -r --exclude=VERIFICATION.md "Change This\|change-this"` — zero hits (settings.yml placeholders replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md "A CLI application"` — zero hits (template description replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md '\${'` — zero hits (all `${...}` placeholders like `SONAR_PROJECT_KEY`, `SONAR_ORG`, `PROJECT_NAME` resolved)
-- [ ] `grep -r --exclude=VERIFICATION.md "avishj"` — zero hits if owner is different; expected hits if owner is `avishj`
+- [ ] `grep -r --exclude=VERIFICATION.md "myapp" .` — zero hits (template app name fully replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md "MYAPP_" .` — zero hits (env prefix replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md "Avish J\|avish.j@pm.me" .` — zero hits if author is different; expected hits if author is Avish J
+- [ ] `grep -r --exclude=VERIFICATION.md "Change This\|change-this" .` — zero hits (settings.yml placeholders replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md "A CLI application" .` — zero hits (template description replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md '\${' .` — zero hits (all `${...}` placeholders like `SONAR_PROJECT_KEY`, `SONAR_ORG`, `PROJECT_NAME` resolved)
+- [ ] `grep -r --exclude=VERIFICATION.md "avishj" .` — zero hits if owner is different; expected hits if owner is `avishj`
 
 ## User Scope
 
