@@ -242,7 +242,6 @@ jobs:
     timeout-minutes: 10
     needs: [test]
     permissions:
-      contents: read
       pull-requests: read
     steps:
       - name: Harden runner
@@ -370,7 +369,6 @@ jobs:
     timeout-minutes: 10
     if: github.event_name == 'pull_request'
     permissions:
-      contents: read
       pull-requests: write
     steps:
       - name: Harden runner
