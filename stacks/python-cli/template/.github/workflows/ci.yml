@@ -346,7 +346,6 @@ jobs:
     name: Security Scans
     uses: ./.github/workflows/_security.yml
     permissions:
-      contents: read
       security-events: write
     secrets: inherit
 
