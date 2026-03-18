@@ -358,6 +358,7 @@ jobs:
 
   osv-scanner:
     name: OSV-Scanner
+    if: github.event_name == 'pull_request'
     uses: ./.github/workflows/_osv-scanner.yml
     with:
       scan-mode: ci
