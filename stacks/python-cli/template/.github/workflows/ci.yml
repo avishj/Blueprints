@@ -66,6 +66,21 @@ jobs:
               - '**/*.md'
             workflows:
               - '.github/workflows/**'
+            config:
+              - '**/*.yml'
+              - '**/*.yaml'
+              - '**/*.json'
+              - '**/*.toml'
+              - 'sonar-project.properties'
+              - '.editorconfig'
+              - '.dockerignore'
+              - '.gitattributes'
+              - '.gitignore'
+              - 'justfile'
+              - 'Dockerfile'
+              - 'CODEOWNERS'
+              - 'LICENSE'
+              - 'LICENSES/**'
 
   lint:
     name: Lint, Format & Type Check
