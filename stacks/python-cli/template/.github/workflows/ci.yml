@@ -60,6 +60,10 @@ jobs:
               - 'src/**'
               - 'pyproject.toml'
               - 'uv.lock'
+            docs:
+              - 'docs/**'
+              - 'mkdocs.yml'
+              - '**/*.md'
 
   lint:
     name: Lint, Format & Type Check
