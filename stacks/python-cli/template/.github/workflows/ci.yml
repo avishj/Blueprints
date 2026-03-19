@@ -64,6 +64,8 @@ jobs:
               - 'docs/**'
               - 'mkdocs.yml'
               - '**/*.md'
+            workflows:
+              - '.github/workflows/**'
 
   lint:
     name: Lint, Format & Type Check
