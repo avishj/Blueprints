@@ -48,6 +48,12 @@ jobs:
         with:
           list-files: json
           filters: |
+            python:
+              - 'src/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - 'sonar-project.properties'
 
   lint:
     name: Lint, Format & Type Check
