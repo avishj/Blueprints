@@ -479,11 +479,24 @@ jobs:
         with:
           args: --include-submodules lint
 
-  validate-config:
-    name: Validate Config Schemas
+  config-validation:
+    name: Config Validation
+    needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions: {}
+    env:
+      SCHEMA_MAP: |
+        .github/workflows/*.yml||uvx check-jsonschema --builtin-schema vendor.github-workflows
+        .github/ISSUE_TEMPLATE/bug_report.yml .github/ISSUE_TEMPLATE/feature_request.yml||uvx check-jsonschema --builtin-schema vendor.github-issue-forms
+        renovate.json||uvx check-jsonschema --builtin-schema vendor.renovate
+        codecov.yml||uvx check-jsonschema --builtin-schema vendor.codecov
+        .pre-commit-config.yaml||uvx check-jsonschema --schemafile https://www.schemastore.org/pre-commit-config.json
+        .github/FUNDING.yml||uvx check-jsonschema --schemafile https://www.schemastore.org/github-funding.json
+        .github/labeler.yml||uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json
+        pyproject.toml||uvx check-jsonschema --schemafile https://www.schemastore.org/pyproject.json
+        mkdocs.yml||uvx check-jsonschema --schemafile https://www.schemastore.org/mkdocs-1.6.json
+        REUSE.toml||uvx check-jsonschema --schemafile https://reuse.software/reuse-toml-v1.schema.json
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
@@ -552,7 +565,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, docker, lychee, test, complexity, security, codeql, osv-scanner, reuse, validate-config, markdownlint, dependency-review, sonarcloud, package]
+    needs: [lint, actionlint, docker, lychee, test, complexity, security, codeql, osv-scanner, reuse, config-validation, markdownlint, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
