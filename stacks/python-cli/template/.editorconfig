@@ -15,11 +15,32 @@ max_line_length = 88
 
 [*.{yml,yaml}]
 indent_size = 2
+max_line_length = off
 
 [*.json]
 indent_size = 2
 
 [*.md]
-indent_size = 2
+indent_size = unset
 trim_trailing_whitespace = false
+max_line_length = off
+
+[*.toml]
+max_line_length = off
+
+[*.properties]
+max_line_length = off
+
+[Dockerfile]
+max_line_length = off
+
+[justfile]
+max_line_length = off
+
+[LICENSE]
+indent_size = unset
+max_line_length = off
+
+[LICENSES/**]
+indent_size = unset
 max_line_length = off
