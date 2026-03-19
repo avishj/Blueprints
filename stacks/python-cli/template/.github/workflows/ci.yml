@@ -55,6 +55,7 @@ jobs:
               - 'uv.lock'
               - 'sonar-project.properties'
               - 'codecov.yml'
+              - '.pre-commit-config.yaml'
             docker:
               - 'Dockerfile'
               - '.dockerignore'
@@ -66,6 +67,8 @@ jobs:
               - 'mkdocs.yml'
               - '**/*.md'
               - 'src/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
             workflows:
               - '.github/workflows/**'
             config:
