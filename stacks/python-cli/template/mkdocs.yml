@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
-
+---
 site_name: myapp
 site_description: myapp documentation.
 site_url: https://avishj.github.io/myapp/

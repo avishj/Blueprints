@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
-
+---
 name: Trivy Image Scan
 
 on:
@@ -23,7 +23,7 @@ jobs:
       security-events: write
     steps:
       - name: Harden runner
-        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
         with:
           egress-policy: audit
 
@@ -37,7 +37,7 @@ jobs:
           IMAGE_REF: ${{ inputs.image-ref }}
 
       - name: Run Trivy
-        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
         with:
           image-ref: ${{ steps.lower.outputs.image-ref }}
           format: sarif
@@ -49,14 +49,14 @@ jobs:
 
       - name: Upload SARIF
         if: always()
-        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0
+        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0
         with:
           sarif_file: trivy.sarif
           category: trivy-image
 
       - name: Upload artifact
         if: always()
-        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
         with:
           name: trivy-image-results
           path: trivy.sarif

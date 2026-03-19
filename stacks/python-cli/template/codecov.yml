@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
-
+---
 codecov:
   require_ci_to_pass: true
   max_report_age: 24h
