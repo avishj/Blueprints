@@ -54,6 +54,12 @@ jobs:
               - 'pyproject.toml'
               - 'uv.lock'
               - 'sonar-project.properties'
+            docker:
+              - 'Dockerfile'
+              - '.dockerignore'
+              - 'src/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
 
   lint:
     name: Lint, Format & Type Check
