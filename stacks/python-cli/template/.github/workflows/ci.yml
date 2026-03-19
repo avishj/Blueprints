@@ -131,6 +131,9 @@ jobs:
       - name: Build docs
         run: uv run mkdocs build --strict
 
+      - name: YAML lint
+        run: uvx yamllint -d '{extends: default, rules: {line-length: disable}}' .
+
       - name: EditorConfig check
         run: uvx --from editorconfig-checker ec
 
