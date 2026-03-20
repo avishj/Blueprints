@@ -33,7 +33,7 @@ jobs:
       changed_config_files: ${{ steps.filter.outputs.config_files }}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
           fetch-depth: 0
@@ -90,7 +90,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Verify lockfile is current
         run: uv lock --check
@@ -129,7 +129,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
 
@@ -150,7 +150,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
 
@@ -172,7 +172,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
 
@@ -196,7 +196,7 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -275,7 +275,7 @@ jobs:
       pull-requests: read
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
           fetch-depth: 0
@@ -306,7 +306,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Build package
         run: uv build
@@ -327,7 +327,7 @@ jobs:
       security-events: write
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Run complexipy
         run: uv run complexipy src/ --max-complexity 15 --output-format sarif --output complexipy.sarif
@@ -370,7 +370,7 @@ jobs:
       pull-requests: write
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
 
@@ -390,7 +390,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
 
@@ -422,7 +422,7 @@ jobs:
         ]
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Validate schemas
         shell: bash
@@ -454,7 +454,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
 
