@@ -500,7 +500,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [lint, actionlint, docker, lychee, test, complexity, security, codeql, osv-scanner, reuse, config-validation, markdownlint, dependency-review, sonarcloud, package]
+    needs: [changes, lint, actionlint, docker, lychee, test, complexity, security, codeql, osv-scanner, reuse, config-validation, markdownlint, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
