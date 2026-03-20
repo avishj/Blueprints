@@ -42,6 +42,7 @@
 
 **Config files:**
 
+- [ ] `.github/actions/setup-python-env/action.yml` — if the default supported Python changes, update the default `python-version` (template uses `3.13`)
 - [ ] `mkdocs.yml` — `site_name`, `site_description`, `copyright`, `watch` path (`src/<yourapp>`)
 - [ ] `codecov.yml` — all `paths` entries under flags > `src/<yourapp>/`
 - [ ] `Dockerfile` — `ENTRYPOINT ["<yourapp>"]`
@@ -85,6 +86,7 @@
 - [ ] `pyproject.toml` — `project.keywords` (empty list)
 - [ ] `pyproject.toml` — `project.license` (if not AGPL-3.0)
 - [ ] `pyproject.toml` — `project.classifiers` license classifier (if license changed)
+- [ ] `pyproject.toml` — `requires-python`, Python classifiers, `[tool.ruff].target-version`, and `[tool.ty].python-version` if the default Python version changes
 - [ ] `.github/settings.yml` — `repository.description` ("Change This"), `repository.topics` ("change-this")
 - [ ] `LICENSE` — replace file if license changed, update copyright holder
 - [ ] `README.md` (template) — license badge and footer link (if license changed)
