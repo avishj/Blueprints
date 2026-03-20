@@ -103,18 +103,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install uv
-        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78  # v7.6.0
-        with:
-          enable-cache: true
-          cache-dependency-glob: uv.lock
-          python-version: "3.13"
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python-env
 
       - name: Verify lockfile is current
         run: uv lock --check
-
-      - name: Install dependencies
-        run: uv sync --frozen
 
       - name: Ruff check
         run: uv run ruff check --output-format=github --show-fixes --statistics .
