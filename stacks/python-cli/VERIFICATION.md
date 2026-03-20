@@ -215,45 +215,34 @@
 **`ci.yml`:**
 
 - [ ] All 17 jobs present: `changes`, `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `osv-scanner`, `dependency-review`, `reuse`, `config-validation`, `markdownlint`, `ci-passed`
-- [ ] `changes` job — uses `dorny/paths-filter` and exposes `python`, `docker`, `docs`, `workflows`, `config`, and `changed_config_files` outputs
-- [ ] `lint` job — uses the shared Python setup action, then runs ruff check, ruff format, ty check, validate-pyproject, mkdocs build --strict, and typos spell check
-- [ ] `actionlint` job — gated on workflow changes only
-- [ ] `docker` job — gated on `docker || workflows`, and `docker build -t` / `docker run --rm` image name uses app name (not `myapp`)
-- [ ] `test` job — uses the shared Python setup action, is gated on `python || workflows`, and runs the `3.13` + `3.14` × `ubuntu` + `macos` + `windows` matrix with all 3 test tiers and per-tier Codecov uploads (`unit`, `integration`, `e2e`)
-- [ ] `sonarcloud` job — downloads test results and coverage artifacts, then runs SonarCloud scan
-- [ ] `package` job — uses the shared Python setup action, is gated on `python || docs || workflows`, and `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
-- [ ] `complexity` job — uses the shared Python setup action, is gated on `python || workflows`, and runs complexipy with max-complexity 15 plus SARIF upload
-- [ ] `config-validation` job — uses the shared Python setup action and is gated on `config`
-- [ ] `markdownlint` job — gated on `docs`
-- [ ] `ci-passed` gate job — `needs` lists all 16 other jobs and fails only on `failure` or `cancelled` results
-- [ ] `osv-scanner` job — calls `_osv-scanner.yml` with `scan-mode: ci`, `security-events: write` permission
-- [ ] `dependency-review` job — PR-only, `fail-on-severity: moderate`, license and vuln checks, SSPL/BUSL denied
-- [ ] `reuse` job — runs `fsfe/reuse-action` with `--include-submodules lint`, no permissions needed
-- [ ] All remaining jobs (`lychee`, `security`, `codeql`) match template exactly
+- [ ] `changes` job and `ci-passed` gate job are present, and `ci.yml` otherwise matches the template including shared Python setup action usage and current job gating
+- [ ] `docker` job — `docker build -t` and `docker run --rm` image name uses app name (not `myapp`)
+- [ ] `package` job — `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
+- [ ] All remaining `ci.yml` jobs and behavior match the template exactly
 
 **`release.yml`:**
 
 - [ ] Triggered on `v*` tags only
-- [ ] `check` job — copy 1:1 from template, then replace `myapp` in the PyPI URL with app name
-- [ ] `build` job — verifies tag is on main, builds sdist+wheel, attests build provenance, uploads dist artifact
-- [ ] `publish-pypi` job — environment `url` uses app name (not `pypi.org/p/myapp`); uses trusted publishing with attestations
-- [ ] `sbom` job — generates SPDX SBOM, attests it, uploads artifact
-- [ ] `docker` job — copy 1:1 from template, then replace `myapp` in the entry-point verification step with app name. Verify the following are present and unchanged: matrix publishes to both `ghcr.io` and `docker.io`, multi-platform build (`linux/amd64`, `linux/arm64`), semver tag patterns, BuildKit provenance and SBOM (`provenance: true`, `sbom: true`), `actions/attest` build provenance attestation, Cosign keyless signing with `--recursive` and annotations (repo, workflow, ref), post-push entry-point verification (pulls by digest, runs `--help`)
-- [ ] `trivy` job — calls `_trivy-image.yml` to scan the newly pushed GHCR image
-- [ ] `github-release` job — creates GitHub release with dist and SBOM artifacts, `--notes-file notes.md --verify-tag` (workflow extracts changelog entry, fetches auto-generated notes via `gh api repos/.../releases/generate-notes`, combines them into notes.md); SHA256SUMS uses flat filenames (no `dist/` or `sbom/` prefixes) so `sha256sum -c` works on downloaded assets
+- [ ] `check` job — replace `myapp` in the PyPI URL with app name
+- [ ] `publish-pypi` job — environment `url` uses app name (not `pypi.org/p/myapp`)
+- [ ] `docker` job — replace `myapp` in the entry-point verification step with app name
+- [ ] All remaining `release.yml` jobs and behavior match the template exactly
 
 **`docs.yml`:**
 
 - [ ] Copy 1:1 from template — builds mkdocs with `--strict`, deploys to GitHub Pages
 - [ ] Triggers on push to `main` for `docs/**`, `mkdocs.yml`, `src/**` paths + `workflow_dispatch`
+- [ ] All remaining `docs.yml` behavior matches the template exactly
 
 **`weekly.yml`:**
 
-- [ ] Copy 1:1 from template — runs OpenSSF Scorecard, Trivy image scan (`:latest`), security scans, CodeQL, OSV-Scanner (weekly mode) on schedule (`cron: "0 0 * * 0"`) + `workflow_dispatch`
+- [ ] Schedule is `cron: "0 0 * * 0"` with `workflow_dispatch`
+- [ ] All remaining `weekly.yml` behavior matches the template exactly, copy 1-1.
 
 **`labeler.yml`:**
 
-- [ ] Copy 1:1 from template — runs `actions/labeler` on `pull_request_target` with `sync-labels: true`
+- [ ] Runs `actions/labeler` on `pull_request_target` with `sync-labels: true`
+- [ ] All remaining `labeler.yml` behavior matches the template exactly, copy 1-1.
 
 ### Section 6 — GitHub Config (`.github/` non-workflow)
 
