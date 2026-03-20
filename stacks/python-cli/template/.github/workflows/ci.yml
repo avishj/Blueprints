@@ -543,6 +543,8 @@ jobs:
 
   markdownlint:
     name: Lint Markdown
+    if: needs.changes.outputs.docs == 'true'
+    needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions: {}
