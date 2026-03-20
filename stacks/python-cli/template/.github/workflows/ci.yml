@@ -490,6 +490,7 @@ jobs:
 
   config-validation:
     name: Config Validation
+    if: needs.changes.outputs.config == 'true'
     needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 10
