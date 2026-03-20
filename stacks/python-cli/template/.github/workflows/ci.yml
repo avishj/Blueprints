@@ -466,9 +466,11 @@ jobs:
       - name: Warn about unvalidated config files
         if: needs.changes.outputs.config == 'true'
         shell: bash
+        env:
+          CHANGED_CONFIG_FILES: ${{ needs.changes.outputs.changed_config_files }}
         run: |
           known=$(jq -r '.[].files' <<< "$SCHEMA_MAP" | tr ' ' '\n' | while read -r p; do compgen -G "$p"; done | sort -u)
-          changed=$(jq -r '.[]' <<< '${{ needs.changes.outputs.changed_config_files }}' | sort -u)
+          changed=$(jq -r '.[]' <<< "$CHANGED_CONFIG_FILES" | sort -u)
           unvalidated=$(grep -vFxf <(echo "$known") <(echo "$changed") || true)
           [[ -n "$unvalidated" ]] && echo "::warning::Changed config files without schema validation, manual review recommended: $(echo "$unvalidated" | tr '\n' ' ')"
 
