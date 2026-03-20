@@ -28,7 +28,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Build docs
         run: uv run mkdocs build --strict
