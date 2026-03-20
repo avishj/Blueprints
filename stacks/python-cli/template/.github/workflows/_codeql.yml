@@ -22,7 +22,7 @@ jobs:
         language: [python]
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0

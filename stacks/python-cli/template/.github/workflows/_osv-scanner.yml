@@ -24,7 +24,7 @@ jobs:
       security-events: write
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           fetch-depth: 0
           setup-python: "false"
@@ -112,7 +112,7 @@ jobs:
       security-events: write
     steps:
       - name: Setup
-        uses: ./.github/actions/setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
       - name: Run scanner
