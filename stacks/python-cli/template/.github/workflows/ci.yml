@@ -355,6 +355,8 @@ jobs:
 
   package:
     name: Package Validation
+    if: needs.changes.outputs.python == 'true' || needs.changes.outputs.docs == 'true' || needs.changes.outputs.workflows == 'true'
+    needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions: {}
