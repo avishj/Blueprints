@@ -17,6 +17,11 @@ inputs:
     required: false
     default: "1"
 
+  sparse-checkout:
+    description: Sparse checkout paths (space-separated). Leave empty to checkout everything.
+    required: false
+    default: ""
+
 runs:
   using: composite
   steps:
@@ -30,6 +35,7 @@ runs:
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
         persist-credentials: false
+        sparse-checkout: ${{ inputs.sparse-checkout || null }}
 
     - name: Install uv
       if: ${{ inputs.setup-python == 'true' }}
