@@ -21,15 +21,8 @@ jobs:
       matrix:
         language: [python]
     steps:
-      - name: Harden runner
-        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
-        with:
-          egress-policy: audit
-
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-        with:
-          persist-credentials: false
+      - name: Setup
+        uses: ./.github/actions/setup
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0
@@ -47,9 +40,6 @@ jobs:
               - remote-sources
               - local-sources
               - environment-sources
-
-      - name: Setup Python environment
-        uses: ./.github/actions/setup-python-env
 
       - name: Perform analysis
         uses: github/codeql-action/analyze@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0
