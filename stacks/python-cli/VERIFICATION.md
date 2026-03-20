@@ -202,20 +202,20 @@
 
 **Reusable workflows (copy 1:1 from template):**
 
-- [ ] `_codeql.yml` — CodeQL analysis with `security-and-quality` queries, paths-ignore for docs/tests, threat models configured, and shared Python setup action usage
+- [ ] `_codeql.yml` — CodeQL analysis with `security-and-quality` queries, paths-ignore for docs/tests, threat models configured, and remote setup action usage
 - [ ] `_osv-scanner.yml` — OSV dependency vulnerability scanner with CI differential scanning and weekly full-repo scanning modes, SARIF upload
 - [ ] `_security.yml` — Semgrep SAST, Trivy filesystem scan, Gitleaks secret scan, zizmor workflow security scan
 - [ ] `_trivy-image.yml` — reusable Trivy container image scan with SARIF upload
 
-**Local workflow actions:**
+**Shared setup action (hosted in Blueprints repo):**
 
-- [ ] `.github/actions/setup-python-env/action.yml` exists — wraps `astral-sh/setup-uv` and `uv sync --frozen`
-- [ ] `.github/actions/setup-python-env/action.yml` defaults `python-version` to `3.13` or whatever we use in the `pyproject.toml`
+- [ ] All workflow jobs reference `avishj/blueprints/stacks/python-cli/actions/setup@main` (no local `.github/actions/` directory in the project)
+- [ ] No `.github/actions/` directory exists in the project — the setup action is centralized in the Blueprints repo at `stacks/python-cli/actions/setup/action.yml`
 
 **`ci.yml`:**
 
 - [ ] All 17 jobs present: `changes`, `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `osv-scanner`, `dependency-review`, `reuse`, `config-validation`, `markdownlint`, `ci-passed`
-- [ ] `changes` job and `ci-passed` gate job are present, and `ci.yml` otherwise matches the template including shared Python setup action usage and current job gating
+- [ ] `changes` job and `ci-passed` gate job are present, and `ci.yml` otherwise matches the template including remote setup action usage and current job gating
 - [ ] `docker` job — `docker build -t` and `docker run --rm` image name uses app name (not `myapp`)
 - [ ] `package` job — `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
 - [ ] All remaining `ci.yml` jobs and behavior match the template exactly

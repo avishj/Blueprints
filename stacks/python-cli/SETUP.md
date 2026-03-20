@@ -42,7 +42,6 @@
 
 **Config files:**
 
-- [ ] `.github/actions/setup-python-env/action.yml` — if the default supported Python changes, update the default `python-version` (template uses `3.13`)
 - [ ] `mkdocs.yml` — `site_name`, `site_description`, `copyright`, `watch` path (`src/<yourapp>`)
 - [ ] `codecov.yml` — all `paths` entries under flags > `src/<yourapp>/`
 - [ ] `Dockerfile` — `ENTRYPOINT ["<yourapp>"]`

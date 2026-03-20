@@ -36,7 +36,7 @@ This stack is for building command-line tools, scripts, and automation utilities
 1. step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0 - Runner hardening.
 2. actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2 - Repo checkout.
 3. dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1 - Job gating by changed paths.
-4. Local composite action (`.github/actions/setup-python-env`) - Shared Python bootstrap (`setup-uv` + `uv sync --frozen`).
+4. avishj/blueprints/stacks/python-cli/actions/setup@main - Shared setup (harden runner + checkout + `setup-uv` + `uv sync --frozen`).
 5. actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0 - Artifact upload.
 6. actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1 - Artifact download.
 7. actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5 - GitHub Pages deployment.
@@ -77,9 +77,6 @@ This stack is for building command-line tools, scripts, and automation utilities
 ```text
 template/
 ├── .github/
-│   ├── actions/
-│   │   └── setup-python-env/
-│   │       └── action.yml
 │   ├── ISSUE_TEMPLATE/
 │   │   ├── bug_report.yml
 │   │   └── feature_request.yml
