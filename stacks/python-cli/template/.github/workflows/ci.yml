@@ -389,6 +389,8 @@ jobs:
 
   complexity:
     name: Cognitive Complexity
+    if: needs.changes.outputs.python == 'true' || needs.changes.outputs.workflows == 'true'
+    needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
