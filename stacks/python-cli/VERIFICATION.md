@@ -202,25 +202,34 @@
 
 **Reusable workflows (copy 1:1 from template):**
 
-- [ ] `_codeql.yml` — CodeQL analysis with `security-and-quality` queries, paths-ignore for docs/tests, threat models configured
+- [ ] `_codeql.yml` — CodeQL analysis with `security-and-quality` queries, paths-ignore for docs/tests, threat models configured, and shared Python setup action usage
 - [ ] `_osv-scanner.yml` — OSV dependency vulnerability scanner with CI differential scanning and weekly full-repo scanning modes, SARIF upload
 - [ ] `_security.yml` — Semgrep SAST, Trivy filesystem scan, Gitleaks secret scan, zizmor workflow security scan
 - [ ] `_trivy-image.yml` — reusable Trivy container image scan with SARIF upload
 
+**Local workflow actions:**
+
+- [ ] `.github/actions/setup-python-env/action.yml` exists — wraps `astral-sh/setup-uv` and `uv sync --frozen`
+- [ ] `.github/actions/setup-python-env/action.yml` defaults `python-version` to `3.13` or whatever we use in the `pyproject.toml`
+
 **`ci.yml`:**
 
-- [ ] All 15 jobs present: `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `osv-scanner`, `dependency-review`, `reuse`, `markdownlint`, `ci-passed`
-- [ ] `docker` job — `docker build -t` and `docker run --rm` image name uses app name (not `myapp`)
-- [ ] `package` job — `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
-- [ ] `test` job — matrix: Python `3.13` + `3.14` (add newer versions as needed) × `ubuntu` + `macos` + `windows`; runs all 3 test tiers separately with per-tier coverage uploads to Codecov (flags: `unit`, `integration`, `e2e`)
-- [ ] `ci-passed` gate job — `needs` lists all 14 other jobs
+- [ ] All 17 jobs present: `changes`, `lint`, `actionlint`, `docker`, `lychee`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `osv-scanner`, `dependency-review`, `reuse`, `config-validation`, `markdownlint`, `ci-passed`
+- [ ] `changes` job — uses `dorny/paths-filter` and exposes `python`, `docker`, `docs`, `workflows`, `config`, and `changed_config_files` outputs
+- [ ] `lint` job — uses the shared Python setup action, then runs ruff check, ruff format, ty check, validate-pyproject, mkdocs build --strict, and typos spell check
+- [ ] `actionlint` job — gated on workflow changes only
+- [ ] `docker` job — gated on `docker || workflows`, and `docker build -t` / `docker run --rm` image name uses app name (not `myapp`)
+- [ ] `test` job — uses the shared Python setup action, is gated on `python || workflows`, and runs the `3.13` + `3.14` × `ubuntu` + `macos` + `windows` matrix with all 3 test tiers and per-tier Codecov uploads (`unit`, `integration`, `e2e`)
+- [ ] `sonarcloud` job — downloads test results and coverage artifacts, then runs SonarCloud scan
+- [ ] `package` job — uses the shared Python setup action, is gated on `python || docs || workflows`, and `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
+- [ ] `complexity` job — uses the shared Python setup action, is gated on `python || workflows`, and runs complexipy with max-complexity 15 plus SARIF upload
+- [ ] `config-validation` job — uses the shared Python setup action and is gated on `config`
+- [ ] `markdownlint` job — gated on `docs`
+- [ ] `ci-passed` gate job — `needs` lists all 16 other jobs and fails only on `failure` or `cancelled` results
 - [ ] `osv-scanner` job — calls `_osv-scanner.yml` with `scan-mode: ci`, `security-events: write` permission
-- [ ] `lint` job — ruff check, ruff format, ty check, validate-pyproject, mkdocs build --strict, typos spell check
-- [ ] `sonarcloud` job — downloads test results and coverage artifacts, runs SonarCloud scan
-- [ ] `complexity` job — complexipy with max-complexity 15 and SARIF upload
 - [ ] `dependency-review` job — PR-only, `fail-on-severity: moderate`, license and vuln checks, SSPL/BUSL denied
 - [ ] `reuse` job — runs `fsfe/reuse-action` with `--include-submodules lint`, no permissions needed
-- [ ] All remaining jobs (`actionlint`, `lychee`, `markdownlint`, `security`, `codeql`) match template exactly
+- [ ] All remaining jobs (`lychee`, `security`, `codeql`) match template exactly
 
 **`release.yml`:**
 
