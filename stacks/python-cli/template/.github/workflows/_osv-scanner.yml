@@ -23,19 +23,15 @@ jobs:
     permissions:
       security-events: write
     steps:
-      - name: Harden runner
-        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
-        with:
-          egress-policy: audit
-
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - name: Setup
+        uses: ./.github/actions/setup
         with:
           fetch-depth: 0
-          # Do persist credentials, as we need it for the git checkout later
+          setup-python: "false"
       - name: Checkout target branch
         run: |
-          git checkout $GITHUB_BASE_REF
+          git fetch origin $GITHUB_BASE_REF
+          git checkout --track origin/$GITHUB_BASE_REF
           git submodule update --recursive
       - name: Run scanner on existing code
         uses: google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730  # v2.3.3
