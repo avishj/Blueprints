@@ -169,6 +169,8 @@ jobs:
 
   docker:
     name: Docker Lint, Build & Validate
+    if: needs.changes.outputs.docker == 'true' || needs.changes.outputs.workflows == 'true'
+    needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions: {}
