@@ -220,6 +220,8 @@ jobs:
 
   test:
     name: Test (Python ${{ matrix.python-version }}, ${{ matrix.os }})
+    if: needs.changes.outputs.python == 'true' || needs.changes.outputs.workflows == 'true'
+    needs: [changes]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     permissions: {}
