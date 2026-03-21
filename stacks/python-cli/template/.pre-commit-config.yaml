@@ -49,6 +49,12 @@ repos:
         types: [python]
         pass_filenames: false
 
+  - repo: https://github.com/adrienverge/yamllint
+    rev: cba56bcde1fdd01c1deb3f945e69764c291a6530  # v1.38.0
+    hooks:
+      - id: yamllint
+        args: [-d, '{extends: default, rules: {line-length: disable, truthy: disable}}']
+
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: 4b2e70d08cb2ccd26d1fba73588de41c7a5d50b7  # v0.25
     hooks:
