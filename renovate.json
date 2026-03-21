@@ -22,9 +22,12 @@
   "rangeStrategy": "auto",
   "semanticCommitType": "chore",
   "semanticCommitScope": "deps",
-  "lockFileMaintenance": {
-    "schedule": ["0 0 * * 0"]
-  },
+  "enabledManagers": [
+    "github-actions",
+    "pre-commit",
+    "dockerfile",
+    "pep621"
+  ],
   "packageRules": [
     {
       "description": "Label major updates",
