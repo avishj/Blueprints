@@ -120,6 +120,12 @@ jobs:
       - name: Spell check
         uses: crate-ci/typos@631208b7aac2daa8b707f55e7331f9112b0e062d  # v1.44.0
 
+      - name: Check links
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
+        with:
+          fail: true
+          jobSummary: true
+
   actionlint:
     name: Lint Workflows
     if: needs.changes.outputs.workflows == 'true'
@@ -164,23 +170,6 @@ jobs:
 
       - name: Verify entry point
         run: docker run --rm myapp:ci --help
-
-  lychee:
-    name: Link Check
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions: {}
-    steps:
-      - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
-        with:
-          setup-python: "false"
-
-      - name: Check links
-        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
-        with:
-          fail: true
-          jobSummary: true
 
   test:
     name: Test (Python ${{ matrix.python-version }}, ${{ matrix.os }})
@@ -466,7 +455,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [changes, lint, actionlint, docker, lychee, test, complexity, security, codeql, osv-scanner, reuse, config-validation, markdownlint, dependency-review, sonarcloud, package]
+    needs: [changes, lint, actionlint, docker, test, complexity, security, codeql, osv-scanner, reuse, config-validation, markdownlint, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
