@@ -85,6 +85,7 @@ jobs:
 
   lint:
     name: Lint, Format & Type Check
+    needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions: {}
