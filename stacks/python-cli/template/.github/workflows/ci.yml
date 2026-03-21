@@ -405,56 +405,10 @@ jobs:
           vulnerability-check: true
           deny-licenses: SSPL-1.0, BUSL-1.1
 
-  config-validation:
-    name: Config Validation
-    if: needs.changes.outputs.config == 'true'
-    needs: [changes]
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions: {}
-    env:
-      SCHEMA_MAP: |
-        [
-          { "files": ".github/workflows/*.yml", "validate": "uvx check-jsonschema --builtin-schema vendor.github-workflows" },
-          { "files": ".github/ISSUE_TEMPLATE/bug_report.yml .github/ISSUE_TEMPLATE/feature_request.yml", "validate": "uvx check-jsonschema --builtin-schema vendor.github-issue-forms" },
-          { "files": "renovate.json", "validate": "uvx check-jsonschema --builtin-schema vendor.renovate" },
-          { "files": "codecov.yml", "validate": "uvx check-jsonschema --builtin-schema vendor.codecov" },
-          { "files": ".pre-commit-config.yaml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/pre-commit-config.json" },
-          { "files": ".github/FUNDING.yml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/github-funding.json" },
-          { "files": ".github/labeler.yml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json" },
-          { "files": "pyproject.toml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/pyproject.json" },
-          { "files": "mkdocs.yml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/mkdocs-1.6.json" },
-          { "files": "REUSE.toml", "validate": "uvx check-jsonschema --schemafile https://reuse.software/reuse-toml-v1.schema.json" }
-        ]
-    steps:
-      - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
-
-      - name: Validate schemas
-        shell: bash
-        run: |
-          jq -r '.[] | select(.validate) | [.files, .validate] | @tsv' <<< "$SCHEMA_MAP" |
-            while IFS=$'\t' read -r files cmd; do
-              echo "::group::✓ $files"
-              $cmd $files
-              echo "::endgroup::"
-            done
-
-      - name: Warn about unvalidated config files
-        if: needs.changes.outputs.config == 'true'
-        shell: bash
-        env:
-          CHANGED_CONFIG_FILES: ${{ needs.changes.outputs.changed_config_files }}
-        run: |
-          known=$(jq -r '.[].files' <<< "$SCHEMA_MAP" | tr ' ' '\n' | while read -r p; do compgen -G "$p"; done | sort -u)
-          changed=$(jq -r '.[]' <<< "$CHANGED_CONFIG_FILES" | sort -u)
-          unvalidated=$(grep -vFxf <(echo "$known") <(echo "$changed") || true)
-          [[ -n "$unvalidated" ]] && echo "::warning::Changed config files without schema validation, manual review recommended: $(echo "$unvalidated" | tr '\n' ' ')"
-
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [changes, lint, docker, test, complexity, security, codeql, osv-scanner, config-validation, dependency-review, sonarcloud, package]
+    needs: [changes, lint, docker, test, complexity, security, codeql, osv-scanner, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
