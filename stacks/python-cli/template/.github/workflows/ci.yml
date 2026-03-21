@@ -83,8 +83,8 @@ jobs:
               - 'LICENSE'
               - 'LICENSES/**'
 
-  lint:
-    name: Lint, Format & Type Check
+  checks:
+    name: Checks
     needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -119,6 +119,31 @@ jobs:
       - name: Type check
         run: uv run ty check src/ tests/
 
+      - name: YAML lint
+        run: >-
+          uvx yamllint -d '{extends: default, rules: {line-length: disable, truthy: disable}}' .
+
+      - name: Lint Markdown
+        uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101  # v22.0.0
+        with:
+          globs: "**/*.md"
+
+      - name: Run actionlint
+        uses: raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8  # v2.1.2
+        with:
+          matcher: true
+          shellcheck: true
+          pyflakes: true
+          flags: "-color"
+
+      - name: Run hadolint
+        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: EditorConfig check
+        run: uvx --from editorconfig-checker ec
+
       - name: Validate pyproject.toml
         run: uvx validate-pyproject pyproject.toml
 
@@ -146,13 +171,6 @@ jobs:
       - name: Build docs
         run: uv run mkdocs build --strict
 
-      - name: YAML lint
-        run: >-
-          uvx yamllint -d '{extends: default, rules: {line-length: disable, truthy: disable}}' .
-
-      - name: EditorConfig check
-        run: uvx --from editorconfig-checker ec
-
       - name: Spell check
         uses: crate-ci/typos@631208b7aac2daa8b707f55e7331f9112b0e062d  # v1.44.0
 
@@ -166,24 +184,6 @@ jobs:
         uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5  # v6.0.0
         with:
           args: --include-submodules lint
-
-      - name: Run actionlint
-        uses: raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8  # v2.1.2
-        with:
-          matcher: true
-          shellcheck: true
-          pyflakes: true
-          flags: "-color"
-
-      - name: Lint Markdown
-        uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101  # v22.0.0
-        with:
-          globs: "**/*.md"
-
-      - name: Run hadolint
-        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
-        with:
-          dockerfile: Dockerfile
 
   docker:
     name: Docker Build & Validate
@@ -408,7 +408,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [changes, lint, docker, test, complexity, security, codeql, osv-scanner, dependency-review, sonarcloud, package]
+    needs: [changes, checks, docker, test, complexity, security, codeql, osv-scanner, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
