@@ -131,19 +131,6 @@ jobs:
         with:
           args: --include-submodules lint
 
-  actionlint:
-    name: Lint Workflows
-    if: needs.changes.outputs.workflows == 'true'
-    needs: [changes]
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions: {}
-    steps:
-      - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
-        with:
-          setup-python: "false"
-
       - name: Run actionlint
         uses: raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8  # v2.1.2
         with:
@@ -444,7 +431,7 @@ jobs:
   ci-passed:
     name: CI Passed
     if: always()
-    needs: [changes, lint, actionlint, docker, test, complexity, security, codeql, osv-scanner, config-validation, markdownlint, dependency-review, sonarcloud, package]
+    needs: [changes, lint, docker, test, complexity, security, codeql, osv-scanner, config-validation, markdownlint, dependency-review, sonarcloud, package]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
