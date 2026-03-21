@@ -144,8 +144,13 @@ jobs:
         with:
           globs: "**/*.md"
 
+      - name: Run hadolint
+        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
+        with:
+          dockerfile: Dockerfile
+
   docker:
-    name: Docker Lint, Build & Validate
+    name: Docker Build & Validate
     if: needs.changes.outputs.docker == 'true' || needs.changes.outputs.workflows == 'true'
     needs: [changes]
     runs-on: ubuntu-latest
@@ -156,11 +161,6 @@ jobs:
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
           setup-python: "false"
-
-      - name: Run hadolint
-        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
-        with:
-          dockerfile: Dockerfile
 
       - name: Build image
         run: docker build -t myapp:ci .
