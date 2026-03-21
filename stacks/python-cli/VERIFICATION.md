@@ -214,7 +214,7 @@
 
 **`ci.yml`:**
 
-- [ ] All 13 jobs present: `changes`, `lint`, `docker`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `osv-scanner`, `dependency-review`, `config-validation`, `ci-passed`
+- [ ] All 12 jobs present: `changes`, `lint`, `docker`, `test`, `sonarcloud`, `package`, `complexity`, `security`, `codeql`, `osv-scanner`, `dependency-review`, `ci-passed`
 - [ ] `changes` job and `ci-passed` gate job are present, and `ci.yml` otherwise matches the template including remote setup action usage and current job gating
 - [ ] `docker` job — `docker build -t` and `docker run --rm` image name uses app name (not `myapp`)
 - [ ] `package` job — `uv run --with dist/*.whl --no-project --` entry-point verification uses app name (not `myapp`)
