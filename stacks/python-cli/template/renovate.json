@@ -6,11 +6,13 @@
   ],
   "timezone": "America/New_York",
   "schedule": ["0 0 * * 0"],
+  "minimumReleaseAge": "3 days",
+  "abandonmentThreshold": "2 years",
   "osvVulnerabilityAlerts": true,
-  "osvVulnerabilitySeverityThreshold": "LOW",
   "dependencyDashboardOSVVulnerabilitySummary": "all",
   "vulnerabilityAlerts": {
-    "labels": ["security"]
+    "labels": ["security"],
+    "minimumReleaseAge": null
   },
   "configMigration": true,
   "platformCommit": "enabled",
