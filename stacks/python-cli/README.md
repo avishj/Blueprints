@@ -33,41 +33,41 @@ This stack is for building command-line tools, scripts, and automation utilities
 
 ## CI
 
-1. step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594 # v2.16.0 - Runner hardening.
-2. actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2 - Repo checkout.
-3. dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d # v4.0.1 - Job gating by changed paths.
-4. avishj/blueprints/stacks/python-cli/actions/setup@main - Shared setup (harden runner + checkout + `setup-uv` + `uv sync --frozen`).
-5. actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0 - Artifact upload.
-6. actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1 - Artifact download.
-7. actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5 - GitHub Pages deployment.
-8. actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0 - Pages artifact upload.
-9. actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b # v6.0.1 - PR auto-labeler.
-10. astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7.6.0 - Install uv.
-11. raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8 # v2.1.2 - Workflow file linter.
-12. codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2 - Coverage upload.
-13. github/codeql-action@b1bff81932f5cdfc8695c7752dcee935dcd061c8 # v4.33.0 - Semantic SAST.
+1. step-security/harden-runner - Runner hardening.
+2. actions/checkout - Repo checkout.
+3. dorny/paths-filter - Job gating by changed paths.
+4. avishj/blueprints/stacks/python-cli/actions/setup - Shared setup (harden runner + checkout + `setup-uv` + `uv sync --frozen`).
+5. actions/upload-artifact - Artifact upload.
+6. actions/download-artifact - Artifact download.
+7. actions/deploy-pages - GitHub Pages deployment.
+8. actions/upload-pages-artifact - Pages artifact upload.
+9. actions/labeler - PR auto-labeler.
+10. astral-sh/setup-uv - Install uv.
+11. raven-actions/actionlint - Workflow file linter.
+12. codecov/codecov-action - Coverage upload.
+13. github/codeql-action - Semantic SAST.
 14. semgrep - Static application security testing (via container).
-15. actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48 # v4.9.0 - PR dependency gate.
-16. gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2.3.9 - Secret scanner.
-17. ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a # v2.4.3 - Supply chain scoring.
-18. anchore/sbom-action@57aae528053a48a3f6235f2d9461b05fbcb7366d # v0.23.1 - SBOM generation.
-19. aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1 # v0.35.0 - Vulnerability scanner.
-20. actions/attest@59d89421af93a897026c735860bf21b6eb4f7b26 # v4.1.0 - Build and SBOM attestation.
-21. pypa/gh-action-pypi-publish@106e0b0b7c337fa67ed433972f777c6357f78598 # v1.13.0 - PyPI publishing.
-22. docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0 - Buildx setup.
-23. docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0 - Registry login.
-24. docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294 # v7.0.0 - Container build and push.
-25. docker/metadata-action@030e881283bb7a6894de51c315a6bfe6a94e05cf # v6.0.0 - Container tags and labels.
-26. zizmorcore/zizmor-action@71321a20a9ded102f6e9ce5718a2fcec2c4f70d8 # v0.5.2 - Workflow security scanner.
-27. sigstore/cosign-installer@ba7bc0a3fef59531c69a25acd34668d6d3fe6f22 # v4.1.0 - Container image signing.
-28. google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3 - Dependency vulnerability scanner.
-29. google/osv-scanner-action/osv-reporter-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730 # v2.3.3 - Vulnerability scan reporter.
-30. SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9 # v7.0.0 - SonarCloud analysis.
-31. hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5 # v3.3.0 - Dockerfile linter.
-32. lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0 - Link checker.
-33. DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101 # v22.0.0 - Markdown linter.
-34. crate-ci/typos@631208b7aac2daa8b707f55e7331f9112b0e062d # v1.44.0 - Spell checker.
-35. fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5 # v6.0.0 - REUSE/SPDX compliance check.
+15. actions/dependency-review-action - PR dependency gate.
+16. gitleaks/gitleaks-action - Secret scanner.
+17. ossf/scorecard-action - Supply chain scoring.
+18. anchore/sbom-action - SBOM generation.
+19. aquasecurity/trivy-action - Vulnerability scanner.
+20. actions/attest - Build and SBOM attestation.
+21. pypa/gh-action-pypi-publish - PyPI publishing.
+22. docker/setup-buildx-action - Buildx setup.
+23. docker/login-action - Registry login.
+24. docker/build-push-action - Container build and push.
+25. docker/metadata-action - Container tags and labels.
+26. zizmorcore/zizmor-action - Workflow security scanner.
+27. sigstore/cosign-installer - Container image signing.
+28. google/osv-scanner-action/osv-scanner-action - Dependency vulnerability scanner.
+29. google/osv-scanner-action/osv-reporter-action - Vulnerability scan reporter.
+30. SonarSource/sonarqube-scan-action - SonarCloud analysis.
+31. hadolint/hadolint-action - Dockerfile linter.
+32. lycheeverse/lychee-action - Link checker.
+33. DavidAnson/markdownlint-cli2-action - Markdown linter.
+34. crate-ci/typos - Spell checker.
+35. fsfe/reuse-action - REUSE/SPDX compliance check.
 36. Renovate - Automated dependency updates (primary, via `renovate.json`).
 37. Dependabot - Urgent security advisories only (GitHub-native repo setting).
 38. GitHub secret scanning - Push protection (repo setting).
