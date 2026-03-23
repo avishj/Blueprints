@@ -89,20 +89,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions: {}
-    env:
-      SCHEMA_MAP: |
-        [
-          { "files": ".github/workflows/*.yml", "validate": "uvx check-jsonschema --builtin-schema vendor.github-workflows" },
-          { "files": ".github/ISSUE_TEMPLATE/bug_report.yml .github/ISSUE_TEMPLATE/feature_request.yml", "validate": "uvx check-jsonschema --builtin-schema vendor.github-issue-forms" },
-          { "files": "renovate.json", "validate": "uvx check-jsonschema --builtin-schema vendor.renovate" },
-          { "files": "codecov.yml", "validate": "uvx check-jsonschema --builtin-schema vendor.codecov" },
-          { "files": ".pre-commit-config.yaml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/pre-commit-config.json" },
-          { "files": ".github/FUNDING.yml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/github-funding.json" },
-          { "files": ".github/labeler.yml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json" },
-          { "files": "pyproject.toml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/pyproject.json" },
-          { "files": "mkdocs.yml", "validate": "uvx check-jsonschema --schemafile https://www.schemastore.org/mkdocs-1.6.json" },
-          { "files": "REUSE.toml", "validate": "uvx check-jsonschema --schemafile https://reuse.software/reuse-toml-v1.schema.json" }
-        ]
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
@@ -162,10 +148,23 @@ jobs:
         env:
           CHANGED_CONFIG_FILES: ${{ needs.changes.outputs.changed_config_files }}
         run: |
-          known=$(jq -r '.[].files' <<< "$SCHEMA_MAP" | tr ' ' '\n' | while read -r p; do compgen -G "$p"; done | sort -u)
-          changed=$(jq -r '.[]' <<< "$CHANGED_CONFIG_FILES" | sort -u)
-          unvalidated=$(grep -vFxf <(echo "$known") <(echo "$changed") || true)
-          [[ -n "$unvalidated" ]] && echo "::warning::Changed config files without schema validation, manual review recommended: $(echo "$unvalidated" | tr '\n' ' ')"
+          # Config files with no available schema or linter
+          unvalidated=(
+            .dockerignore
+            .gitattributes
+            .github/settings.yml
+            .gitignore
+            CODEOWNERS
+            justfile
+            LICENSE
+            sonar-project.properties
+          )
+          changed=$(jq -r '.[]' <<< "$CHANGED_CONFIG_FILES")
+          hit=()
+          for f in "${unvalidated[@]}"; do
+            grep -qFx "$f" <<< "$changed" && hit+=("$f")
+          done
+          (( ${#hit[@]} )) && echo "::warning::Changed config files without validation, manual review recommended: ${hit[*]}"
 
       - name: Spell check
         if: '!cancelled()'
