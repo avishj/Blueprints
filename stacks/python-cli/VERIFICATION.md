@@ -148,7 +148,7 @@
 - [ ] Install commands use app name (uv, pip, docker)
 - [ ] Usage examples updated for actual commands (demo `hello` command replaced)
 - [ ] Development section: clone URL, `cd` dir use correct repo name
-- [ ] Common tasks table matches template (`just lint`, `just typecheck`, `just validate`, `just package-check`, `just reuse-check`, `just pre-commit`, etc.)
+- [ ] Common tasks table matches template (`just lint`, `just test`, `just build`, `just docs`, `just ci`, `just clean`)
 - [ ] Configuration section: env var prefix and table use `<APP>_` (not `MYAPP_`), rows updated for actual settings
 - [ ] Documentation link points to correct GitHub Pages URL
 - [ ] License section matches `pyproject.toml` license choice
@@ -291,8 +291,8 @@
 
 **Copy 1:1 from template (no changes needed):**
 
-- [ ] `justfile` — all recipes: `lint`, `lint-fix`, `typecheck`, `test`, `cov`, `complexity`, `semgrep`, `build`, `docs`, `docs-build`, `ci`, `clean`
-- [ ] `.pre-commit-config.yaml` — all 9 repos: pre-commit-hooks, ruff, ty (local), validate-pyproject, complexipy, commitizen, typos, reuse, gitleaks
+- [ ] `justfile` — all 6 recipes: `lint`, `test`, `build`, `docs`, `ci`, `clean`
+- [ ] `.pre-commit-config.yaml` — all 9 repos: pre-commit-hooks, ruff, ty (local), yamllint, validate-pyproject, complexipy, commitizen, typos, reuse, gitleaks
 - [ ] `.editorconfig` — indent/charset/line-ending rules for `*`, `*.yml/yaml`, `*.json`, `*.md`
 - [ ] `.gitattributes` — line-ending normalization, diff drivers, linguist overrides
 - [ ] `.gitignore` — Python, dist, venv, testing, linting, type-checking, SonarCloud, docs, IDE, OS, env file patterns
@@ -320,25 +320,11 @@
 
 **Quality gates (via justfile):**
 
-- [ ] `just lint` — ruff check + format
-- [ ] `just lint-fix` — auto-fix lint issues if any
-- [ ] `just typecheck` — ty check on src/ and tests/
-- [ ] `just test` — all unit, integration, and e2e tests
-- [ ] `just cov` — coverage report, must reach ≥ 70%
-- [ ] `just complexity` — cognitive complexity ≤ 15
-- [ ] `just semgrep` — SAST scan
-- [ ] `just build` — sdist + wheel built successfully
-- [ ] `just validate` — validate-pyproject passes
-- [ ] `just package-check` — build + twine check + entry point smoke test
+- [ ] `just lint` — all pre-commit hooks pass (ruff fix + format, ty, complexipy, validate-pyproject, yamllint, reuse, gitleaks, typos)
+- [ ] `just test` — all unit, integration, and e2e tests pass with coverage report
+- [ ] `just build` — sdist + wheel built, twine check passes, entry point smoke test passes
 - [ ] `just docs` — mkdocs serves without errors
-- [ ] `just docs-build` — mkdocs strict build passes
-- [ ] `just reuse-check` — REUSE/SPDX compliance passes
-- [ ] `just pre-commit` — all pre-commit hooks pass
-- [ ] `just ci` — full composite gate (pre-commit + lint + typecheck + cov + complexity + semgrep + validate + docs-build + package-check + reuse-check)
-
-**Pre-commit hooks:**
-
-- [ ] `pre-commit run --all-files` — all hooks pass (ruff, ty, validate-pyproject, complexipy, typos, reuse, gitleaks)
+- [ ] `just ci` — full composite gate (lint + test with coverage ≥ 70% + build + docs strict build)
 
 ### Section 10 — Global Grep Sanity Check
 
