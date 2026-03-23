@@ -10,6 +10,7 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # v6.0.0
     hooks:
+      # --- File hygiene (checks) ---
       - id: check-added-large-files
         args: [--maxkb=500]
       - id: check-case-conflict
@@ -24,15 +25,18 @@ repos:
         exclude: pyproject\.toml
       - id: destroyed-symlinks
       - id: detect-private-key
+      # --- File hygiene (fixers) ---
       - id: end-of-file-fixer
       - id: fix-byte-order-marker
       - id: mixed-line-ending
         args: [--fix=lf]
-      - id: no-commit-to-branch
-        args: [--branch=main]
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
+      # --- Branch protection ---
+      - id: no-commit-to-branch
+        args: [--branch=main]
 
+  # --- Linting & formatting ---
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: 4924b0e01e032fea073ad04a1c5cfa7e4add0afb  # v0.15.6
     hooks:
@@ -40,6 +44,18 @@ repos:
         args: [--fix, --exit-non-zero-on-fix]
       - id: ruff-format
 
+  - repo: https://github.com/adrienverge/yamllint
+    rev: cba56bcde1fdd01c1deb3f945e69764c291a6530  # v1.38.0
+    hooks:
+      - id: yamllint
+        args: [-d, '{extends: default, rules: {line-length: disable, truthy: disable}}']
+
+  - repo: https://github.com/crate-ci/typos
+    rev: 631208b7aac2daa8b707f55e7331f9112b0e062d  # v1.44.0
+    hooks:
+      - id: typos
+
+  # --- Validation & analysis ---
   - repo: local
     hooks:
       - id: uv-lock-check
@@ -55,12 +71,6 @@ repos:
         types: [python]
         pass_filenames: false
 
-  - repo: https://github.com/adrienverge/yamllint
-    rev: cba56bcde1fdd01c1deb3f945e69764c291a6530  # v1.38.0
-    hooks:
-      - id: yamllint
-        args: [-d, '{extends: default, rules: {line-length: disable, truthy: disable}}']
-
   - repo: https://github.com/abravalheri/validate-pyproject
     rev: 4b2e70d08cb2ccd26d1fba73588de41c7a5d50b7  # v0.25
     hooks:
@@ -72,22 +82,19 @@ repos:
       - id: complexipy
         args: [--max-complexity, "15"]
 
+  # --- Commit hygiene ---
   - repo: https://github.com/commitizen-tools/commitizen
     rev: 4fbeae7861663ecf4b4989211eba41c1a3fb1227  # v4.13.9
     hooks:
       - id: commitizen
 
-  - repo: https://github.com/crate-ci/typos
-    rev: 631208b7aac2daa8b707f55e7331f9112b0e062d  # v1.44.0
+  # --- Security & licensing ---
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: 6eaad039603a4de39fddd1cf5f727391efe9974e  # v8.30.0
     hooks:
-      - id: typos
+      - id: gitleaks
 
   - repo: https://github.com/fsfe/reuse-tool
     rev: a1bb792acda6fd0724936b4ebbdbc8eceb9c0459  # v6.2.0
     hooks:
       - id: reuse
-
-  - repo: https://github.com/gitleaks/gitleaks
-    rev: 6eaad039603a4de39fddd1cf5f727391efe9974e  # v8.30.0
-    hooks:
-      - id: gitleaks
