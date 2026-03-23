@@ -107,21 +107,19 @@ jobs:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
-      - name: Verify lockfile is current
-        run: uv lock --check
+      - name: Lint & validate
+        shell: bash
+        run: |
+          failed=()
+          run() { local n=$1; shift; echo "::group::$n"; if "$@"; then echo "::endgroup::"; else echo "::endgroup::"; failed+=("$n"); fi; }
 
-      - name: Ruff check
-        run: uv run ruff check --output-format=github --show-fixes --statistics .
+          run "Lockfile"    uv lock --check
+          run "Ruff check"  uv run ruff check --output-format=github --show-fixes --statistics .
+          run "Ruff format" uv run ruff format --check .
+          run "Type check"  uv run ty check src/ tests/
+          run "YAML lint"   uvx yamllint -d '{extends: default, rules: {line-length: disable, truthy: disable}}' .
 
-      - name: Ruff format check
-        run: uv run ruff format --check .
-
-      - name: Type check
-        run: uv run ty check src/ tests/
-
-      - name: YAML lint
-        run: >-
-          uvx yamllint -d '{extends: default, rules: {line-length: disable, truthy: disable}}' .
+          (( ${#failed[@]} )) && printf '::error::Failed: %s\n' "${failed[*]}" && exit 1
 
       - name: Lint Markdown
         uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101  # v22.0.0
