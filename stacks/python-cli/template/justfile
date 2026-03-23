@@ -8,51 +8,26 @@ default:
     @just --list
 
 lint:
-    uv run ruff check --show-fixes --statistics .
-    uv run ruff format --check .
-
-lint-fix:
-    uv run ruff check --fix .
-    uv run ruff format .
-
-typecheck:
-    uv run ty check src/ tests/
+    uvx pre-commit run --all-files
 
 test *args:
-    uv run pytest -n auto {{ args }}
-
-cov:
-    uv run pytest --cov --cov-report=term --cov-report=html --cov-report=xml --cov-fail-under=70 --junitxml=results.xml -n auto
-
-complexity:
-    uv run complexipy src/ --max-complexity 15
-
-semgrep:
-    uvx semgrep scan --config=auto .
-
-validate:
-    uvx validate-pyproject pyproject.toml
+    uv run pytest --cov --cov-report=term -n auto {{ args }}
 
 build:
     uv build
-
-package-check: build
     uvx twine check dist/*
     uv run --with dist/*.whl --no-project -- myapp --help
 
 docs:
     uv run mkdocs serve
 
-docs-build:
-    uv run mkdocs build --strict
-
-reuse-check:
-    uvx reuse lint
-
-pre-commit:
+ci:
     uvx pre-commit run --all-files
-
-ci: pre-commit lint typecheck cov complexity semgrep validate docs-build package-check reuse-check
+    uv run pytest --cov --cov-report=term --cov-report=html --cov-fail-under=70 -n auto
+    uv build
+    uvx twine check dist/*
+    uv run --with dist/*.whl --no-project -- myapp --help
+    uv run mkdocs build --strict
 
 clean:
     rm -rf build/ dist/ *.egg-info/ .pytest_cache/ .ruff_cache/ .coverage htmlcov/ coverage.xml results.xml site/ .ty/
