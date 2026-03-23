@@ -19,6 +19,7 @@ build:
     uv run --with dist/*.whl --no-project -- myapp --help
 
 docs:
+    uv run mkdocs build --strict
     uv run mkdocs serve
 
 ci:
