@@ -136,11 +136,13 @@ jobs:
           (( ${#failed[@]} )) && printf '::error::Failed: %s\n' "${failed[*]}" && exit 1
 
       - name: Lint Markdown
+        if: '!cancelled()'
         uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101  # v22.0.0
         with:
           globs: "**/*.md"
 
       - name: Run actionlint
+        if: '!cancelled()'
         uses: raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8  # v2.1.2
         with:
           matcher: true
@@ -149,12 +151,13 @@ jobs:
           flags: "-color"
 
       - name: Run hadolint
+        if: '!cancelled()'
         uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
         with:
           dockerfile: Dockerfile
 
       - name: Warn about unvalidated config files
-        if: needs.changes.outputs.config == 'true'
+        if: "!cancelled() && needs.changes.outputs.config == 'true'"
         shell: bash
         env:
           CHANGED_CONFIG_FILES: ${{ needs.changes.outputs.changed_config_files }}
@@ -165,15 +168,18 @@ jobs:
           [[ -n "$unvalidated" ]] && echo "::warning::Changed config files without schema validation, manual review recommended: $(echo "$unvalidated" | tr '\n' ' ')"
 
       - name: Spell check
+        if: '!cancelled()'
         uses: crate-ci/typos@631208b7aac2daa8b707f55e7331f9112b0e062d  # v1.44.0
 
       - name: Check links
+        if: '!cancelled()'
         uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
         with:
           fail: true
           jobSummary: true
 
       - name: REUSE lint
+        if: '!cancelled()'
         uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5  # v6.0.0
         with:
           args: --include-submodules lint
