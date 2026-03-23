@@ -88,32 +88,41 @@ jobs:
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Lint & validate
-        shell: bash
+        shell: python
         run: |
-          failed=()
-          run() { local n=$1; shift; echo "::group::$n"; if "$@"; then echo "::endgroup::"; else echo "::endgroup::"; failed+=("$n"); fi; }
+          import subprocess, sys
 
-          run "Lockfile"    uv lock --check
-          run "Ruff check"  uv run ruff check --output-format=github --show-fixes --statistics .
-          run "Ruff format" uv run ruff format --check .
-          run "Type check"  uv run ty check src/ tests/
-          run "YAML lint"   uvx yamllint -d '{extends: default, rules: {line-length: disable, truthy: disable}}' .
-          run "EditorConfig"       uvx --from editorconfig-checker ec
-          run "Validate pyproject" uvx validate-pyproject pyproject.toml
-          run "Docs build"         uv run mkdocs build --strict
+          CHECKS = [
+              ("Lockfile",             "uv lock --check"),
+              ("Ruff check",           "uv run ruff check --output-format=github --show-fixes --statistics ."),
+              ("Ruff format",          "uv run ruff format --check ."),
+              ("Type check",           "uv run ty check src/ tests/"),
+              ("YAML lint",            "uvx yamllint -d '{extends: default, rules: {line-length: disable, truthy: disable}}' ."),
+              ("EditorConfig",         "uvx --from editorconfig-checker ec"),
+              ("Validate pyproject",   "uvx validate-pyproject pyproject.toml"),
+              ("Docs build",           "uv run mkdocs build --strict"),
+              ("Schema: workflows",    "uvx check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml"),
+              ("Schema: issue forms",  "uvx check-jsonschema --builtin-schema vendor.github-issue-forms .github/ISSUE_TEMPLATE/bug_report.yml .github/ISSUE_TEMPLATE/feature_request.yml"),
+              ("Schema: renovate",     "uvx check-jsonschema --builtin-schema vendor.renovate renovate.json"),
+              ("Schema: codecov",      "uvx check-jsonschema --builtin-schema vendor.codecov codecov.yml"),
+              ("Schema: pre-commit",   "uvx check-jsonschema --schemafile https://www.schemastore.org/pre-commit-config.json .pre-commit-config.yaml"),
+              ("Schema: funding",      "uvx check-jsonschema --schemafile https://www.schemastore.org/github-funding.json .github/FUNDING.yml"),
+              ("Schema: labeler",      "uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml"),
+              ("Schema: pyproject",    "uvx check-jsonschema --schemafile https://www.schemastore.org/pyproject.json pyproject.toml"),
+              ("Schema: mkdocs",       "uvx check-jsonschema --schemafile https://www.schemastore.org/mkdocs-1.6.json mkdocs.yml"),
+              ("Schema: REUSE",        "uvx check-jsonschema --schemafile https://reuse.software/reuse-toml-v1.schema.json REUSE.toml"),
+          ]
 
-          run "Schema: workflows"    uvx check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
-          run "Schema: issue forms"  uvx check-jsonschema --builtin-schema vendor.github-issue-forms .github/ISSUE_TEMPLATE/bug_report.yml .github/ISSUE_TEMPLATE/feature_request.yml
-          run "Schema: renovate"     uvx check-jsonschema --builtin-schema vendor.renovate renovate.json
-          run "Schema: codecov"      uvx check-jsonschema --builtin-schema vendor.codecov codecov.yml
-          run "Schema: pre-commit"   uvx check-jsonschema --schemafile https://www.schemastore.org/pre-commit-config.json .pre-commit-config.yaml
-          run "Schema: funding"      uvx check-jsonschema --schemafile https://www.schemastore.org/github-funding.json .github/FUNDING.yml
-          run "Schema: labeler"      uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
-          run "Schema: pyproject"    uvx check-jsonschema --schemafile https://www.schemastore.org/pyproject.json pyproject.toml
-          run "Schema: mkdocs"       uvx check-jsonschema --schemafile https://www.schemastore.org/mkdocs-1.6.json mkdocs.yml
-          run "Schema: REUSE"        uvx check-jsonschema --schemafile https://reuse.software/reuse-toml-v1.schema.json REUSE.toml
+          failed = []
+          for name, cmd in CHECKS:
+              print(f"::group::{name}", flush=True)
+              if subprocess.run(cmd, shell=True).returncode != 0:
+                  failed.append(name)
+              print("::endgroup::", flush=True)
 
-          (( ${#failed[@]} )) && printf '::error::Failed: %s\n' "${failed[*]}" && exit 1
+          if failed:
+              print(f"::error::Failed: {', '.join(failed)}")
+              sys.exit(1)
 
       - name: Lint Markdown
         if: '!cancelled()'
