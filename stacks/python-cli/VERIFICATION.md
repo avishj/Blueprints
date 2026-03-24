@@ -292,7 +292,7 @@
 **Copy 1:1 from template (no changes needed):**
 
 - [ ] `justfile` — all 6 recipes: `lint`, `test`, `build`, `docs`, `ci`, `clean`
-- [ ] `.pre-commit-config.yaml` — all 9 repos: pre-commit-hooks, ruff, ty (local), yamllint, validate-pyproject, complexipy, commitizen, typos, reuse, gitleaks
+- [ ] `.pre-commit-config.yaml` — all 10 repos: pre-commit-hooks, ruff, ty (local), yamllint, validate-pyproject, complexipy, commitizen, typos, reuse, gitleaks
 - [ ] `.editorconfig` — indent/charset/line-ending rules for `*`, `*.yml/yaml`, `*.json`, `*.md`
 - [ ] `.gitattributes` — line-ending normalization, diff drivers, linguist overrides
 - [ ] `.gitignore` — Python, dist, venv, testing, linting, type-checking, SonarCloud, docs, IDE, OS, env file patterns
