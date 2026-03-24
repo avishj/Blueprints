@@ -11,10 +11,10 @@
 - [ ] `project.description`, `authors`, `keywords` are filled in (not template placeholders)
 - [ ] `project.license` and matching `classifiers` entry are consistent
 - [ ] All template `classifiers` retained (`Console`, `Typed`, Python versions, etc.)
-- [ ] `project.scripts` entry point: key = app name, value = `<app>.cli:entrypoint`
+- [ ] `project.scripts` entry point: key = app name, value = `myapp.cli:entrypoint`
 - [ ] All 5 `project.urls` point to the correct repo (no `myapp` remnants)
 - [ ] `dependencies` includes `cyclopts`, `rich`, `pydantic-settings` (plus any project additions)
-- [ ] `tool.hatch.build.targets.wheel.packages` points to `src/<app>`
+- [ ] `tool.hatch.build.targets.wheel.packages` points to `src/myapp`
 
 **Dev dependencies:**
 
@@ -37,15 +37,15 @@
 
 - [ ] `tool.ruff.lint.isort.known-first-party` uses app name
 - [ ] `tool.coverage.run.source` uses app name
-- [ ] `tool.commitizen.version_files` points to `src/<app>/__init__.py:__version__`
+- [ ] `tool.commitizen.version_files` points to `src/myapp/__init__.py:__version__`
 
 **Commitizen:**
 
 - [ ] `[tool.commitizen]` section present — `tag_format`, `changelog_file`, `update_changelog_on_bump` match template
 
-### Section 2 — Source Code (`src/<yourapp>/`)
+### Section 2 — Source Code (`src/myapp/`)
 
-- [ ] Directory renamed from `src/myapp/` to `src/<app>/`
+- [ ] Directory `src/myapp/` exists (rename to match your app name)
 - [ ] `py.typed` marker file exists (empty file, copy 1:1)
 
 **`__init__.py`:**
@@ -55,13 +55,13 @@
 
 **`__main__.py`:**
 
-- [ ] Docstring references app name (`Allow running as \`python -m <app>\``)
-- [ ] Imports `app` from `<app>.cli` (no `myapp` remnants)
+- [ ] Docstring references app name (`Allow running as \`python -m myapp\``)
+- [ ] Imports `app` from `myapp.cli` (no `myapp` remnants)
 - [ ] Calls `app.meta()`
 
 **`cli.py`:**
 
-- [ ] Imports `__version__` from `<app>` and `settings` from `<app>.config`
+- [ ] Imports `__version__` from `myapp` and `settings` from `myapp.config`
 - [ ] `App()` created with `name=`, `help=`, `version=__version__`, `version_flags=["--version", "-V"]`
 - [ ] `console = Console()` instantiated
 - [ ] `@app.meta.default` function exists — wires `--verbose` flag to `settings.verbose` and calls `app(tokens)`
@@ -89,25 +89,25 @@
 
 - [ ] `CliResult` helper class exists with `exit_code` and `output` attrs
 - [ ] `invoke` fixture exists — wraps `app.meta()` calls with capsys capture and SystemExit handling
-- [ ] Imports `app` from `<app>.cli` (no `myapp` remnants)
+- [ ] Imports `app` from `myapp.cli` (no `myapp` remnants)
 
 **`unit/test_version.py`:**
 
 - [ ] `pytestmark = pytest.mark.unit` set
-- [ ] Imports `__version__` from `<app>` (no `myapp`)
+- [ ] Imports `__version__` from `myapp` (no `myapp`)
 - [ ] Tests that `__version__` is a string and valid semver — these are mandatory, not demo
 
 **`unit/test_config.py`:**
 
 - [ ] `pytestmark = pytest.mark.unit` set
-- [ ] Imports `Settings` from `<app>.config` (no `myapp`)
+- [ ] Imports `Settings` from `myapp.config` (no `myapp`)
 - [ ] Tests default values, env prefix loading, and that unprefixed env vars are ignored
 - [ ] All env var references use `<APP>_` prefix (not `MYAPP_`)
 
 **`integration/test_cli.py`:**
 
 - [ ] `pytestmark = pytest.mark.integration` set
-- [ ] Imports `__version__` from `<app>` (no `myapp`)
+- [ ] Imports `__version__` from `myapp` (no `myapp`)
 - [ ] Uses `invoke` fixture from conftest
 - [ ] `test_version` — mandatory: asserts `--version` exits 0 and output contains `__version__`
 - [ ] `test_no_args` — mandatory: asserts bare invocation exits 0 and shows usage
@@ -135,7 +135,7 @@
 - [ ] `site_name`, `site_description` use app name (no `myapp`)
 - [ ] `site_url`, `repo_url`, `repo_name` point to correct owner/repo
 - [ ] `copyright` has correct year and project name
-- [ ] `watch` path points to `src/<app>` (not `src/myapp`)
+- [ ] `watch` path points to `src/myapp` (replace `myapp` with your app name)
 - [ ] `edit_uri` is `edit/main/docs/`
 - [ ] All remaining config (theme, plugins, markdown_extensions, nav) matches template exactly
 
@@ -300,7 +300,7 @@
 
 **`codecov.yml`:**
 
-- [ ] Copy 1:1 from template, then update all 3 flag `paths` entries (`unit`, `integration`, `e2e`) from `src/myapp/` to `src/<app>/`
+- [ ] Copy 1:1 from template, then update all 3 flag `paths` entries (`unit`, `integration`, `e2e`) from `src/myapp/` to match your app name
 - [ ] All remaining config (precision, range, status targets, comment layout, github_checks) unchanged
 
 **`sonar-project.properties`:**
