@@ -293,7 +293,7 @@
 
 - [ ] `justfile` — all 6 recipes: `lint`, `test`, `build`, `docs`, `ci`, `clean`
 - [ ] `.pre-commit-config.yaml` — all 10 repos: pre-commit-hooks, ruff, ty (local), yamllint, validate-pyproject, complexipy, commitizen, typos, reuse, gitleaks
-- [ ] `.editorconfig` — indent/charset/line-ending rules for `*`, `*.yml/yaml`, `*.json`, `*.md`
+- [ ] `.editorconfig` — indent/charset/line-ending rules for `*`, `*.yml/yaml`, `*.json`, `*.md`, `*.toml`, `*.properties`, `Dockerfile`, `justfile`, `LICENSE`, `LICENSES/**`
 - [ ] `.gitattributes` — line-ending normalization, diff drivers, linguist overrides
 - [ ] `.gitignore` — Python, dist, venv, testing, linting, type-checking, SonarCloud, docs, IDE, OS, env file patterns
 - [ ] `renovate.json` — best-practices config, OSV vulnerability alerts, package rules for GHA/Dockerfile/pre-commit
