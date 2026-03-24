@@ -47,7 +47,7 @@
 - [ ] `Dockerfile` — `ENTRYPOINT ["<yourapp>"]`
 - [ ] `justfile` — entry point in `build` and `ci` smoke test (`myapp --help`)
 - [ ] `.github/workflows/ci.yml` — `docker build -t` and `docker run --rm` image name, `package` job entry-point verification
-- [ ] `.github/workflows/release.yml` — `pypi.org/p/<yourapp>` environment URL, `check` job PyPI URL
+- [ ] `.github/workflows/release.yml` — `pypi.org/p/myapp` environment URL, `check` job PyPI URL, release-notes `uv add myapp==`, `pip install myapp==`, and `pypi.org/project/myapp/` link
 - [ ] `.github/ISSUE_TEMPLATE/bug_report.yml` — version command, reproduction steps
 - [ ] `.github/settings.yml` — `repository.name`
 - [ ] `CONTRIBUTING.md` — clone URL repo name, `cd` directory name
