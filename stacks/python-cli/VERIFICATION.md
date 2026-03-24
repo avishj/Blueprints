@@ -11,10 +11,10 @@
 - [ ] `project.description`, `authors`, `keywords` are filled in (not template placeholders)
 - [ ] `project.license` and matching `classifiers` entry are consistent
 - [ ] All template `classifiers` retained (`Console`, `Typed`, Python versions, etc.)
-- [ ] `project.scripts` entry point: key = app name, value = `myapp.cli:entrypoint`
+- [ ] `project.scripts` entry point: key = app name, value = `myapp.cli:entrypoint` (replace `myapp`)
 - [ ] All 5 `project.urls` point to the correct repo (no `myapp` remnants)
 - [ ] `dependencies` includes `cyclopts`, `rich`, `pydantic-settings` (plus any project additions)
-- [ ] `tool.hatch.build.targets.wheel.packages` points to `src/myapp`
+- [ ] `tool.hatch.build.targets.wheel.packages` points to `src/myapp` (replace `myapp`)
 
 **Dev dependencies:**
 
@@ -37,15 +37,15 @@
 
 - [ ] `tool.ruff.lint.isort.known-first-party` uses app name
 - [ ] `tool.coverage.run.source` uses app name
-- [ ] `tool.commitizen.version_files` points to `src/myapp/__init__.py:__version__`
+- [ ] `tool.commitizen.version_files` points to `src/myapp/__init__.py:__version__` (replace `myapp`)
 
 **Commitizen:**
 
 - [ ] `[tool.commitizen]` section present — `tag_format`, `changelog_file`, `update_changelog_on_bump` match template
 
-### Section 2 — Source Code (`src/myapp/`)
+### Section 2 — Source Code (`src/myapp/`) (replace `myapp`)
 
-- [ ] Directory `src/myapp/` exists (rename to match your app name)
+- [ ] Directory `src/myapp/` exists (replace `myapp` with your app name)
 - [ ] `py.typed` marker file exists (empty file, copy 1:1)
 
 **`__init__.py`:**
@@ -55,13 +55,13 @@
 
 **`__main__.py`:**
 
-- [ ] Docstring references app name (`Allow running as \`python -m myapp\``)
-- [ ] Imports `app` from `myapp.cli` (no `myapp` remnants)
+- [ ] Docstring references app name (`Allow running as \`python -m myapp\``) (replace `myapp`)
+- [ ] Imports `app` from `myapp.cli` (replace `myapp`)
 - [ ] Calls `app.meta()`
 
 **`cli.py`:**
 
-- [ ] Imports `__version__` from `myapp` and `settings` from `myapp.config`
+- [ ] Imports `__version__` from `myapp` and `settings` from `myapp.config` (replace `myapp`)
 - [ ] `App()` created with `name=`, `help=`, `version=__version__`, `version_flags=["--version", "-V"]`
 - [ ] `console = Console()` instantiated
 - [ ] `@app.meta.default` function exists — wires `--verbose` flag to `settings.verbose` and calls `app(tokens)`
@@ -89,25 +89,25 @@
 
 - [ ] `CliResult` helper class exists with `exit_code` and `output` attrs
 - [ ] `invoke` fixture exists — wraps `app.meta()` calls with capsys capture and SystemExit handling
-- [ ] Imports `app` from `myapp.cli` (no `myapp` remnants)
+- [ ] Imports `app` from `myapp.cli` (replace `myapp`)
 
 **`unit/test_version.py`:**
 
 - [ ] `pytestmark = pytest.mark.unit` set
-- [ ] Imports `__version__` from `myapp` (no `myapp`)
+- [ ] Imports `__version__` from `myapp` (replace `myapp`)
 - [ ] Tests that `__version__` is a string and valid semver — these are mandatory, not demo
 
 **`unit/test_config.py`:**
 
 - [ ] `pytestmark = pytest.mark.unit` set
-- [ ] Imports `Settings` from `myapp.config` (no `myapp`)
+- [ ] Imports `Settings` from `myapp.config` (replace `myapp`)
 - [ ] Tests default values, env prefix loading, and that unprefixed env vars are ignored
 - [ ] All env var references use `<APP>_` prefix (not `MYAPP_`)
 
 **`integration/test_cli.py`:**
 
 - [ ] `pytestmark = pytest.mark.integration` set
-- [ ] Imports `__version__` from `myapp` (no `myapp`)
+- [ ] Imports `__version__` from `myapp` (replace `myapp`)
 - [ ] Uses `invoke` fixture from conftest
 - [ ] `test_version` — mandatory: asserts `--version` exits 0 and output contains `__version__`
 - [ ] `test_no_args` — mandatory: asserts bare invocation exits 0 and shows usage
