@@ -85,7 +85,6 @@ myapp reads configuration from environment variables prefixed with `MYAPP_` and 
 
 | Variable | Default | Description |
 | --- | --- | --- |
-| `MYAPP_DEBUG` | `false` | Enable debug mode |
 | `MYAPP_VERBOSE` | `false` | Enable verbose output |
 
 ## Documentation
