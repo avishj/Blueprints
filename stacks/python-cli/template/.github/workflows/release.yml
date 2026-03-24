@@ -311,13 +311,14 @@ jobs:
 
   github-release:
     name: GitHub Release
-    needs: [build, publish-pypi, sbom, docker, check]
+    needs: [build, publish-pypi, sbom, docker, trivy, check]
     if: >-
       always()
       && needs.check.outputs.release != 'true'
       && needs.build.result == 'success'
       && needs.sbom.result == 'success'
       && needs.docker.result == 'success'
+      && needs.trivy.result == 'success'
       && (needs.publish-pypi.result == 'success' || needs.check.outputs.pypi == 'true')
     runs-on: ubuntu-latest
     timeout-minutes: 10
