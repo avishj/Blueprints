@@ -12,39 +12,39 @@
 ## Scaffold
 
 - [ ] Copy `template/` contents into a new repo root
-- [ ] Rename `src/myapp/` directory > `src/<yourapp>/`
+- [ ] Rename `src/myapp/` directory to match your app name
 
-## Replace `myapp` > `<yourapp>`
+## Replace `myapp` with your app name
 
 **pyproject.toml:**
 
 - [ ] `project.name`
-- [ ] `project.scripts` — key and module path (`<yourapp> = "<yourapp>.cli:entrypoint"`)
-- [ ] `tool.hatch.build.targets.wheel.packages` > `["src/<yourapp>"]`
-- [ ] `tool.ruff.lint.isort.known-first-party` > `["<yourapp>"]`
-- [ ] `tool.coverage.run.source` > `["<yourapp>"]`
-- [ ] `tool.commitizen.version_files` > `"src/<yourapp>/__init__.py:__version__"`
+- [ ] `project.scripts` — key and module path (`myapp = "myapp.cli:entrypoint"`)
+- [ ] `tool.hatch.build.targets.wheel.packages` > `["src/myapp"]`
+- [ ] `tool.ruff.lint.isort.known-first-party` > `["myapp"]`
+- [ ] `tool.coverage.run.source` > `["myapp"]`
+- [ ] `tool.commitizen.version_files` > `"src/myapp/__init__.py:__version__"`
 
 **Source code:**
 
-- [ ] `src/<yourapp>/__init__.py` — module docstring
-- [ ] `src/<yourapp>/__main__.py` — docstring, `from <yourapp>.cli import app`
-- [ ] `src/<yourapp>/cli.py` — imports (`from <yourapp> import ...`, `from <yourapp>.config import ...`), `App(name=..., help=...)`, `main()` docstring
-- [ ] `src/<yourapp>/config.py` — `env_prefix="<YOURAPP>_"`
+- [ ] `src/myapp/__init__.py` — module docstring
+- [ ] `src/myapp/__main__.py` — docstring, `from myapp.cli import app`
+- [ ] `src/myapp/cli.py` — imports (`from myapp import ...`, `from myapp.config import ...`), `App(name=..., help=...)`, `main()` docstring
+- [ ] `src/myapp/config.py` — `env_prefix="MYAPP_"`
 
 **Tests:**
 
-- [ ] `tests/conftest.py` — `from <yourapp>.cli import app`
-- [ ] `tests/unit/test_version.py` — `from <yourapp> import __version__`
-- [ ] `tests/unit/test_config.py` — `from <yourapp>.config import Settings`, env var refs (`<YOURAPP>_VERBOSE`)
-- [ ] `tests/integration/test_cli.py` — `from <yourapp> import __version__`
+- [ ] `tests/conftest.py` — `from myapp.cli import app`
+- [ ] `tests/unit/test_version.py` — `from myapp import __version__`
+- [ ] `tests/unit/test_config.py` — `from myapp.config import Settings`, env var refs (`MYAPP_VERBOSE`)
+- [ ] `tests/integration/test_cli.py` — `from myapp import __version__`
 - [ ] `tests/e2e/test_entrypoint.py` — subprocess command name, assertion strings
 
 **Config files:**
 
-- [ ] `mkdocs.yml` — `site_name`, `site_description`, `copyright`, `watch` path (`src/<yourapp>`)
-- [ ] `codecov.yml` — all `paths` entries under flags > `src/<yourapp>/`
-- [ ] `Dockerfile` — `ENTRYPOINT ["<yourapp>"]`
+- [ ] `mkdocs.yml` — `site_name`, `site_description`, `copyright`, `watch` path (`src/myapp`)
+- [ ] `codecov.yml` — all `paths` entries under flags > `src/myapp/`
+- [ ] `Dockerfile` — `ENTRYPOINT ["myapp"]`
 - [ ] `justfile` — entry point in `build` and `ci` smoke test (`myapp --help`)
 - [ ] `.github/workflows/ci.yml` — `docker build -t` and `docker run --rm` image name, `package` job entry-point verification
 - [ ] `.github/workflows/release.yml` — `pypi.org/p/myapp` environment URL, `check` job PyPI URL, release-notes `uv add myapp==`, `pip install myapp==`, and `pypi.org/project/myapp/` link
@@ -52,7 +52,7 @@
 - [ ] `.github/settings.yml` — `repository.name`
 - [ ] `CONTRIBUTING.md` — clone URL repo name, `cd` directory name
 - [ ] `docs/index.md` — heading, description, install/usage commands
-- [ ] `README.md` (template) — heading, all badge URLs, install commands (`uv`, `pip`, `docker`), usage examples, clone URL, `cd` dir, env var prefix table (`<YOURAPP>_` entries), docs link, star history chart
+- [ ] `README.md` (template) — heading, all badge URLs, install commands (`uv`, `pip`, `docker`), usage examples, clone URL, `cd` dir, env var prefix table (`MYAPP_` entries), docs link, star history chart
 
 ## Replace `avishj` > `<owner>`
 
