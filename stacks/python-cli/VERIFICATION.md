@@ -334,7 +334,7 @@
 - [ ] `grep -r --exclude=VERIFICATION.md "Change This\|change-this" .` — zero hits (settings.yml placeholders replaced)
 - [ ] `grep -r --exclude=VERIFICATION.md "A CLI application" .` — zero hits (template description replaced)
 - [ ] `grep -r --exclude=VERIFICATION.md '\${' .` — zero hits (all `${...}` placeholders like `SONAR_PROJECT_KEY`, `SONAR_ORG`, `PROJECT_NAME` resolved)
-- [ ] `grep -r --exclude=VERIFICATION.md "avishj" .` — zero hits if owner is different; expected hits if owner is `avishj`
+- [ ] `grep -r --exclude=VERIFICATION.md "avishj" . | grep -v "avishj/blueprints"` — zero hits if owner is different; hits referencing `avishj/blueprints` (centralized actions) are expected and excluded by this command
 
 ## User Scope
 
