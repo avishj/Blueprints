@@ -55,7 +55,7 @@
 
 **`__main__.py`:**
 
-- [ ] Docstring references app name (`Allow running as \`python -m myapp\``) (replace `myapp`)
+- [ ] Docstring references app name (Allow running as `python -m myapp`) (replace `myapp`)
 - [ ] Imports `app` from `myapp.cli` (replace `myapp`)
 - [ ] Calls `app.meta()`
 
