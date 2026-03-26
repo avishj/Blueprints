@@ -1,12 +1,12 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
 repository:
-  name: myapp
-  description: A CLI application. Change This
-  homepage: https://avishj.github.io/myapp
-  topics: python, cli, cyclopts, change-this
+  name: {{ project_name }}
+  description: {{ description }}
+  homepage: https://{{ owner }}.github.io/{{ project_name }}
+  topics: {{ github_topics }}
 
   private: false
   has_issues: true
