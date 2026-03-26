@@ -1,6 +1,7 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
+{% raw %}
 ---
 name: Release
 
@@ -41,7 +42,9 @@ jobs:
           V="${VERSION#v}"
           exists() { "$@" > /dev/null 2>&1 && echo true || echo false; }
 
-          echo "pypi=$(exists curl -sf "https://pypi.org/pypi/myapp/$V/json")" >> "$GITHUB_OUTPUT"
+{% endraw %}
+          echo "pypi=$(exists curl -sf "https://pypi.org/pypi/{{ project_name }}/$V/json")" >> "$GITHUB_OUTPUT"
+{% raw %}
           echo "ghcr=$(exists docker manifest inspect "ghcr.io/${{ github.repository }}:$V")" >> "$GITHUB_OUTPUT"
           echo "dockerhub=$(exists curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V")" >> "$GITHUB_OUTPUT"
           echo "release=$(exists gh release view "$VERSION" --repo "${{ github.repository }}")" >> "$GITHUB_OUTPUT"
@@ -124,7 +127,9 @@ jobs:
       id-token: write
     environment:
       name: pypi
-      url: https://pypi.org/p/myapp
+{% endraw %}
+      url: https://pypi.org/p/{{ project_name }}
+{% raw %}
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
@@ -387,16 +392,18 @@ jobs:
           ## Install (uv recommended)
 
           \`\`\`
-          uv add myapp==${V}
+{% endraw %}
+          uv add {{ project_name }}==${V}
           \`\`\`
 
           or
 
           \`\`\`
-          pip install myapp==${V}
+          pip install {{ project_name }}==${V}
           \`\`\`
 
-          - [PyPI](https://pypi.org/project/myapp/${V}/)
+          - [PyPI](https://pypi.org/project/{{ project_name }}/${V}/)
+{% raw %}
 
           ## Docker Images
 
@@ -409,3 +416,4 @@ jobs:
             --verify-tag \
             --notes-file notes.md \
             dist/* sbom/* SHA256SUMS
+{% endraw %}
