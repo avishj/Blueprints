@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
@@ -11,7 +11,7 @@ body:
     id: version
     attributes:
       label: Version
-      description: Output of `myapp --version`.
+      description: Output of `{{ project_name }} --version`.
       placeholder: "0.1.0"
     validations:
       required: true
@@ -42,7 +42,7 @@ body:
     attributes:
       label: Steps to reproduce
       placeholder: |
-        1. Run `myapp ...`
+        1. Run `{{ project_name }} ...`
         2. Observe ...
     validations:
       required: true
