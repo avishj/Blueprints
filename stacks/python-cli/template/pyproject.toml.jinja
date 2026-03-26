@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -7,13 +7,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "myapp"
+name = "{{ project_name }}"
 version = "0.1.0"
-description = "A CLI application."
+description = "{{ description }}"
 readme = "README.md"
 license = "AGPL-3.0-or-later"
 requires-python = ">=3.13"
-authors = [{ name = "Avish J", email = "avish.j@pm.me" }]
+authors = [{ name = "{{ author_name }}", email = "{{ author_email }}" }]
 keywords = []
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -33,14 +33,14 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/avishj/myapp"
-Documentation = "https://avishj.github.io/myapp"
-Repository = "https://github.com/avishj/myapp"
-Changelog = "https://github.com/avishj/myapp/blob/main/CHANGELOG.md"
-Issues = "https://github.com/avishj/myapp/issues"
+Homepage = "https://github.com/{{ owner }}/{{ project_name }}"
+Documentation = "https://{{ owner }}.github.io/{{ project_name }}"
+Repository = "https://github.com/{{ owner }}/{{ project_name }}"
+Changelog = "https://github.com/{{ owner }}/{{ project_name }}/blob/main/CHANGELOG.md"
+Issues = "https://github.com/{{ owner }}/{{ project_name }}/issues"
 
 [project.scripts]
-myapp = "myapp.cli:entrypoint"
+{{ project_name }} = "{{ module_name }}.cli:entrypoint"
 
 [tool.uv]
 python-preference = "managed"
@@ -60,7 +60,7 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/myapp"]
+packages = ["src/{{ module_name }}"]
 
 [tool.ruff]
 target-version = "py313"
@@ -144,7 +144,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["myapp"]
+known-first-party = ["{{ module_name }}"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -172,7 +172,7 @@ filterwarnings = ["error"]
 xfail_strict = true
 
 [tool.coverage.run]
-source = ["myapp"]
+source = ["{{ module_name }}"]
 branch = true
 parallel = true
 relative_files = true
@@ -195,7 +195,7 @@ name = "cz_conventional_commits"
 version = "0.1.0"
 tag_format = "v$version"
 version_files = [
-    "src/myapp/__init__.py:__version__",
+    "src/{{ module_name }}/__init__.py:__version__",
     "pyproject.toml:version",
 ]
 changelog_file = "CHANGELOG.md"
