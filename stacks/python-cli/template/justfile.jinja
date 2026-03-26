@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -10,13 +10,15 @@ default:
 lint:
     uvx pre-commit run --all-files
 
+{% raw %}
 test *args:
     uv run pytest --cov --cov-report=term -n auto {{ args }}
+{% endraw %}
 
 build:
     uv build
     uvx twine check dist/*
-    uv run --with dist/*.whl --no-project -- myapp --help
+    uv run --with dist/*.whl --no-project -- {{ project_name }} --help
 
 docs:
     uv run mkdocs build --strict
@@ -27,7 +29,7 @@ ci:
     uv run pytest --cov --cov-report=term --cov-report=html --cov-fail-under=70 -n auto
     uv build
     uvx twine check dist/*
-    uv run --with dist/*.whl --no-project -- myapp --help
+    uv run --with dist/*.whl --no-project -- {{ project_name }} --help
     uv run mkdocs build --strict
 
 clean:
