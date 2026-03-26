@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -14,7 +14,7 @@ pytestmark = pytest.mark.e2e
 
 def _run(*args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        ["myapp", *args],
+        ["{{ project_name }}", *args],
         capture_output=True,
         text=True,
         check=False,
@@ -36,7 +36,7 @@ def test_hello_command():
 def test_no_args_shows_help():
     result = _run()
     assert result.returncode == 0
-    assert "Usage" in result.stdout or "myapp" in result.stdout
+    assert "Usage" in result.stdout or "{{ project_name }}" in result.stdout
 
 
 def test_invalid_command():

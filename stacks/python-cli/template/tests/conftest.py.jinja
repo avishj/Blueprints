@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -9,7 +9,7 @@ from typing import NamedTuple
 
 import pytest
 
-from myapp.cli import app
+from {{ module_name }}.cli import app
 
 
 class CliResult(NamedTuple):

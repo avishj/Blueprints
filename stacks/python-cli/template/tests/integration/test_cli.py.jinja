@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -6,7 +6,7 @@
 
 import pytest
 
-from myapp import __version__
+from {{ module_name }} import __version__
 
 
 pytestmark = pytest.mark.integration
