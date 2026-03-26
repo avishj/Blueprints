@@ -1,15 +1,15 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-site_name: myapp
-site_description: myapp documentation.
-site_url: https://avishj.github.io/myapp/
-repo_url: https://github.com/avishj/myapp
-repo_name: avishj/myapp
+site_name: {{ project_name }}
+site_description: {{ project_name }} documentation.
+site_url: https://{{ owner }}.github.io/{{ project_name }}/
+repo_url: https://github.com/{{ owner }}/{{ project_name }}
+repo_name: {{ owner }}/{{ project_name }}
 edit_uri: edit/main/docs/
 
-copyright: Copyright &copy; 2026 &ndash; Present myapp contributors
+copyright: Copyright &copy; {{ copyright_year }} &ndash; Present {{ author_name }} and contributors
 
 theme:
   name: material
@@ -92,4 +92,4 @@ nav:
   - Home: index.md
 
 watch:
-  - src/myapp
+  - src/{{ module_name }}
