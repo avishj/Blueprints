@@ -1,6 +1,7 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
+{% raw %}
 ---
 name: CI
 
@@ -180,11 +181,13 @@ jobs:
         with:
           setup-python: "false"
 
+{% endraw %}
       - name: Build image
-        run: docker build -t myapp:ci .
+        run: docker build -t {{ project_name }}:ci .
 
       - name: Verify entry point
-        run: docker run --rm myapp:ci --help
+        run: docker run --rm {{ project_name }}:ci --help
+{% raw %}
 
   test:
     name: Test (Python ${{ matrix.python-version }}, ${{ matrix.os }})
@@ -318,8 +321,10 @@ jobs:
       - name: Check metadata
         run: uvx twine check dist/*
 
+{% endraw %}
       - name: Verify entry point
-        run: uv run --with dist/*.whl --no-project -- myapp --help
+        run: uv run --with dist/*.whl --no-project -- {{ project_name }} --help
+{% raw %}
 
   complexity:
     name: Cognitive Complexity
@@ -401,3 +406,4 @@ jobs:
             echo "::error::One or more jobs failed or were cancelled."
             exit 1
           fi
+{% endraw %}
