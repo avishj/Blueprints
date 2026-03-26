@@ -1,5 +1,5 @@
 <!--
-SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 
 SPDX-License-Identifier: AGPL-3.0-or-later
 -->
@@ -16,8 +16,8 @@ Thanks for your interest in contributing!
    Install [`just`](https://github.com/casey/just) if not already available, then:
 
    ```bash
-   git clone https://github.com/<your_username>/myapp.git
-   cd myapp
+   git clone https://github.com/<your_username>/{{ project_name }}.git
+   cd {{ project_name }}
    uv sync
    pre-commit install
    ```
@@ -63,7 +63,7 @@ This gives you the same rules that run in CI directly in your editor, catching i
 
 ## Reporting Bugs
 
-Open a [GitHub issue](https://github.com/avishj/myapp/issues/new/choose) using the appropriate template.
+Open a [GitHub issue](https://github.com/{{ owner }}/{{ project_name }}/issues/new/choose) using the appropriate template.
 
 ## Security
 
