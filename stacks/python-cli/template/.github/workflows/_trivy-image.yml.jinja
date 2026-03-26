@@ -1,6 +1,7 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
+{% raw %}
 ---
 name: Trivy Image Scan
 
@@ -61,3 +62,4 @@ jobs:
           name: trivy-image-results
           path: trivy.sarif
           retention-days: 90
+{% endraw %}

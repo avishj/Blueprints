@@ -1,6 +1,7 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
+{% raw %}
 ---
 name: OSV-Scanner
 
@@ -157,3 +158,4 @@ jobs:
         run: |
           echo "::error::Artifact upload failed. This is most likely caused by a error during scanning earlier in the workflow."
           exit 1
+{% endraw %}
