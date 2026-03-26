@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -38,4 +38,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 USER app
 WORKDIR /app
 
-ENTRYPOINT ["myapp"]
+ENTRYPOINT ["{{ project_name }}"]
