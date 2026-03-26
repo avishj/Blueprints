@@ -1,4 +1,4 @@
-# SPDX-FileCopyrightText: 2026 Avish J <avish.j@pm.me>
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
@@ -28,7 +28,7 @@ coverage:
 flags:
   unit:
     paths:
-      - src/myapp/
+      - src/{{ module_name }}/
     carryforward: false
     statuses:
       - type: project
@@ -37,7 +37,7 @@ flags:
         target: 70%
   integration:
     paths:
-      - src/myapp/
+      - src/{{ module_name }}/
     carryforward: false
     statuses:
       - type: project
@@ -46,7 +46,7 @@ flags:
         target: 70%
   e2e:
     paths:
-      - src/myapp/
+      - src/{{ module_name }}/
     carryforward: false
     statuses:
       - type: project
