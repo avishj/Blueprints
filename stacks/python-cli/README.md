@@ -4,6 +4,18 @@
 
 This stack is for building command-line tools, scripts, and automation utilities in Python. The deliverable is a CLI application that users install and invoke from a terminal, not a web service or library. It covers single-command tools as well as multi-command CLIs with subcommands, flags, and configuration.
 
+## Usage
+
+This stack is a [Copier](https://copier.readthedocs.io/) template. Scaffold a new project:
+
+```bash
+git clone https://github.com/avishj/blueprints /tmp/blueprints
+uvx copier copy /tmp/blueprints/stacks/python-cli my-project --trust
+rm -rf /tmp/blueprints
+```
+
+See [SETUP.md](SETUP.md) for prerequisites, variable reference, non-interactive usage, and GitHub repo configuration.
+
 ## Tooling
 
 1. uv - Package manager.
@@ -74,67 +86,75 @@ This stack is for building command-line tools, scripts, and automation utilities
 
 ## Project structure
 
+Files with `.jinja` suffix are Copier templates — the suffix is stripped during scaffolding. `{{ module_name }}` and other `{{ }}` directory/file names are rendered from user answers.
+
 ```text
-template/
-├── .github/
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── bug_report.yml
-│   │   └── feature_request.yml
-│   ├── workflows/
-│   │   ├── _codeql.yml
-│   │   ├── _osv-scanner.yml
-│   │   ├── _security.yml
-│   │   ├── _trivy-image.yml
-│   │   ├── ci.yml
-│   │   ├── docs.yml
-│   │   ├── labeler.yml
-│   │   ├── release.yml
-│   │   └── weekly.yml
-│   ├── FUNDING.yml
-│   ├── labeler.yml
-│   ├── PULL_REQUEST_TEMPLATE.md
-│   └── settings.yml
-├── docs/
-│   └── index.md
-├── src/
-│   └── myapp/
-│       ├── __init__.py
-│       ├── __main__.py
-│       ├── cli.py
-│       ├── config.py
-│       └── py.typed
-├── tests/
-│   ├── e2e/
-│   │   ├── __init__.py
-│   │   └── test_entrypoint.py
-│   ├── integration/
-│   │   ├── __init__.py
-│   │   └── test_cli.py
-│   ├── unit/
-│   │   ├── __init__.py
-│   │   ├── test_config.py
-│   │   └── test_version.py
-│   ├── __init__.py
-│   └── conftest.py
-├── .dockerignore
-├── .editorconfig
-├── .gitattributes
-├── .gitignore
-├── .pre-commit-config.yaml
-├── CHANGELOG.md
-├── CODEOWNERS
-├── CONTRIBUTING.md
-├── Dockerfile
-├── LICENSE
-├── LICENSES/
-│   └── AGPL-3.0-or-later.txt
+stacks/python-cli/
+├── copier.yml                         # Copier config (questions, derived vars, tasks)
+├── template/
+│   ├── {{ _copier_conf.answers_file }}.jinja  # Copier answers (auto-generated)
+│   ├── .github/
+│   │   ├── ISSUE_TEMPLATE/
+│   │   │   ├── bug_report.yml.jinja
+│   │   │   └── feature_request.yml.jinja
+│   │   ├── workflows/
+│   │   │   ├── _codeql.yml.jinja
+│   │   │   ├── _osv-scanner.yml.jinja
+│   │   │   ├── _security.yml.jinja
+│   │   │   ├── _trivy-image.yml.jinja
+│   │   │   ├── ci.yml.jinja
+│   │   │   ├── docs.yml.jinja
+│   │   │   ├── labeler.yml.jinja
+│   │   │   ├── release.yml.jinja
+│   │   │   └── weekly.yml.jinja
+│   │   ├── FUNDING.yml.jinja
+│   │   ├── labeler.yml.jinja
+│   │   ├── PULL_REQUEST_TEMPLATE.md.jinja
+│   │   └── settings.yml.jinja
+│   ├── docs/
+│   │   └── index.md.jinja
+│   ├── src/
+│   │   └── {{ module_name }}/
+│   │       ├── __init__.py.jinja
+│   │       ├── __main__.py.jinja
+│   │       ├── cli.py.jinja
+│   │       ├── config.py.jinja
+│   │       └── py.typed
+│   ├── tests/
+│   │   ├── e2e/
+│   │   │   ├── __init__.py.jinja
+│   │   │   └── test_entrypoint.py.jinja
+│   │   ├── integration/
+│   │   │   ├── __init__.py.jinja
+│   │   │   └── test_cli.py.jinja
+│   │   ├── unit/
+│   │   │   ├── __init__.py.jinja
+│   │   │   ├── test_config.py.jinja
+│   │   │   └── test_version.py.jinja
+│   │   ├── __init__.py.jinja
+│   │   └── conftest.py.jinja
+│   ├── .dockerignore.jinja
+│   ├── .editorconfig.jinja
+│   ├── .gitattributes.jinja
+│   ├── .gitignore.jinja
+│   ├── .pre-commit-config.yaml.jinja
+│   ├── CHANGELOG.md.jinja
+│   ├── CODEOWNERS.jinja
+│   ├── CONTRIBUTING.md.jinja
+│   ├── Dockerfile.jinja
+│   ├── LICENSE
+│   ├── LICENSES/
+│   │   └── AGPL-3.0-or-later.txt
+│   ├── README.md.jinja
+│   ├── REUSE.toml.jinja
+│   ├── SECURITY.md.jinja
+│   ├── codecov.yml.jinja
+│   ├── justfile.jinja
+│   ├── mkdocs.yml.jinja
+│   ├── pyproject.toml.jinja
+│   ├── renovate.json
+│   └── sonar-project.properties.jinja
 ├── README.md
-├── REUSE.toml
-├── SECURITY.md
-├── codecov.yml
-├── justfile
-├── mkdocs.yml
-├── pyproject.toml
-├── renovate.json
-└── sonar-project.properties
+├── SETUP.md
+└── VERIFICATION.md
 ```
