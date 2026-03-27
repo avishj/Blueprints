@@ -328,13 +328,16 @@
 
 ### Section 10 — Global Grep Sanity Check
 
-- [ ] `grep -r --exclude=VERIFICATION.md "myapp" .` — zero hits (template app name fully replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md "MYAPP_" .` — zero hits (env prefix replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md "Avish J\|avish.j@pm.me" .` — zero hits if author is different; expected hits if author is Avish J
-- [ ] `grep -r --exclude=VERIFICATION.md "Change This\|change-this" .` — zero hits (settings.yml placeholders replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md "A CLI application" .` — zero hits (template description replaced)
-- [ ] `grep -r --exclude=VERIFICATION.md '\${' .` — zero hits (all `${...}` placeholders like `SONAR_PROJECT_KEY`, `SONAR_ORG`, `PROJECT_NAME` resolved)
-- [ ] `grep -r --exclude=VERIFICATION.md "avishj" . | grep -v "avishj/blueprints"` — zero hits if owner is different; hits referencing `avishj/blueprints` (centralized actions) are expected and excluded by this command
+> **Note:** `.copier-answers.yml` contains Copier metadata (template source path, variable values). Exclude it from all grep checks — its contents are expected and managed by Copier.
+
+- [ ] `grep -r --exclude=VERIFICATION.md --exclude=.copier-answers.yml "myapp" .` — zero hits (template app name fully replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md --exclude=.copier-answers.yml "MYAPP_" .` — zero hits (env prefix replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md --exclude=.copier-answers.yml "Avish J\|avish.j@pm.me" .` — zero hits if author is different; expected hits if author is Avish J
+- [ ] `grep -r --exclude=VERIFICATION.md --exclude=.copier-answers.yml "Change This\|change-this" .` — zero hits (settings.yml placeholders replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md --exclude=.copier-answers.yml "A CLI application" .` — zero hits (template description replaced)
+- [ ] `grep -r --exclude=VERIFICATION.md --exclude=.copier-answers.yml '\${' .` — zero hits (all `${...}` placeholders like `SONAR_PROJECT_KEY`, `SONAR_ORG`, `PROJECT_NAME` resolved)
+- [ ] `grep -r --exclude=VERIFICATION.md --exclude=.copier-answers.yml "avishj" . | grep -v "avishj/blueprints"` — zero hits if owner is different; hits referencing `avishj/blueprints` (centralized actions) are expected and excluded by this command
+- [ ] `.copier-answers.yml` exists in project root and contains expected answer values
 
 ## User Scope
 
