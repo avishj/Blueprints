@@ -11,91 +11,73 @@
 
 ## Scaffold
 
-- [ ] Copy `template/` contents into a new repo root
-- [ ] Rename `src/myapp/` directory to match your app name
+Clone the Blueprints repo and run Copier against the `python-cli` stack:
 
-## Replace `myapp` with your app name
+```bash
+git clone https://github.com/avishj/blueprints /tmp/blueprints
+uvx copier copy /tmp/blueprints/stacks/python-cli my-project --trust
+rm -rf /tmp/blueprints
+```
 
-**pyproject.toml:**
+> **Note:** `--trust` is required because the template runs post-scaffold tasks (`uv sync` and `pre-commit install`). Review the tasks in `copier.yml` before running if concerned.
 
-- [ ] `project.name`
-- [ ] `project.scripts` — key and module path (`myapp = "myapp.cli:entrypoint"`)
-- [ ] `tool.hatch.build.targets.wheel.packages` > `["src/myapp"]`
-- [ ] `tool.ruff.lint.isort.known-first-party` > `["myapp"]`
-- [ ] `tool.coverage.run.source` > `["myapp"]`
-- [ ] `tool.commitizen.version_files` > `"src/myapp/__init__.py:__version__"`
+> **Why clone first?** Copier discovers its config at the root of the path you give it. Since `copier.yml` lives at `stacks/python-cli/copier.yml` (not the repo root), remote URLs like `gh:avishj/blueprints` won't work directly. Cloning first and pointing to the subdirectory is the supported approach for multi-stack repos.
 
-**Source code:**
+Copier will prompt for:
 
-- [ ] `src/myapp/__init__.py` — module docstring
-- [ ] `src/myapp/__main__.py` — docstring, `from myapp.cli import app`
-- [ ] `src/myapp/cli.py` — imports (`from myapp import ...`, `from myapp.config import ...`), `App(name=..., help=...)`, `main()` docstring
-- [ ] `src/myapp/config.py` — `env_prefix="MYAPP_"`
+| Variable | Description | Example |
+|---|---|---|
+| `project_name` | PyPI/CLI name (may contain hyphens) | `my-tool` |
+| `owner` | GitHub username | `avishj` |
+| `description` | Project description | `A CLI application.` |
+| `author_name` | Author display name | `Avish J` |
+| `author_email` | Author email | `avish.j@pm.me` |
+| `copyright_year` | Copyright year for SPDX headers | `2026` |
+| `sonar_project_key` | SonarCloud project key | `avishj_my-tool` |
+| `sonar_org` | SonarCloud organization | `avishj` |
+| `github_topics` | Comma-separated GitHub topics | `python, cli, cyclopts` |
+| `module_name` | Python import name (auto-derived) | `my_tool` |
+| `env_prefix` | Env var prefix (auto-derived) | `MY_TOOL_` |
+| `copyright_holder` | SPDX copyright holder (auto-derived) | `Avish J <avish.j@pm.me>` |
 
-**Tests:**
+Derived variables are auto-computed and shown for optional override.
 
-- [ ] `tests/conftest.py` — `from myapp.cli import app`
-- [ ] `tests/unit/test_version.py` — `from myapp import __version__`
-- [ ] `tests/unit/test_config.py` — `from myapp.config import Settings`, env var refs (`MYAPP_VERBOSE`)
-- [ ] `tests/integration/test_cli.py` — `from myapp import __version__`
-- [ ] `tests/e2e/test_entrypoint.py` — subprocess command name, assertion strings
+For non-interactive scaffolding (CI or scripting):
 
-**Config files:**
+```bash
+uvx copier copy /tmp/blueprints/stacks/python-cli my-project \
+  --trust \
+  --data project_name=my-tool \
+  --data owner=avishj \
+  --data description="A CLI application." \
+  --data author_name="Avish J" \
+  --data author_email="avish.j@pm.me" \
+  --data copyright_year="2026" \
+  --data sonar_project_key=avishj_my-tool \
+  --data sonar_org=avishj \
+  --data github_topics="python, cli, cyclopts"
+```
 
-- [ ] `mkdocs.yml` — `site_name`, `site_description`, `copyright`, `watch` path (`src/myapp`)
-- [ ] `codecov.yml` — all `paths` entries under flags > `src/myapp/`
-- [ ] `Dockerfile` — `ENTRYPOINT ["myapp"]`
-- [ ] `justfile` — entry point in `build` and `ci` smoke test (`myapp --help`)
-- [ ] `.github/workflows/ci.yml` — `docker build -t` and `docker run --rm` image name, `package` job entry-point verification
-- [ ] `.github/workflows/release.yml` — `pypi.org/p/myapp` environment URL, `check` job PyPI URL, release-notes `uv add myapp==`, `pip install myapp==`, and `pypi.org/project/myapp/` link
-- [ ] `.github/ISSUE_TEMPLATE/bug_report.yml` — version command, reproduction steps
-- [ ] `.github/settings.yml` — `repository.name`
-- [ ] `CONTRIBUTING.md` — clone URL repo name, `cd` directory name
-- [ ] `docs/index.md` — heading, description, install/usage commands
-- [ ] `README.md` (template) — heading, all badge URLs, install commands (`uv`, `pip`, `docker`), usage examples, clone URL, `cd` dir, env var prefix table (`MYAPP_` entries), docs link, star history chart
+## Post-scaffold customization
 
-## Replace `avishj` > `<owner>`
+These items are intentionally not templated by Copier (hardcoded defaults). Change them manually after scaffolding if needed:
 
-- [ ] `pyproject.toml` — all `project.urls` (Homepage, Documentation, Repository, Changelog, Issues)
-- [ ] `mkdocs.yml` — `site_url`, `repo_url`, `repo_name`
-- [ ] `README.md` (template) — all badge URLs, clone URL, docs link, star history chart
-- [ ] `SECURITY.md` — advisory link
-- [ ] `CONTRIBUTING.md` — clone URL, issues link
-- [ ] `.github/FUNDING.yml` — `github: [<owner>]`
-- [ ] `CODEOWNERS` — `* @<owner>`
-- [ ] `.github/settings.yml` — `repository.homepage`
+**If changing the license** (default: AGPL-3.0-or-later):
 
-## Replace `${...}` placeholders
+- [ ] `pyproject.toml` — `project.license` and matching `classifiers` entry
+- [ ] `LICENSE` — replace file with new license text
+- [ ] `LICENSES/` — run `reuse download <SPDX-ID>` to add the new license, remove old one
+- [ ] `REUSE.toml` — update all `SPDX-License-Identifier` entries
+- [ ] All commentable files — update inline `SPDX-License-Identifier` headers
+- [ ] `README.md` — license badge and footer link
 
-- [ ] `sonar-project.properties` — `${SONAR_PROJECT_KEY}`, `${SONAR_ORG}`, `${PROJECT_NAME}`
-- [ ] `README.md` (template) — `${SONAR_PROJECT_KEY}` in SonarCloud badge
+**If changing the Python version** (default: 3.13):
 
-## Replace REUSE / SPDX placeholders
+- [ ] `pyproject.toml` — `requires-python`, Python version classifiers, `[tool.ruff].target-version`, `[tool.ty].python-version`
 
-- [ ] All commentable files contain inline `SPDX-FileCopyrightText` and `SPDX-License-Identifier` headers — update copyright holder and year in each (search `Avish J <avish.j@pm.me>`). This includes `.pre-commit-config.yaml`, `.editorconfig`, `.gitattributes`, `justfile`, etc.
-- [ ] `REUSE.toml` — replace `Avish J <avish.j@pm.me>` with actual copyright holder in all `SPDX-FileCopyrightText` entries (covers `*.json`, `*.lock`, `py.typed`)
-- [ ] `REUSE.toml` — replace `2026` with actual year in all `SPDX-FileCopyrightText` entries
-- [ ] `REUSE.toml` — if license changed from AGPL-3.0-or-later, update all `SPDX-License-Identifier` entries and inline headers
-- [ ] `LICENSES/` — if license changed, run `reuse download <SPDX-ID>` to replace the license text
+**Other optional changes:**
 
-## Replace other placeholders
-
-- [ ] `pyproject.toml` — `project.description` ("A CLI application.")
-- [ ] `pyproject.toml` — `project.authors` (if author is not `Avish J <avish.j@pm.me>`)
-- [ ] `pyproject.toml` — `project.keywords` (empty list)
-- [ ] `pyproject.toml` — `project.license` (if not AGPL-3.0)
-- [ ] `pyproject.toml` — `project.classifiers` license classifier (if license changed)
-- [ ] `pyproject.toml` — `requires-python`, Python classifiers, `[tool.ruff].target-version`, and `[tool.ty].python-version` if the default Python version changes
-- [ ] `.github/settings.yml` — `repository.description` ("Change This"), `repository.topics` ("change-this")
-- [ ] `LICENSE` — replace file if license changed, update copyright holder
-- [ ] `README.md` (template) — license badge and footer link (if license changed)
-- [ ] `mkdocs.yml` — `copyright` year
-
-## Install & initialize
-
-- [ ] Run `uv sync` — creates venv and installs all deps
-- [ ] Run `uv lock` — generates `uv.lock`
-- [ ] Run `pre-commit install` — installs git hooks (pre-commit + commit-msg)
+- [ ] `pyproject.toml` — `project.keywords` (empty list, fill in as desired)
 
 ## Validate locally
 
@@ -119,3 +101,16 @@
 - [ ] Enable Docker Hub immutable tags: Docker Hub > Repositories > select repo > Settings > General > Tag Mutability > select "Specific tags are immutable" > set regex to `^\d+\.\d+\.\d+$` > save (protects exact semver; keeps `latest`/major/minor mutable)
 - [ ] GHCR immutable tags: GHCR does not support immutable tags; Cosign signatures and attestations verify provenance by digest but do not prevent tag repointing; consumers must point to digests where possible
 - [ ] Push and verify CI workflow passes
+
+## Updating an existing project
+
+When the template changes upstream, pull updates into an existing project:
+
+```bash
+git clone https://github.com/avishj/blueprints /tmp/blueprints
+cd my-project
+uvx copier update --vcs-ref=HEAD --trust
+rm -rf /tmp/blueprints
+```
+
+Copier uses the `.copier-answers.yml` file in your project root to track which template version was used and what answers were given. Do not delete or manually edit this file.
