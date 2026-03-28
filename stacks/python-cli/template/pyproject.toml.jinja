@@ -50,6 +50,7 @@ dev = [
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
     "pytest-randomly>=4.0.1",
+    "pytest-timeout>=2.4.0",
     "pytest-xdist>=3.8.0",
     "mkdocs-material>=9.7.5",
     "mkdocstrings[python]>=1.0.3",
@@ -169,6 +170,7 @@ markers = [
     "integration: tests exercising multiple components together (e.g. CliRunner)",
     "e2e: end-to-end tests invoking the installed CLI via subprocess",
 ]
+timeout = 60
 filterwarnings = ["error"]
 xfail_strict = true
 
