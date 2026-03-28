@@ -27,9 +27,7 @@ docs:
 ci:
     uvx pre-commit run --all-files
     uv run pytest --cov --cov-report=term --cov-report=html --cov-fail-under=70 -n auto
-    uv build
-    uvx twine check dist/*
-    uv run --with dist/*.whl --no-project -- {{ project_name }} --help
+    just build
     uv run mkdocs build --strict
 
 clean:
