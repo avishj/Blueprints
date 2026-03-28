@@ -109,8 +109,10 @@ When the template changes upstream, pull updates into an existing project:
 ```bash
 git clone https://github.com/avishj/blueprints /tmp/blueprints
 cd my-project
-uvx copier update --vcs-ref=HEAD --trust
+uvx copier update --vcs-ref=<TAG> --trust
 rm -rf /tmp/blueprints
 ```
+
+> Replace `<TAG>` with the desired release tag (e.g. `v1.0.0`). Pinning to a tag ensures you get a known-good snapshot of the template rather than whatever happens to be on `main`.
 
 Copier uses the `.copier-answers.yml` file in your project root to track which template version was used and what answers were given. Do not delete or manually edit this file.
