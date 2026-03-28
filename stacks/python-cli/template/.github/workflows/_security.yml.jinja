@@ -18,7 +18,7 @@ jobs:
     permissions:
       security-events: write
     container:
-      image: semgrep/semgrep@sha256:3dab091ee3247fce7e4ed3df9f92b3bd72692c083295f53cec3f135b86404db1  # v1.155.0
+      image: semgrep/semgrep@sha256:a3d49dc967b8534a6a76628e50c51cbfe33eb7195dc2feab1fdc0f100852c8ef  # v1.156.0
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
@@ -30,7 +30,7 @@ jobs:
 
       - name: Upload SARIF
         if: always()
-        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
         with:
           sarif_file: semgrep.sarif
           category: semgrep
@@ -60,7 +60,7 @@ jobs:
 
       - name: Upload SARIF
         if: always()
-        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
         with:
           sarif_file: trivy.sarif
           category: trivy
