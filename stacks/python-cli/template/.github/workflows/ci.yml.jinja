@@ -148,8 +148,10 @@ jobs:
 
       - name: Warn about unvalidated config files
         if: "!cancelled() && needs.changes.outputs.config == 'true'"
+        env:
+          CHANGED_FILES: ${{ needs.changes.outputs.changed_config_files }}
         run: |
-          echo "::warning::Changed config files without validation, manual review recommended: $(echo '${{ needs.changes.outputs.changed_config_files }}' | jq -r 'join(", ")')"
+          echo "::warning::Changed config files without validation, manual review recommended: $(echo "$CHANGED_FILES" | jq -r 'join(", ")')"
 
       - name: Spell check
         if: '!cancelled()'
