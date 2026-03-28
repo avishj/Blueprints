@@ -93,7 +93,7 @@ These items are intentionally not templated by Copier (hardcoded defaults). Chan
 - [ ] Enable GitHub Pages (source: GitHub Actions) for docs
 - [ ] Add repo secret: `CODECOV_TOKEN`
 - [ ] Add repo secret: `SONAR_TOKEN`
-- [ ] Add repo secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN` (if publishing to Docker Hub)
+- [ ] Add repo secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`
 - [ ] Create GitHub environment: `pypi` (with trusted publisher configured)
 - [ ] Enable secret scanning with push protection
 - [ ] Enable Dependabot security updates
