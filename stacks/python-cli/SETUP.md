@@ -20,7 +20,7 @@ rm -rf /tmp/blueprints
 ```
 
 > **Note:** `--trust` is required because the template runs post-scaffold tasks (`uv sync` and `pre-commit install`). Review the tasks in `copier.yml` before running if concerned.
-
+>
 > **Why clone first?** Copier discovers its config at the root of the path you give it. Since `copier.yml` lives at `stacks/python-cli/copier.yml` (not the repo root), remote URLs like `gh:avishj/blueprints` won't work directly. Cloning first and pointing to the subdirectory is the supported approach for multi-stack repos.
 
 Copier will prompt for:
