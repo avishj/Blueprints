@@ -14,7 +14,8 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 [![Python](https://img.shields.io/pypi/pyversions/{{ project_name }})](https://pypi.org/project/{{ project_name }}/)
 [![License](https://img.shields.io/github/license/{{ owner }}/{{ project_name }})](LICENSE)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/{{ owner }}/{{ project_name }}/badge)](https://scorecard.dev/viewer/?uri=github.com/{{ owner }}/{{ project_name }})
-[![Docker](https://img.shields.io/docker/v/{{ owner }}/{{ project_name }}?label=docker)](https://hub.docker.com/r/{{ owner }}/{{ project_name }})
+[![Docker Hub](https://img.shields.io/docker/v/{{ owner }}/{{ project_name }}?label=docker%20hub)](https://hub.docker.com/r/{{ owner }}/{{ project_name }})
+[![GHCR](https://ghcr-badge.egpl.dev/{{ owner }}/{{ project_name }}/latest_tag?label=ghcr)](https://github.com/{{ owner }}/{{ project_name }}/pkgs/container/{{ project_name }})
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project={{ sonar_project_key }}&metric=alert_status)](https://sonarcloud.io/summary/new_code?id={{ sonar_project_key }})
 
 {{ description }}
@@ -43,6 +44,8 @@ Or with Docker:
 
 ```bash
 docker run --rm ghcr.io/{{ owner }}/{{ project_name }} --help
+# or
+docker run --rm docker.io/{{ owner }}/{{ project_name }} --help
 ```
 
 ## Usage
