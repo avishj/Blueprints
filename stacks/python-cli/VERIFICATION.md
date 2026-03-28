@@ -81,8 +81,8 @@
 
 **Directory structure:**
 
-- [ ] `tests/__init__.py` exists (empty)
-- [ ] `tests/unit/__init__.py`, `tests/integration/__init__.py`, `tests/e2e/__init__.py` exist (empty)
+- [ ] `tests/__init__.py` exists (SPDX header only)
+- [ ] `tests/unit/__init__.py`, `tests/integration/__init__.py`, `tests/e2e/__init__.py` exist (SPDX header only)
 - [ ] All three test tiers present: `unit/`, `integration/`, `e2e/`
 
 **`conftest.py`:**
