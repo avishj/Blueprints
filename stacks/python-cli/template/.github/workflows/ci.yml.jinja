@@ -127,7 +127,7 @@ jobs:
 
       - name: Lint Markdown
         if: '!cancelled()'
-        uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101  # v22.0.0
+        uses: DavidAnson/markdownlint-cli2-action@ce4853d43830c74c1753b39f3cf40f71c2031eb9  # v23.0.0
         with:
           globs: "**/*.md"
 
@@ -249,7 +249,7 @@ jobs:
           retention-days: 90
 
       - name: Upload unit coverage
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de  # v5.5.2
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2  # v6.0.0
         with:
           files: coverage-${{ steps.prefix.outputs.value }}-unit.xml
           flags: unit
@@ -257,7 +257,7 @@ jobs:
           disable_search: true
 
       - name: Upload integration coverage
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de  # v5.5.2
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2  # v6.0.0
         with:
           files: coverage-${{ steps.prefix.outputs.value }}-integration.xml
           flags: integration
@@ -265,7 +265,7 @@ jobs:
           disable_search: true
 
       - name: Upload e2e coverage
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de  # v5.5.2
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2  # v6.0.0
         with:
           files: coverage-${{ steps.prefix.outputs.value }}-e2e.xml
           flags: e2e
@@ -343,7 +343,7 @@ jobs:
 
       - name: Upload SARIF
         if: always()
-        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
         with:
           sarif_file: complexipy.sarif
           category: complexipy

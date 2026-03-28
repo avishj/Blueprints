@@ -35,7 +35,7 @@ jobs:
           git checkout --track origin/$GITHUB_BASE_REF
           git submodule update --recursive
       - name: Run scanner on existing code
-        uses: google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730  # v2.3.3
+        uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
         continue-on-error: true
         with:
           scan-args: |-
@@ -49,7 +49,7 @@ jobs:
           git checkout -f $GITHUB_SHA
           git submodule update --recursive
       - name: Run scanner on new code
-        uses: google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730  # v2.3.3
+        uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
         with:
           scan-args: |-
             --format=json
@@ -58,7 +58,7 @@ jobs:
             ./
         continue-on-error: true
       - name: Run osv-scanner-reporter
-        uses: google/osv-scanner-action/osv-reporter-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730  # v2.3.3
+        uses: google/osv-scanner-action/osv-reporter-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
         with:
           scan-args: |-
             --output=results.sarif
@@ -90,7 +90,7 @@ jobs:
       - name: Upload to code-scanning
         id: upload_artifact
         if: ${{ !cancelled() }}
-        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
         with:
           sarif_file: results.sarif
       - name: Print Code Scanning PR URL
@@ -117,7 +117,7 @@ jobs:
         with:
           setup-python: "false"
       - name: Run scanner
-        uses: google/osv-scanner-action/osv-scanner-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730  # v2.3.3
+        uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
         with:
           scan-args: |-
             --output=results.json
@@ -126,7 +126,7 @@ jobs:
             ./
         continue-on-error: true
       - name: Run osv-scanner-reporter
-        uses: google/osv-scanner-action/osv-reporter-action@c5996e0193a3df57d695c1b8a1dec2a4c62e8730  # v2.3.3
+        uses: google/osv-scanner-action/osv-reporter-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
         with:
           scan-args: |-
             --output=results.sarif
@@ -143,7 +143,7 @@ jobs:
           retention-days: 90
       - name: Upload to code-scanning
         if: ${{ !cancelled() }}
-        uses: github/codeql-action/upload-sarif@b1bff81932f5cdfc8695c7752dcee935dcd061c8  # v4.33.0
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
         with:
           sarif_file: results.sarif
       - name: Print Code Scanning URL
