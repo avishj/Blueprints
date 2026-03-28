@@ -142,7 +142,7 @@
 **`README.md` (template):**
 
 - [ ] All badge URLs use correct owner/repo (no `myapp` remnants in GitHub, PyPI, Docker, Scorecard URLs)
-- [ ] `${SONAR_PROJECT_KEY}` in SonarCloud badge replaced with actual key
+- [ ] SonarCloud badge uses correct project key (auto-filled by Copier from `sonar_project_key`)
 - [ ] Description updated (not `"A CLI application."`)
 - [ ] Features section retained (Cyclopts, Rich, pydantic-settings, py.typed, Python 3.13+)
 - [ ] Install commands use app name (uv, pip, docker)
@@ -305,7 +305,7 @@
 
 **`sonar-project.properties`:**
 
-- [ ] `${SONAR_PROJECT_KEY}`, `${SONAR_ORG}`, `${PROJECT_NAME}` replaced with actual values
+- [ ] `sonar.projectKey`, `sonar.organization`, and `sonar.projectName` contain correct values (auto-filled by Copier)
 - [ ] All remaining config (python version, sources/tests paths, coverage/test report patterns, quality gate, encoding) matches template exactly
 
 ### Section 9 — Install & Local Validation
