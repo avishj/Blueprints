@@ -4,6 +4,7 @@
 
 """CLI entry point."""
 
+import logging
 from typing import Annotated
 
 from cyclopts import App, Parameter
@@ -13,6 +14,8 @@ from rich.markup import escape
 from {{ module_name }} import __version__
 from {{ module_name }}.config import settings
 from {{ module_name }}.logging import setup_logging
+
+logger = logging.getLogger(__name__)
 
 app = App(
     name="{{ project_name }}",
@@ -32,8 +35,7 @@ def hello(name: str) -> None:
     name:
         Name to greet.
     """
-    if settings.verbose:
-        console.print(f"[dim]greeting name={escape(name)}[/dim]")
+    logger.debug("greeting name=%s", name)
     console.print(f"Hello, [bold]{escape(name)}[/bold]!")
 
 
