@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+"""Structured exit codes for CLI commands.
+
+Cyclopts owns exit code 1 (parse/validation errors) and 130 (Ctrl-C).
+Commands return an ExitCode; the default result_action calls sys.exit(n).
+"""
+
+from enum import IntEnum
+
+
+class ExitCode(IntEnum):
+    """Process exit codes for scripting and automation."""
+
+    OK = 0
+    ERROR = 1
+    USAGE = 2
+    CONFIG = 78  # sysexits.h EX_CONFIG
