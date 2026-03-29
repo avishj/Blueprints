@@ -37,7 +37,7 @@
 
 - [ ] `tool.ruff.lint.isort.known-first-party` uses app name
 - [ ] `tool.coverage.run.source` uses app name
-- [ ] `tool.commitizen.version_files` points to `src/myapp/__init__.py:__version__` (replace `myapp`)
+- [ ] `tool.commitizen.version_files` contains only `pyproject.toml:version` (version is no longer duplicated in `__init__.py`)
 
 **Commitizen:**
 
@@ -51,7 +51,7 @@
 **`__init__.py`:**
 
 - [ ] Module docstring updated to app name
-- [ ] `__version__` variable defined (commitizen manages this)
+- [ ] `__version__` defined via `importlib.metadata.version("app-name")` — single source of truth in `pyproject.toml`, no hardcoded version string
 
 **`__main__.py`:**
 
@@ -61,21 +61,39 @@
 
 **`cli.py`:**
 
-- [ ] Imports `__version__` from `myapp` and `settings` from `myapp.config` (replace `myapp`)
+- [ ] Imports `__version__` from `myapp`, `settings` from `myapp.config`, `ExitCode` from `myapp.exit_codes`, `setup_logging` from `myapp.logging` (replace `myapp`)
+- [ ] Module-level `logger = logging.getLogger(__name__)` defined
 - [ ] `App()` created with `name=`, `help=`, `version=__version__`, `version_flags=["--version", "-V"]`
 - [ ] `console = Console()` instantiated
-- [ ] `@app.meta.default` function exists — wires `--verbose` flag to `settings.verbose` and calls `app(tokens)`
+- [ ] `@app.meta.default` function exists — wires `--verbose` flag to `settings.verbose`, calls `setup_logging()`, and calls `app(tokens)`
 - [ ] `entrypoint()` function exists — calls `app.meta()` (this is the `console_scripts` target)
 - [ ] No `myapp` strings remain in `App(name=...)`, `App(help=...)`, or docstrings
 - [ ] Demo command (`hello`) may be replaced, but at least one `@app.command` should exist
+- [ ] Commands return `ExitCode` (cyclopts' default `result_action` maps return values to `sys.exit(n)`)
+- [ ] Commands use `logger.debug()` for verbose output instead of manual `if settings.verbose` checks
 
 **`config.py`:**
 
+- [ ] `LogFormat` enum defined with `PRETTY` and `JSON` values
 - [ ] `Settings` class extends `BaseSettings` with `SettingsConfigDict`
 - [ ] `env_prefix` set to `<APP>_` (uppercase app name + underscore, not `MYAPP_`)
 - [ ] `env_file` and `env_file_encoding` settings present
 - [ ] `verbose: bool = False` field exists (used by CLI `--verbose` flag)
+- [ ] `log_format: LogFormat = LogFormat.PRETTY` field exists (set via `<APP>_LOG_FORMAT` env var)
 - [ ] Module-level `settings = Settings()` instance exported
+
+**`exit_codes.py`:**
+
+- [ ] `ExitCode` enum defined as `IntEnum` with at least `OK = 0`, `ERROR = 1`, `USAGE = 2`, `CONFIG = 78`
+- [ ] Docstring documents that cyclopts owns exit code 1 for parse errors and 130 for Ctrl-C
+
+**`logging.py`:**
+
+- [ ] `_JSONFormatter` class defined — formats log records as JSON with `timestamp`, `level`, `logger`, `message` fields
+- [ ] `setup_logging()` function defined with `verbose` and `log_format` params
+- [ ] Pretty mode attaches `RichHandler` with `rich_tracebacks=True`
+- [ ] JSON mode attaches `StreamHandler` with `_JSONFormatter`
+- [ ] Verbose sets root logger to `DEBUG`, non-verbose sets `INFO`
 
 ### Section 3 — Tests
 
@@ -104,13 +122,28 @@
 - [ ] Tests default values, env prefix loading, and that unprefixed env vars are ignored
 - [ ] All env var references use `<APP>_` prefix (not `MYAPP_`)
 
+**`unit/test_logging.py`:**
+
+- [ ] `pytestmark = pytest.mark.unit` set
+- [ ] Imports `setup_logging` from `myapp.logging` and `LogFormat` from `myapp.config` (replace `myapp`)
+- [ ] Tests that pretty mode attaches `RichHandler`
+- [ ] Tests that JSON mode emits JSON to stderr
+- [ ] Tests that verbose enables `DEBUG`, non-verbose stays `INFO`
+- [ ] Uses `autouse` fixture to reset root logger state between tests
+
+**`unit/test_exit_codes.py`:**
+
+- [ ] `pytestmark = pytest.mark.unit` set
+- [ ] Imports `ExitCode` from `myapp.exit_codes` (replace `myapp`)
+- [ ] Tests that `OK == 0`, `ERROR == 1`, and all codes are `int`
+
 **`integration/test_cli.py`:**
 
 - [ ] `pytestmark = pytest.mark.integration` set
-- [ ] Imports `__version__` from `myapp` (replace `myapp`)
+- [ ] Imports `__version__` from `myapp` and `ExitCode` from `myapp.exit_codes` (replace `myapp`)
 - [ ] Uses `invoke` fixture from conftest
-- [ ] `test_version` — mandatory: asserts `--version` exits 0 and output contains `__version__`
-- [ ] `test_no_args` — mandatory: asserts bare invocation exits 0 and shows usage
+- [ ] `test_version` — mandatory: asserts `--version` exits `ExitCode.OK` and output contains `__version__`
+- [ ] `test_no_args` — mandatory: asserts bare invocation exits `ExitCode.OK` and shows usage
 - [ ] `test_hello` — demo (replace with actual command tests)
 
 **`e2e/test_entrypoint.py`:**
