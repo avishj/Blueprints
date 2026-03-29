@@ -1,0 +1,161 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{% raw %}
+---
+name: OSV-Scanner
+
+on:
+  workflow_call:
+    inputs:
+      scan-mode:
+        description: "Scan mode: 'ci' for PR differential scanning, 'weekly' for full repository scan"
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  scan-ci:
+    if: inputs.scan-mode == 'ci'
+    name: OSV CI Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      security-events: write
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        with:
+          fetch-depth: 0
+          setup-python: "false"
+      - name: Checkout target branch
+        run: |
+          git fetch origin $GITHUB_BASE_REF
+          git checkout --track origin/$GITHUB_BASE_REF
+          git submodule update --recursive
+      - name: Run scanner on existing code
+        uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
+        continue-on-error: true
+        with:
+          scan-args: |-
+            --format=json
+            --output=old-results.json
+            -r
+            ./
+      - name: Checkout current branch
+        # Use -f in case any changes were made by osv-scanner (there should be no changes)
+        run: |
+          git checkout -f $GITHUB_SHA
+          git submodule update --recursive
+      - name: Run scanner on new code
+        uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
+        with:
+          scan-args: |-
+            --format=json
+            --output=new-results.json
+            -r
+            ./
+        continue-on-error: true
+      - name: Run osv-scanner-reporter
+        uses: google/osv-scanner-action/osv-reporter-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
+        with:
+          scan-args: |-
+            --output=results.sarif
+            --old=old-results.json
+            --new=new-results.json
+            --gh-annotations=true
+            --fail-on-vuln=true
+      - name: Upload artifact
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: CI OSV SARIF
+          path: results.sarif
+          retention-days: 90
+      - name: Upload old scan json results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: CI OSV Old JSON
+          path: old-results.json
+          retention-days: 90
+      - name: Upload new scan json results
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: CI OSV New JSON
+          path: new-results.json
+          retention-days: 90
+      - name: Upload to code-scanning
+        id: upload_artifact
+        if: ${{ !cancelled() }}
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
+        with:
+          sarif_file: results.sarif
+      - name: Print Code Scanning PR URL
+        if: ${{ !cancelled() }}
+        run: |
+          echo "View the OSV-Scanner results for this PR in the 'Security' tab, using the following link:"
+          echo "${{ github.server_url }}/${{ github.repository }}/security/code-scanning?query=pr%3A${{ github.event.pull_request.number }}"
+      - name: Error troubleshooter
+        if: ${{ always() && steps.upload_artifact.outcome == 'failure' }}
+        run: |
+          echo "::error::Artifact upload failed. This is most likely caused by a error during scanning earlier in the workflow."
+          exit 1
+
+  scan-weekly:
+    if: inputs.scan-mode == 'weekly'
+    name: OSV Weekly Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      security-events: write
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        with:
+          setup-python: "false"
+      - name: Run scanner
+        uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
+        with:
+          scan-args: |-
+            --output=results.json
+            --format=json
+            -r
+            ./
+        continue-on-error: true
+      - name: Run osv-scanner-reporter
+        uses: google/osv-scanner-action/osv-reporter-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
+        with:
+          scan-args: |-
+            --output=results.sarif
+            --new=results.json
+            --gh-annotations=false
+            --fail-on-vuln=true
+      - name: Upload artifact
+        id: upload_artifact
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: Weekly OSV SARIF
+          path: results.sarif
+          retention-days: 90
+      - name: Upload to code-scanning
+        if: ${{ !cancelled() }}
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
+        with:
+          sarif_file: results.sarif
+      - name: Print Code Scanning URL
+        if: ${{ !cancelled() }}
+        run: |
+          echo "View the OSV-Scanner results in the 'Security' tab, using the following link:"
+          echo "${{ github.server_url }}/${{ github.repository }}/security/code-scanning?query=is%3Aopen+branch%3A${GITHUB_REF_NAME}+tool%3Aosv-scanner"
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+      - name: Error troubleshooter
+        if: ${{ always() && steps.upload_artifact.outcome == 'failure' }}
+        run: |
+          echo "::error::Artifact upload failed. This is most likely caused by a error during scanning earlier in the workflow."
+          exit 1
+{% endraw %}

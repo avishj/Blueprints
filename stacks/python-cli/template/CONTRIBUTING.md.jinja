@@ -1,0 +1,70 @@
+<!--
+SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+# Contributing
+
+Thanks for your interest in contributing!
+
+## Getting Started
+
+1. Fork the repository
+2. Clone your fork and set up the dev environment:
+
+   Install [`just`](https://github.com/casey/just) if not already available, then:
+
+   ```bash
+   git clone https://github.com/<your_username>/{{ project_name }}.git
+   cd {{ project_name }}
+   uv sync
+   pre-commit install
+   ```
+
+## Development Workflow
+
+1. Create a feature branch from `main`:
+
+   ```bash
+   git checkout -b feat/my-feature
+   ```
+
+2. Make your changes and verify everything passes:
+
+   ```bash
+   just ci
+   ```
+
+3. Commit using [conventional commits](https://www.conventionalcommits.org/) with a [sign-off](https://developercertificate.org/):
+
+   ```bash
+   git commit -s -m "feat: add cool feature"
+   ```
+
+4. Push and open a pull request against `main`.
+
+## Guidelines
+
+- **Open an issue first** for non-trivial changes to discuss the approach.
+- **Keep PRs focused** with one logical change per PR.
+- **Add tests** for new functionality.
+- **Follow existing code style** enforced by pre-commit hooks and CI.
+
+## IDE Integration
+
+Install [SonarQube for IDE](https://www.sonarsource.com/products/sonarlint/) for real-time code quality feedback. Connect it to SonarCloud in **Connected Mode** to sync the project's quality profile and rules:
+
+1. Install the SonarQube for IDE extension for your editor
+2. Add a SonarCloud connection using your token
+3. Bind your local project to the SonarCloud project
+
+This gives you the same rules that run in CI directly in your editor, catching issues before you even commit.
+
+## Reporting Bugs
+
+Open a [GitHub issue](https://github.com/{{ owner }}/{{ project_name }}/issues/new/choose) using the appropriate template.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for reporting vulnerabilities.

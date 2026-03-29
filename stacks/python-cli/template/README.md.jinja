@@ -1,0 +1,113 @@
+<!--
+SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
+# {{ project_name }}
+
+[![CI](https://github.com/{{ owner }}/{{ project_name }}/actions/workflows/ci.yml/badge.svg)](https://github.com/{{ owner }}/{{ project_name }}/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/{{ owner }}/{{ project_name }}/actions/workflows/_codeql.yml/badge.svg)](https://github.com/{{ owner }}/{{ project_name }}/actions/workflows/_codeql.yml)
+[![codecov](https://codecov.io/gh/{{ owner }}/{{ project_name }}/branch/main/graph/badge.svg)](https://codecov.io/gh/{{ owner }}/{{ project_name }})
+[![PyPI](https://img.shields.io/pypi/v/{{ project_name }})](https://pypi.org/project/{{ project_name }}/)
+[![Downloads](https://img.shields.io/pypi/dm/{{ project_name }})](https://pypi.org/project/{{ project_name }}/)
+[![Python](https://img.shields.io/pypi/pyversions/{{ project_name }})](https://pypi.org/project/{{ project_name }}/)
+[![License](https://img.shields.io/github/license/{{ owner }}/{{ project_name }})](LICENSE)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/{{ owner }}/{{ project_name }}/badge)](https://scorecard.dev/viewer/?uri=github.com/{{ owner }}/{{ project_name }})
+[![Docker Hub](https://img.shields.io/docker/v/{{ owner }}/{{ project_name }}?label=docker%20hub)](https://hub.docker.com/r/{{ owner }}/{{ project_name }})
+[![GHCR](https://ghcr-badge.egpl.dev/{{ owner }}/{{ project_name }}/latest_tag?label=ghcr)](https://github.com/{{ owner }}/{{ project_name }}/pkgs/container/{{ project_name }})
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project={{ sonar_project_key }}&metric=alert_status)](https://sonarcloud.io/summary/new_code?id={{ sonar_project_key }})
+
+{{ description }}
+
+## Features
+
+- Subcommand-based CLI built with [Cyclopts](https://cyclopts.readthedocs.io/)
+- Rich terminal output via [Rich](https://rich.readthedocs.io/)
+- Typed configuration from environment variables and `.env` files via [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/)
+- Fully typed with [PEP 561](https://peps.python.org/pep-0561/) `py.typed` marker
+- Python 3.13+ support
+
+## Installation
+
+```bash
+uv tool install {{ project_name }}
+```
+
+Or with pip:
+
+```bash
+pip install {{ project_name }}
+```
+
+Or with Docker:
+
+```bash
+docker run --rm ghcr.io/{{ owner }}/{{ project_name }} --help
+# or
+docker run --rm docker.io/{{ owner }}/{{ project_name }} --help
+```
+
+## Usage
+
+```bash
+{{ project_name }} --help
+{{ project_name }} hello World
+```
+
+## Development
+
+### Prerequisites
+
+- [uv](https://docs.astral.sh/uv/)
+- [just](https://github.com/casey/just)
+
+### Setup
+
+```bash
+git clone https://github.com/{{ owner }}/{{ project_name }}.git
+cd {{ project_name }}
+uv sync
+pre-commit install
+```
+
+### Common tasks
+
+```bash
+just lint    # run all pre-commit hooks (ruff, ty, complexipy, reuse, etc.)
+just test    # run all tests with coverage
+just build   # build sdist + wheel, twine check, entry point smoke test
+just docs    # build and serve docs locally
+just ci      # full composite gate (lint + test + build + docs)
+just clean   # remove build artifacts
+```
+
+## Configuration
+
+{{ project_name }} reads configuration from environment variables prefixed with `{{ env_prefix }}` and from `.env` files.
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `{{ env_prefix }}VERBOSE` | `false` | Enable verbose output |
+
+## Documentation
+
+[https://{{ owner }}.github.io/{{ project_name }}](https://{{ owner }}.github.io/{{ project_name }})
+
+## Contributing
+
+Contributions are welcome. Please open an issue first to discuss what you would like to change.
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feat/my-feature`)
+3. Make your changes and run `just ci` to verify
+4. Commit using [conventional commits](https://www.conventionalcommits.org/)
+5. Open a pull request
+
+## License
+
+[AGPL-3.0-or-later](LICENSE)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos={{ owner }}/{{ project_name }}&type=Date)](https://star-history.com/#{{ owner }}/{{ project_name }}&Date)

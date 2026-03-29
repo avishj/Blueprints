@@ -1,0 +1,51 @@
+name: Setup
+description: Harden runner, checkout repository, and optionally setup Python dependencies.
+
+inputs:
+  setup-python:
+    description: Whether to install Python tooling and sync dependencies.
+    required: false
+    default: "true"
+
+  python-version:
+    description: Python version to install when setup-python is enabled.
+    required: false
+    default: "3.13"
+
+  fetch-depth:
+    description: Checkout history depth. Use 0 for full history.
+    required: false
+    default: "1"
+
+  sparse-checkout:
+    description: Sparse checkout patterns (newline-delimited). Leave empty to checkout everything.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Harden runner
+      uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
+      with:
+        egress-policy: audit
+
+    - name: Checkout
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        persist-credentials: false
+        sparse-checkout: ${{ inputs.sparse-checkout || null }}
+
+    - name: Install uv
+      if: ${{ inputs.setup-python == 'true' }}
+      uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78  # v7.6.0
+      with:
+        enable-cache: true
+        cache-dependency-glob: uv.lock
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install dependencies
+      if: ${{ inputs.setup-python == 'true' }}
+      shell: bash
+      run: uv sync --frozen

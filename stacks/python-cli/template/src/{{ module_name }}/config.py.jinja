@@ -1,0 +1,32 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+"""Application configuration."""
+
+from enum import StrEnum
+
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class LogFormat(StrEnum):
+    """Supported log output formats."""
+
+    PRETTY = "pretty"
+    JSON = "json"
+
+
+class Settings(BaseSettings):
+    """Application settings loaded from environment variables."""
+
+    model_config = SettingsConfigDict(
+        env_prefix="{{ env_prefix }}",
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
+
+    verbose: bool = False
+    log_format: LogFormat = LogFormat.PRETTY
+
+
+settings = Settings()

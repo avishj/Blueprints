@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+* text=auto eol=lf
+
+*.py text diff=python
+*.pyi text diff=python
+*.md text diff=markdown
+*.yml text
+*.yaml text
+*.toml text
+*.json text
+
+Dockerfile text
+justfile text
+LICENSE text
+
+uv.lock text -diff linguist-generated
+docs/** linguist-documentation

@@ -1,0 +1,48 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+"""Unit tests for logging configuration."""
+
+import logging
+
+import pytest
+from rich.logging import RichHandler
+
+from {{ module_name }}.config import LogFormat
+from {{ module_name }}.logging import setup_logging
+
+
+pytestmark = pytest.mark.unit
+
+
+@pytest.fixture(autouse=True)
+def _reset_root_logger():
+    """Restore root logger state after each test."""
+    root = logging.getLogger()
+    original_handlers = root.handlers[:]
+    original_level = root.level
+    yield
+    root.handlers = original_handlers
+    root.setLevel(original_level)
+
+
+def test_pretty_mode_attaches_rich_handler():
+    setup_logging(verbose=False, log_format=LogFormat.PRETTY)
+    assert isinstance(logging.getLogger().handlers[0], RichHandler)
+
+
+def test_json_mode_emits_json(capfd):
+    setup_logging(verbose=False, log_format=LogFormat.JSON)
+    logging.getLogger("test").info("hello")
+    assert '"message": "hello"' in capfd.readouterr().err
+
+
+def test_verbose_enables_debug():
+    setup_logging(verbose=True, log_format=LogFormat.PRETTY)
+    assert logging.getLogger().level == logging.DEBUG
+
+
+def test_non_verbose_stays_info():
+    setup_logging(verbose=False, log_format=LogFormat.PRETTY)
+    assert logging.getLogger().level == logging.INFO

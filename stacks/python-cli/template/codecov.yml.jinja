@@ -1,0 +1,63 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+codecov:
+  require_ci_to_pass: true
+  max_report_age: 24h
+  notify:
+    wait_for_ci: true
+
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        if_ci_failed: error
+    patch:
+      default:
+        target: 70%
+    changes:
+      default:
+        enabled: true
+
+flags:
+  unit:
+    paths:
+      - src/{{ module_name }}/
+    carryforward: false
+    statuses:
+      - type: project
+        target: auto
+      - type: patch
+        target: 70%
+  integration:
+    paths:
+      - src/{{ module_name }}/
+    carryforward: false
+    statuses:
+      - type: project
+        target: auto
+      - type: patch
+        target: 70%
+  e2e:
+    paths:
+      - src/{{ module_name }}/
+    carryforward: false
+    statuses:
+      - type: project
+        target: auto
+      - type: patch
+        target: 70%
+
+comment:
+  layout: "header, diff, flags, files, footer"
+  behavior: default
+  require_changes: false
+
+github_checks:
+  annotations: true

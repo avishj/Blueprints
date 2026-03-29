@@ -1,0 +1,74 @@
+_subdirectory: template
+_templates_suffix: ".jinja"
+_min_copier_version: "9.14.0"
+_envops:
+  trim_blocks: true
+  lstrip_blocks: true
+
+# --- Questions ---
+
+project_name:
+  type: str
+  help: "PyPI/CLI name (may contain hyphens, e.g. my-tool)"
+
+owner:
+  type: str
+  help: "GitHub username (e.g. avishj)"
+
+description:
+  type: str
+  default: "A CLI application."
+  help: "Project description"
+
+author_name:
+  type: str
+  default: "Avish J"
+  help: "Author display name"
+
+author_email:
+  type: str
+  default: "avish.j@pm.me"
+  help: "Author email"
+
+copyright_year:
+  type: str
+  default: "2026"
+  help: "Copyright year for SPDX headers"
+
+sonar_project_key:
+  type: str
+  help: "SonarCloud project key"
+
+sonar_org:
+  type: str
+  help: "SonarCloud organization"
+
+github_topics:
+  type: str
+  default: "python, cli, cyclopts"
+  help: "Comma-separated GitHub topics"
+
+# --- Derived variables ---
+
+module_name:
+  type: str
+  default: "{{ project_name | lower | replace('-', '_') }}"
+  help: "Python module/import name (auto-derived)"
+  validator: "{% if not module_name.isidentifier() %}Must be a valid Python identifier{% endif %}"
+
+env_prefix:
+  type: str
+  default: "{{ module_name | upper }}_"
+  help: "Env var prefix (auto-derived)"
+  validator: "{% if not env_prefix.endswith('_') %}Must end with an underscore{% endif %}"
+
+copyright_holder:
+  type: str
+  default: "{{ author_name }} <{{ author_email }}>"
+  help: "SPDX copyright holder (auto-derived from author_name and author_email)"
+
+# --- Post-scaffold tasks ---
+
+_tasks:
+  - "uv sync"
+  - "pre-commit install"

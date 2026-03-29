@@ -1,0 +1,34 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+set dotenv-load
+
+default:
+    @just --list
+
+lint:
+    uvx pre-commit run --all-files
+
+{% raw %}
+test *args:
+    uv run pytest --cov --cov-report=term -n auto {{ args }}
+{% endraw %}
+
+build:
+    uv build
+    uvx twine check dist/*
+    uv run --with dist/*.whl --no-project -- {{ project_name }} --help
+
+docs:
+    uv run mkdocs build --strict
+    uv run mkdocs serve
+
+ci:
+    uvx pre-commit run --all-files
+    uv run pytest --cov --cov-report=term --cov-report=html --cov-fail-under=70 -n auto
+    just build
+    uv run mkdocs build --strict
+
+clean:
+    rm -rf build/ dist/ *.egg-info/ .pytest_cache/ .ruff_cache/ .coverage htmlcov/ coverage.xml results.xml site/ .ty/

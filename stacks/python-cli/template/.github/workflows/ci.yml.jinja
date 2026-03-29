@@ -1,0 +1,411 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{% raw %}
+---
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    outputs:
+      python: ${{ steps.filter.outputs.python }}
+      docker: ${{ steps.filter.outputs.docker }}
+      docs: ${{ steps.filter.outputs.docs }}
+      workflows: ${{ steps.filter.outputs.workflows }}
+      config: ${{ steps.filter.outputs.config }}
+      changed_config_files: ${{ steps.filter.outputs.config_files }}
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        with:
+          setup-python: "false"
+          fetch-depth: 0
+
+      - name: Detect changed paths
+        id: filter
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d  # v4.0.1
+        with:
+          list-files: json
+          filters: |
+            python:
+              - 'src/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - 'sonar-project.properties'
+              - 'codecov.yml'
+              - '.pre-commit-config.yaml'
+            docker:
+              - 'Dockerfile'
+              - '.dockerignore'
+              - 'src/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+            docs:
+              - 'docs/**'
+              - 'mkdocs.yml'
+              - '**/*.md'
+              - 'src/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+            workflows:
+              - '.github/workflows/**'
+            config:
+              - '.dockerignore'
+              - '.gitattributes'
+              - '.github/settings.yml'
+              - '.gitignore'
+              - 'CODEOWNERS'
+              - 'justfile'
+              - 'LICENSE'
+              - 'sonar-project.properties'
+
+  checks:
+    name: Checks
+    needs: [changes]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: {}
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+
+      - name: Lint & validate
+        shell: python
+        run: |
+          import subprocess, sys
+
+          CHECKS = [
+              ("Lockfile",             "uv lock --check"),
+              ("Ruff check",           "uv run ruff check --output-format=github --show-fixes --statistics ."),
+              ("Ruff format",          "uv run ruff format --check ."),
+              ("Type check",           "uv run ty check src/ tests/"),
+              ("YAML lint",            "uvx yamllint -d '{extends: default, rules: {line-length: disable, truthy: disable}}' ."),
+              ("EditorConfig",         "uvx --from editorconfig-checker ec"),
+              ("Validate pyproject",   "uvx validate-pyproject pyproject.toml"),
+              ("Docs build",           "uv run mkdocs build --strict"),
+              ("Schema: workflows",    "uvx check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml"),
+              ("Schema: issue forms",  "uvx check-jsonschema --builtin-schema vendor.github-issue-forms .github/ISSUE_TEMPLATE/bug_report.yml .github/ISSUE_TEMPLATE/feature_request.yml"),
+              ("Schema: renovate",     "uvx check-jsonschema --builtin-schema vendor.renovate renovate.json"),
+              ("Schema: codecov",      "uvx check-jsonschema --builtin-schema vendor.codecov codecov.yml"),
+              ("Schema: pre-commit",   "uvx check-jsonschema --schemafile https://www.schemastore.org/pre-commit-config.json .pre-commit-config.yaml"),
+              ("Schema: funding",      "uvx check-jsonschema --schemafile https://www.schemastore.org/github-funding.json .github/FUNDING.yml"),
+              ("Schema: labeler",      "uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml"),
+              ("Schema: pyproject",    "uvx check-jsonschema --schemafile https://www.schemastore.org/pyproject.json pyproject.toml"),
+              ("Schema: mkdocs",       "uvx check-jsonschema --schemafile https://www.schemastore.org/mkdocs-1.6.json mkdocs.yml"),
+              ("Schema: REUSE",        "uvx check-jsonschema --schemafile https://reuse.software/reuse-toml-v1.schema.json REUSE.toml"),
+          ]
+
+          failed = []
+          for name, cmd in CHECKS:
+              print(f"::group::{name}", flush=True)
+              if subprocess.run(cmd, shell=True).returncode != 0:
+                  failed.append(name)
+              print("::endgroup::", flush=True)
+
+          if failed:
+              print(f"::error::Failed: {', '.join(failed)}")
+              sys.exit(1)
+
+      - name: Lint Markdown
+        if: '!cancelled()'
+        uses: DavidAnson/markdownlint-cli2-action@ce4853d43830c74c1753b39f3cf40f71c2031eb9  # v23.0.0
+        with:
+          globs: "**/*.md"
+
+      - name: Run actionlint
+        if: '!cancelled()'
+        uses: raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8  # v2.1.2
+        with:
+          matcher: true
+          shellcheck: true
+          pyflakes: true
+          flags: "-color"
+
+      - name: Run hadolint
+        if: '!cancelled()'
+        uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
+        with:
+          dockerfile: Dockerfile
+
+      - name: Warn about unvalidated config files
+        if: "!cancelled() && needs.changes.outputs.config == 'true'"
+        env:
+          CHANGED_FILES: ${{ needs.changes.outputs.changed_config_files }}
+        run: |
+          echo "::warning::Changed config files without validation, manual review recommended: $(echo "$CHANGED_FILES" | jq -r 'join(", ")')"
+
+      - name: Spell check
+        if: '!cancelled()'
+        uses: crate-ci/typos@631208b7aac2daa8b707f55e7331f9112b0e062d  # v1.44.0
+
+      - name: Check links
+        if: '!cancelled()'
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
+        with:
+          fail: true
+          jobSummary: true
+
+      - name: REUSE lint
+        if: '!cancelled()'
+        uses: fsfe/reuse-action@676e2d560c9a403aa252096d99fcab3e1132b0f5  # v6.0.0
+        with:
+          args: --include-submodules lint
+
+  docker:
+    name: Docker Build & Validate
+    if: needs.changes.outputs.docker == 'true' || needs.changes.outputs.workflows == 'true'
+    needs: [changes]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions: {}
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        with:
+          setup-python: "false"
+
+{% endraw %}
+      - name: Build image
+        run: docker build -t {{ project_name }}:ci .
+
+      - name: Verify entry point
+        run: docker run --rm {{ project_name }}:ci --help
+{% raw %}
+
+  test:
+    name: Test (Python ${{ matrix.python-version }}, ${{ matrix.os }})
+    if: needs.changes.outputs.python == 'true' || needs.changes.outputs.workflows == 'true'
+    needs: [changes]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    permissions: {}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.13", "3.14"]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set matrix prefix
+        id: prefix
+        shell: bash
+        run: echo "value=${{ matrix.os }}-py${{ matrix.python-version }}" >> "$GITHUB_OUTPUT"
+
+      - name: Run unit tests
+        run: uv run pytest -m unit --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-unit.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-unit.xml -n auto
+        env:
+          COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.unit
+
+      - name: Run integration tests
+        run: uv run pytest -m integration --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-integration.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-integration.xml -n auto
+        env:
+          COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.integration
+
+      - name: Run e2e tests
+        run: uv run pytest -m e2e --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-e2e.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-e2e.xml -n auto
+        env:
+          COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.e2e
+
+      - name: Check combined coverage
+        run: |
+          uv run coverage combine
+          uv run coverage report --fail-under=70
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: test-results-${{ matrix.os }}-${{ matrix.python-version }}
+          path: results-*.xml
+          retention-days: 90
+
+      - name: Upload coverage reports
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: coverage-reports-${{ matrix.os }}-${{ matrix.python-version }}
+          path: coverage-*.xml
+          retention-days: 90
+
+      - name: Upload unit coverage
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2  # v6.0.0
+        with:
+          files: coverage-${{ steps.prefix.outputs.value }}-unit.xml
+          flags: unit
+          fail_ci_if_error: true
+          disable_search: true
+
+      - name: Upload integration coverage
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2  # v6.0.0
+        with:
+          files: coverage-${{ steps.prefix.outputs.value }}-integration.xml
+          flags: integration
+          fail_ci_if_error: true
+          disable_search: true
+
+      - name: Upload e2e coverage
+        uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2  # v6.0.0
+        with:
+          files: coverage-${{ steps.prefix.outputs.value }}-e2e.xml
+          flags: e2e
+          fail_ci_if_error: true
+          disable_search: true
+
+  sonarcloud:
+    name: SonarCloud
+    if: github.event.pull_request.head.repo.full_name == github.repository || github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [test]
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        with:
+          setup-python: "false"
+          fetch-depth: 0
+
+      - name: Download test results
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        with:
+          pattern: test-results-*
+          merge-multiple: true
+
+      - name: Download coverage reports
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c  # v8.0.1
+        with:
+          pattern: coverage-reports-*
+          merge-multiple: true
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@a31c9398be7ace6bbfaf30c0bd5d415f843d45e9  # v7.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  package:
+    name: Package Validation
+    if: needs.changes.outputs.python == 'true' || needs.changes.outputs.docs == 'true' || needs.changes.outputs.workflows == 'true'
+    needs: [changes]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: {}
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+
+      - name: Build package
+        run: uv build
+
+      - name: Check metadata
+        run: uvx twine check dist/*
+
+{% endraw %}
+      - name: Verify entry point
+        run: uv run --with dist/*.whl --no-project -- {{ project_name }} --help
+{% raw %}
+
+  complexity:
+    name: Cognitive Complexity
+    if: needs.changes.outputs.python == 'true' || needs.changes.outputs.workflows == 'true'
+    needs: [changes]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      security-events: write
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+
+      - name: Run complexipy
+        run: uv run complexipy src/ --max-complexity 15 --output-format sarif --output complexipy.sarif
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
+        with:
+          sarif_file: complexipy.sarif
+          category: complexipy
+
+  security:
+    name: Security Scans
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      security-events: write
+    secrets: inherit
+
+  codeql:
+    name: CodeQL
+    uses: ./.github/workflows/_codeql.yml
+    permissions:
+      security-events: write
+
+  osv-scanner:
+    name: OSV-Scanner
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/_osv-scanner.yml
+    with:
+      scan-mode: ci
+    permissions:
+      security-events: write
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event_name == 'pull_request'
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        with:
+          setup-python: "false"
+
+      - name: Dependency review
+        uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48  # v4.9.0
+        with:
+          fail-on-severity: moderate
+          comment-summary-in-pr: always
+          license-check: true
+          vulnerability-check: true
+          deny-licenses: SSPL-1.0, BUSL-1.1
+
+  ci-passed:
+    name: CI Passed
+    if: always()
+    needs: [changes, checks, docker, test, complexity, security, codeql, osv-scanner, dependency-review, sonarcloud, package]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Check results
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" || "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "::error::One or more jobs failed or were cancelled."
+            exit 1
+          fi
+{% endraw %}

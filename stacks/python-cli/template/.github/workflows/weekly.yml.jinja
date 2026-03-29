@@ -1,0 +1,78 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{% raw %}
+---
+name: Weekly
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  scorecard:
+    name: OpenSSF Scorecard
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      security-events: write
+      id-token: write
+      actions: read
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        with:
+          setup-python: "false"
+
+      - name: Run Scorecard
+        uses: ossf/scorecard-action@4eaacf0543bb3f2c246792bd56e8cdeffafb205a  # v2.4.3
+        with:
+          results_file: scorecard.sarif
+          results_format: sarif
+          publish_results: true
+
+      - name: Upload SARIF
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
+        with:
+          sarif_file: scorecard.sarif
+          category: scorecard
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: scorecard-results
+          path: scorecard.sarif
+          retention-days: 90
+
+  trivy-image:
+    name: Trivy Image Scan
+    uses: ./.github/workflows/_trivy-image.yml
+    with:
+      image-ref: ghcr.io/${{ github.repository }}:latest
+    permissions:
+      security-events: write
+
+  security:
+    name: Security Scans
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      security-events: write
+    secrets: inherit
+
+  codeql:
+    name: CodeQL
+    uses: ./.github/workflows/_codeql.yml
+    permissions:
+      security-events: write
+
+  osv-scanner:
+    name: OSV-Scanner
+    uses: ./.github/workflows/_osv-scanner.yml
+    with:
+      scan-mode: weekly
+    permissions:
+      security-events: write
+{% endraw %}

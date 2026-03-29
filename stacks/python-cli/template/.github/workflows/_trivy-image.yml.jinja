@@ -1,0 +1,65 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+{% raw %}
+---
+name: Trivy Image Scan
+
+on:
+  workflow_call:
+    inputs:
+      image-ref:
+        description: Container image reference to scan
+        required: true
+        type: string
+
+permissions: {}
+
+jobs:
+  scan:
+    name: Trivy Image Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      security-events: write
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@fa2e9d605c4eeb9fcad4c99c224cee0c6c7f3594  # v2.16.0
+        with:
+          egress-policy: audit
+
+      - name: Lowercase image ref
+        id: lower
+        run: |
+          name="${IMAGE_REF%%[:@]*}"
+          suffix="${IMAGE_REF#"$name"}"
+          echo "image-ref=${name,,}${suffix}" >> "$GITHUB_OUTPUT"
+        env:
+          IMAGE_REF: ${{ inputs.image-ref }}
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@57a97c7e7821a5776cebc9bb87c984fa69cba8f1  # v0.35.0
+        with:
+          image-ref: ${{ steps.lower.outputs.image-ref }}
+          format: sarif
+          output: trivy.sarif
+          severity: LOW,MEDIUM,HIGH,CRITICAL
+          ignore-unfixed: true
+          vuln-type: os,library
+          scanners: vuln,secret,misconfig
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@c10b8064de6f491fea524254123dbe5e09572f13  # v4.35.1
+        with:
+          sarif_file: trivy.sarif
+          category: trivy-image
+
+      - name: Upload artifact
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f  # v7.0.0
+        with:
+          name: trivy-image-results
+          path: trivy.sarif
+          retention-days: 90
+{% endraw %}
