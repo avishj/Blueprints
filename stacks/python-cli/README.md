@@ -119,6 +119,8 @@ stacks/python-cli/
 │   │       ├── __main__.py.jinja
 │   │       ├── cli.py.jinja
 │   │       ├── config.py.jinja
+│   │       ├── exit_codes.py.jinja
+│   │       ├── logging.py.jinja
 │   │       └── py.typed
 │   ├── tests/
 │   │   ├── e2e/
@@ -130,6 +132,8 @@ stacks/python-cli/
 │   │   ├── unit/
 │   │   │   ├── __init__.py.jinja
 │   │   │   ├── test_config.py.jinja
+│   │   │   ├── test_exit_codes.py.jinja
+│   │   │   ├── test_logging.py.jinja
 │   │   │   └── test_version.py.jinja
 │   │   ├── __init__.py.jinja
 │   │   └── conftest.py.jinja
