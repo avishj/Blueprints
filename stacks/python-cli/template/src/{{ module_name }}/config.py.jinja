@@ -4,7 +4,16 @@
 
 """Application configuration."""
 
+from enum import StrEnum
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class LogFormat(StrEnum):
+    """Supported log output formats."""
+
+    PRETTY = "pretty"
+    JSON = "json"
 
 
 class Settings(BaseSettings):
@@ -17,6 +26,7 @@ class Settings(BaseSettings):
     )
 
     verbose: bool = False
+    log_format: LogFormat = LogFormat.PRETTY
 
 
 settings = Settings()
