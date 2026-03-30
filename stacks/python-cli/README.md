@@ -137,6 +137,13 @@ stacks/python-cli/
 │   │   │   └── test_version.py.jinja
 │   │   ├── __init__.py.jinja
 │   │   └── conftest.py.jinja
+│   ├── .devcontainer/
+│   │   ├── devcontainer.json.jinja
+│   │   └── Dockerfile.jinja
+│   ├── .vscode/
+│   │   ├── extensions.json
+│   │   ├── launch.json.jinja
+│   │   └── settings.json
 │   ├── .dockerignore.jinja
 │   ├── .editorconfig.jinja
 │   ├── .gitattributes.jinja
