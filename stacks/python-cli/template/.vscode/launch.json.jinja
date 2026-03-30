@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug CLI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "{{ module_name }}",
+      // Update args to match your CLI commands
+      "args": ["hello", "world"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "{{ env_prefix }}VERBOSE": "true"
+      }
+    }
+  ]
+}
