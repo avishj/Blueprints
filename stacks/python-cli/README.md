@@ -31,11 +31,10 @@ See [SETUP.md](SETUP.md) for prerequisites, variable reference, non-interactive 
 11. Gitleaks - Secret scanner.
 12. OSV-Scanner - Dependency vulnerability scanner.
 13. mkdocs-material - Documentation site generator.
-14. editorconfig - Editor consistency config.
-15. REUSE - SPDX license/copyright compliance checker.
-16. semgrep - Static application security testing.
-17. validate-pyproject - pyproject.toml validation.
-18. twine - Package validation.
+14. REUSE - SPDX license/copyright compliance checker.
+15. semgrep - Static application security testing.
+16. validate-pyproject - pyproject.toml validation.
+17. twine - Package validation.
 
 ## Libraries
 
@@ -44,6 +43,8 @@ See [SETUP.md](SETUP.md) for prerequisites, variable reference, non-interactive 
 3. pydantic-settings - Typed configuration.
 
 ## Development Environment
+
+**EditorConfig** — Consistent indentation, charset, and line endings across any editor.
 
 **VS Code** — Preconfigured workspace settings, recommended extensions, and a debug launch configuration. Open the project and everything just works.
 
