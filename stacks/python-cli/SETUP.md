@@ -36,11 +36,10 @@ Copier will prompt for:
 | `sonar_project_key` | SonarCloud project key | `avishj_my-tool` |
 | `sonar_org` | SonarCloud organization | `avishj` |
 | `github_topics` | Comma-separated GitHub topics | `python, cli, cyclopts` |
-| `module_name` | Python import name (auto-derived) | `my_tool` |
 | `env_prefix` | Env var prefix (auto-derived) | `MY_TOOL_` |
 | `copyright_holder` | SPDX copyright holder (auto-derived) | `Avish J <avish.j@pm.me>` |
 
-Derived variables are auto-computed and shown for optional override.
+`env_prefix` and `copyright_holder` are auto-derived and shown for optional override. `module_name` is always derived from `project_name` (lowercased, hyphens to underscores) and cannot be overridden.
 
 For non-interactive scaffolding (CI or scripting):
 
