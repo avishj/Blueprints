@@ -1,10 +1,6 @@
 {
   "name": "{{ project_name }} Dev",
-  "image": "mcr.microsoft.com/devcontainers/python:3.13",
-  "features": {
-    "ghcr.io/devcontainers-contrib/features/uv:1": {},
-    "ghcr.io/devcontainers-extra/features/just:1": {}
-  },
+  "build": { "dockerfile": "Dockerfile" },
   "updateContentCommand": "uv sync",
   "postCreateCommand": "uv run pre-commit install",
   "forwardPorts": [8000],
