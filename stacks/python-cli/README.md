@@ -50,6 +50,10 @@ See [SETUP.md](SETUP.md) for prerequisites, variable reference, non-interactive 
 
 **Dev Container** — One-click setup for GitHub Codespaces or VS Code Dev Containers. Opens a ready-to-code environment with all tools and dependencies pre-installed.
 
+## Repository
+
+Preconfigured issue and PR templates, auto-labeling, and CODEOWNERS. Includes contributing guidelines, security policy, and GitHub Sponsors funding config. Repo settings managed via probot. SPDX-compliant licensing with REUSE, and a commitizen-managed changelog.
+
 ## CI
 
 1. step-security/harden-runner - Runner hardening.
