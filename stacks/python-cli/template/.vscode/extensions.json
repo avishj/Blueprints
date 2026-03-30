@@ -8,7 +8,11 @@
     "EditorConfig.EditorConfig",
     "ms-vscode-remote.remote-containers",
     "GitHub.vscode-pull-request-github",
-    "usernamehw.errorlens"
+    "usernamehw.errorlens",
+    "tamasfe.even-better-toml",
+    "DavidAnson.vscode-markdownlint",
+    "SonarSource.sonarlint-vscode",
+    "crate-ci.typos-vscode"
   ],
   "unwantedRecommendations": [
     "ms-python.autopep8",
