@@ -7,7 +7,8 @@
     "GitHub.vscode-github-actions",
     "EditorConfig.EditorConfig",
     "ms-vscode-remote.remote-containers",
-    "GitHub.vscode-pull-request-github"
+    "GitHub.vscode-pull-request-github",
+    "usernamehw.errorlens"
   ],
   "unwantedRecommendations": [
     "ms-python.autopep8",
