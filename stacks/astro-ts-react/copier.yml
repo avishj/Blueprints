@@ -67,3 +67,8 @@ env_prefix:
   default: "{{ module_name | upper }}_"
   help: "Environment variable prefix (auto-derived)"
   validator: "{% if not env_prefix.endswith('_') %}env_prefix must end with underscore{% endif %}"
+
+# --- Post-scaffold tasks ---
+
+_tasks:
+  - "bun install"
