@@ -7,6 +7,14 @@
     "noImplicitOverride": true,
     "useUnknownInCatchVariables": true,
     "verbatimModuleSyntax": true,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@components/*": ["src/components/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@styles/*": ["src/styles/*"],
+      "@lib/*": ["src/lib/*"]
+    }
   }
 }
