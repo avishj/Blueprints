@@ -2,33 +2,23 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
-# --- Project identification (mandatory, fill in after project creation) ---
 sonar.projectKey={{ sonar_project_key }}
 sonar.organization={{ sonar_org }}
-
-# --- Project metadata ---
 sonar.projectName={{ project_name }}
 
-# --- Language ---
 sonar.python.version=3.13, 3.14
 
-# --- Analysis scope ---
 sonar.sources=src/
 sonar.tests=tests/
 
-# --- Coverage (Cobertura XML from pytest-cov / coverage.py) ---
 sonar.python.coverage.reportPaths=\
     coverage-*-unit.xml,\
     coverage-*-integration.xml,\
     coverage-*-e2e.xml
 
-# --- Test execution (xunit reports from pytest --junitxml) ---
-# Supports wildcards; pytest --junitxml produces compatible xUnit/JUnit XML
 sonar.python.xunit.reportPath=results-*-*.xml
 
-# --- Quality gate ---
 sonar.qualitygate.wait=true
 sonar.qualitygate.timeout=300
 
-# --- Encoding ---
 sonar.sourceEncoding=UTF-8
