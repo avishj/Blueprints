@@ -1,0 +1,46 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":enablePreCommit"
+  ],
+  "timezone": "America/New_York",
+  "schedule": ["* 0 * * 0"],
+  "minimumReleaseAge": "3 days",
+  "abandonmentThreshold": "2 years",
+  "osvVulnerabilityAlerts": true,
+  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "minimumReleaseAge": null
+  },
+  "configMigration": true,
+  "platformCommit": "enabled",
+  "rollbackPrs": true,
+  "separateMultipleMajor": true,
+  "prConcurrentLimit": 15,
+  "prHourlyLimit": 4,
+  "labels": ["dependencies"],
+  "rangeStrategy": "auto",
+  "semanticCommitType": "chore",
+  "semanticCommitScope": "deps",
+  "enabledManagers": [
+    "github-actions",
+    "pre-commit",
+    "dockerfile",
+    "pep621"
+  ],
+  "packageRules": [
+    {
+      "description": "Label major updates",
+      "matchUpdateTypes": ["major"],
+      "addLabels": ["major"]
+    },
+    {
+      "description": "Label and pin GitHub Actions updates",
+      "matchManagers": ["github-actions"],
+      "labels": ["dependencies", "ci"],
+      "pinDigests": true
+    }
+  ]
+}
