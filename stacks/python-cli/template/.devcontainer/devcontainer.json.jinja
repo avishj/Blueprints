@@ -3,6 +3,7 @@
   "build": { "dockerfile": "Dockerfile" },
   "updateContentCommand": "uv sync",
   "postCreateCommand": "uv run pre-commit install",
+  "remoteUser": "vscode",
   "forwardPorts": [8000],
   "portsAttributes": {
     "8000": {
