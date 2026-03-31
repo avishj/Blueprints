@@ -1,4 +1,24 @@
 {
-  "name": "{{ project_name }}",
-  "features": {}
+  "name": "{{ project_name }} Dev",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "remoteUser": "vscode",
+  "postCreateCommand": "bun install && pre-commit install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "astro-build.astro-vscode",
+        "biomejs.biome",
+        "nefrob.vscode-just-syntax",
+        "EditorConfig.EditorConfig",
+        "ms-playwright.playwright",
+        "GitHub.vscode-github-actions",
+        "ms-vscode-remote.remote-containers",
+        "GitHub.vscode-pull-request-github",
+        "usernamehw.errorlens",
+        "DavidAnson.vscode-markdownlint"
+      ]
+    }
+  }
 }
