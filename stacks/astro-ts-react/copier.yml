@@ -21,4 +21,19 @@ description:
   default: "A modern Astro + React application."
   help: "Short project description"
 
+author_name:
+  type: str
+  default: "Avish J"
+  help: "Author display name"
+
+author_email:
+  type: str
+  default: "avish.j@pm.me"
+  help: "Author email"
+
+copyright_year:
+  type: str
+  default: "2026"
+  help: "Copyright year"
+
 # --- Derived values are added in follow-up commits ---
