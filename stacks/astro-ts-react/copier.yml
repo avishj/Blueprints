@@ -48,4 +48,22 @@ strict_typescript:
   when: false
   validator: "{% if not strict_typescript %}TypeScript strict mode is required{% endif %}"
 
-# --- Derived values are added in follow-up commits ---
+# --- Derived values ---
+
+package_name:
+  type: str
+  default: "{{ project_name | lower }}"
+  when: false
+  validator: "{% if not package_name %}package_name cannot be empty{% endif %}"
+
+module_name:
+  type: str
+  default: "{{ project_name | lower | replace('-', '_') }}"
+  when: false
+  validator: "{% if not module_name.isidentifier() %}project_name '{{ project_name }}' must produce a valid module identifier{% endif %}"
+
+env_prefix:
+  type: str
+  default: "{{ module_name | upper }}_"
+  help: "Environment variable prefix (auto-derived)"
+  validator: "{% if not env_prefix.endswith('_') %}env_prefix must end with underscore{% endif %}"
