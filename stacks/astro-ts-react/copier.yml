@@ -6,4 +6,19 @@ _envops:
   trim_blocks: true
   lstrip_blocks: true
 
-# --- Questions and derived values are added in follow-up commits ---
+# --- Questions ---
+
+project_name:
+  type: str
+  help: "Package/project name (e.g. my-app)"
+
+owner:
+  type: str
+  help: "GitHub username or org (e.g. avishj)"
+
+description:
+  type: str
+  default: "A modern Astro + React application."
+  help: "Short project description"
+
+# --- Derived values are added in follow-up commits ---
