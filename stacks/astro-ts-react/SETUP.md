@@ -30,13 +30,28 @@ Copier will prompt for:
 - Runtime is locked to Bun (`runtime=bun`).
 - TypeScript strict mode is locked on (`strict_typescript=true`).
 
-These are intentional stack constraints and validated by the template.
-
 ## Derived variables
 
 - `package_name` is derived from `project_name` (lowercased).
 - `module_name` is derived from `project_name` (hyphens replaced with underscores).
 - `env_prefix` defaults to `{{ module_name | upper }}_` and can be overridden.
+
+## Runtime shell generated files
+
+Branch 2 currently scaffolds:
+
+- `template/package.json.jinja`
+- `template/astro.config.mjs.jinja`
+- `template/tsconfig.json.jinja`
+- `template/src/layouts/BaseLayout.astro.jinja`
+- `template/src/pages/index.astro.jinja`
+- `template/src/components/App.tsx.jinja`
+- `template/src/styles/global.css.jinja`
+- `template/src/env.d.ts.jinja`
+- `template/src/types/global.d.ts.jinja`
+- `template/src/lib/config.ts.jinja`
+- `template/.vscode/*`
+- `template/.devcontainer/*`
 
 ## Scaffold (non-interactive)
 
