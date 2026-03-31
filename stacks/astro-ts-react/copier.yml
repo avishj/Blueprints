@@ -1,3 +1,4 @@
+# --- Copier metadata ---
 _subdirectory: template
 _templates_suffix: ".jinja"
 _min_copier_version: "9.14.1"
@@ -5,4 +6,4 @@ _envops:
   trim_blocks: true
   lstrip_blocks: true
 
-# Questions and derived values are added in follow-up commits.
+# --- Questions and derived values are added in follow-up commits ---
