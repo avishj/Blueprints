@@ -53,8 +53,8 @@ github_topics:
 module_name:
   type: str
   default: "{{ project_name | lower | replace('-', '_') }}"
-  help: "Python module/import name (auto-derived)"
-  validator: "{% if not module_name.isidentifier() %}Must be a valid Python identifier{% endif %}"
+  when: false
+  validator: "{% if not module_name.isidentifier() %}project_name '{{ project_name }}' produces an invalid Python identifier — must start with a letter or underscore and contain only letters, digits, underscores, or hyphens (hyphens are converted to underscores){% endif %}"
 
 env_prefix:
   type: str

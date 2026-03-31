@@ -31,17 +31,28 @@ See [SETUP.md](SETUP.md) for prerequisites, variable reference, non-interactive 
 11. Gitleaks - Secret scanner.
 12. OSV-Scanner - Dependency vulnerability scanner.
 13. mkdocs-material - Documentation site generator.
-14. editorconfig - Editor consistency config.
-15. REUSE - SPDX license/copyright compliance checker.
-16. semgrep - Static application security testing.
-17. validate-pyproject - pyproject.toml validation.
-18. twine - Package validation.
+14. REUSE - SPDX license/copyright compliance checker.
+15. semgrep - Static application security testing.
+16. validate-pyproject - pyproject.toml validation.
+17. twine - Package validation.
 
 ## Libraries
 
 1. Cyclopts - CLI framework.
 2. rich - Terminal output formatting.
 3. pydantic-settings - Typed configuration.
+
+## Development Environment
+
+**EditorConfig** — Consistent indentation, charset, and line endings across any editor.
+
+**VS Code** — Preconfigured workspace settings, recommended extensions, and a debug launch configuration. Open the project and everything just works.
+
+**Dev Container** — One-click setup for GitHub Codespaces or VS Code Dev Containers. Opens a ready-to-code environment with all tools and dependencies pre-installed.
+
+## Repository
+
+Preconfigured issue and PR templates, auto-labeling, and CODEOWNERS. Includes contributing guidelines, security policy, and GitHub Sponsors funding config. Repo settings managed via probot. SPDX-compliant licensing with REUSE, and a commitizen-managed changelog.
 
 ## CI
 
@@ -137,6 +148,13 @@ stacks/python-cli/
 │   │   │   └── test_version.py.jinja
 │   │   ├── __init__.py.jinja
 │   │   └── conftest.py.jinja
+│   ├── .devcontainer/
+│   │   ├── devcontainer.json.jinja
+│   │   └── Dockerfile.jinja
+│   ├── .vscode/
+│   │   ├── extensions.json
+│   │   ├── launch.json.jinja
+│   │   └── settings.json
 │   ├── .dockerignore.jinja
 │   ├── .editorconfig.jinja
 │   ├── .gitattributes.jinja

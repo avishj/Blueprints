@@ -1,0 +1,32 @@
+{
+  "name": "{{ project_name }} Dev",
+  "build": { "dockerfile": "Dockerfile" },
+  "updateContentCommand": "uv sync",
+  "postCreateCommand": "uv run pre-commit install",
+  "remoteUser": "vscode",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "MkDocs",
+      "onAutoForward": "notify"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "charliermarsh.ruff",
+        "astral-sh.ty",
+        "nefrob.vscode-just-syntax",
+        "GitHub.vscode-github-actions",
+        "EditorConfig.EditorConfig",
+        "GitHub.vscode-pull-request-github",
+        "usernamehw.errorlens",
+        "tamasfe.even-better-toml",
+        "DavidAnson.vscode-markdownlint",
+        "SonarSource.sonarlint-vscode",
+        "crate-ci.typos-vscode"
+      ]
+    }
+  }
+}

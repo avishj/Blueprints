@@ -1,0 +1,25 @@
+{
+  "recommendations": [
+    "ms-python.python",
+    "charliermarsh.ruff",
+    "astral-sh.ty",
+    "nefrob.vscode-just-syntax",
+    "GitHub.vscode-github-actions",
+    "EditorConfig.EditorConfig",
+    "ms-vscode-remote.remote-containers",
+    "GitHub.vscode-pull-request-github",
+    "usernamehw.errorlens",
+    "tamasfe.even-better-toml",
+    "DavidAnson.vscode-markdownlint",
+    "SonarSource.sonarlint-vscode",
+    "crate-ci.typos-vscode"
+  ],
+  "unwantedRecommendations": [
+    "ms-python.autopep8",
+    "ms-python.black-formatter",
+    "ms-python.flake8",
+    "ms-python.isort",
+    "ms-python.pylint",
+    "ms-python.mypy-type-checker"
+  ]
+}

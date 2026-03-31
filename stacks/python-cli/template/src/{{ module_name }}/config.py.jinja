@@ -4,9 +4,14 @@
 
 """Application configuration."""
 
+import sys
 from enum import StrEnum
 
+from pydantic import ValidationError
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from rich.console import Console
+from rich.panel import Panel
+from rich.text import Text
 
 
 class LogFormat(StrEnum):
@@ -29,4 +34,21 @@ class Settings(BaseSettings):
     log_format: LogFormat = LogFormat.PRETTY
 
 
-settings = Settings()
+try:
+    settings = Settings()
+except ValidationError as exc:
+    body = Text()
+    for error in exc.errors():
+        loc = " → ".join(str(part) for part in error["loc"])
+        body.append(f"  • {loc}", style="bold red")
+        body.append(f"  {error['msg']}\n", style="dim")
+    Console(stderr=True).print(
+        Panel(
+            body,
+            title="⚙ Configuration Error",
+            subtitle="check your .env file or {{ env_prefix }}* variables",
+            border_style="red",
+            expand=False,
+        ),
+    )
+    sys.exit(78)

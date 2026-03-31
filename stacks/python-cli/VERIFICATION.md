@@ -322,6 +322,41 @@
 
 ### Section 8 — Dev Tooling & Root Config
 
+**`.vscode/settings.json` (copy 1:1 from template):**
+
+- [ ] `python.defaultInterpreterPath` set to `${workspaceFolder}/.venv`
+- [ ] `python.analysis.typeCheckingMode` is `off` (ty handles type checking)
+- [ ] `python.testing.pytestEnabled` is `true`
+- [ ] `[python]` block: `editor.defaultFormatter` is `charliermarsh.ruff`, `editor.formatOnSave` is `true`
+- [ ] `source.fixAll.ruff` and `source.organizeImports.ruff` both set to `explicit`
+
+**`.vscode/extensions.json` (copy 1:1 from template):**
+
+- [ ] All 13 `recommendations` present (ms-python.python, charliermarsh.ruff, astral-sh.ty, nefrob.vscode-just-syntax, GitHub.vscode-github-actions, EditorConfig.EditorConfig, ms-vscode-remote.remote-containers, GitHub.vscode-pull-request-github, usernamehw.errorlens, tamasfe.even-better-toml, DavidAnson.vscode-markdownlint, SonarSource.sonarlint-vscode, crate-ci.typos-vscode)
+- [ ] All 6 `unwantedRecommendations` present (autopep8, black-formatter, flake8, isort, pylint, mypy-type-checker)
+
+**`.vscode/launch.json`:**
+
+- [ ] `module` uses app name (not `myapp`)
+- [ ] `env` uses correct `<APP>_VERBOSE` prefix (not `MYAPP_VERBOSE`)
+- [ ] `args` updated for actual CLI commands (demo `["hello", "world"]` replaced)
+
+**`.devcontainer/Dockerfile` (copy 1:1 from template):**
+
+- [ ] `FROM ghcr.io/astral-sh/uv:...` pinned with `@sha256:` digest
+- [ ] `FROM mcr.microsoft.com/devcontainers/python:3.13` pinned with `@sha256:` digest
+- [ ] `COPY --from=uv /uv /uvx /usr/local/bin/`
+- [ ] `uv tool install just==<version>` installs just
+
+**`.devcontainer/devcontainer.json`:**
+
+- [ ] `name` uses app name (not `myapp`)
+- [ ] `build.dockerfile` points to `Dockerfile` (no community features)
+- [ ] `updateContentCommand` is `uv sync`
+- [ ] `postCreateCommand` is `uv run pre-commit install`
+- [ ] `forwardPorts` includes `8000`, `portsAttributes` labels it as `MkDocs`
+- [ ] Extensions list matches `.vscode/extensions.json` minus `ms-vscode-remote.remote-containers`
+
 **Copy 1:1 from template (no changes needed):**
 
 - [ ] `justfile` — all 6 recipes: `lint`, `test`, `build`, `docs`, `ci`, `clean`
