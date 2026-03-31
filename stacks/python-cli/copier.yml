@@ -54,7 +54,7 @@ module_name:
   type: str
   default: "{{ project_name | lower | replace('-', '_') }}"
   when: false
-  validator: "{% if not module_name.isidentifier() %}project_name '{{ project_name }}' produces an invalid Python identifier — use only letters, digits, and hyphens{% endif %}"
+  validator: "{% if not module_name.isidentifier() %}project_name '{{ project_name }}' produces an invalid Python identifier — must start with a letter and contain only letters, digits, and hyphens{% endif %}"
 
 env_prefix:
   type: str
