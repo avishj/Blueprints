@@ -1,0 +1,78 @@
+# --- Copier metadata ---
+_subdirectory: template
+_templates_suffix: ".jinja"
+_min_copier_version: "9.14.1"
+_envops:
+  trim_blocks: true
+  lstrip_blocks: true
+
+# --- Questions ---
+
+project_name:
+  type: str
+  help: "Project/package name (kebab-case recommended, e.g. my-app)"
+  validator: "{% if ' ' in project_name %}project_name cannot contain spaces{% endif %}"
+
+owner:
+  type: str
+  help: "GitHub owner (username or organization, e.g. avishj)"
+  validator: "{% if not owner %}owner cannot be empty{% endif %}"
+
+description:
+  type: str
+  default: "A modern Astro + React application."
+  help: "Short one-line project description"
+
+author_name:
+  type: str
+  default: "Avish J"
+  help: "Primary author display name"
+
+author_email:
+  type: str
+  default: "avish.j@pm.me"
+  help: "Primary author email"
+  validator: "{% if '@' not in author_email %}author_email must contain '@'{% endif %}"
+
+copyright_year:
+  type: str
+  default: "2026"
+  help: "Copyright year used in notices"
+  validator: "{% if not copyright_year.isdigit() %}copyright_year must be numeric{% endif %}"
+
+runtime:
+  type: str
+  default: "bun"
+  when: false
+  validator: "{% if runtime != 'bun' %}Runtime is locked to bun{% endif %}"
+
+strict_typescript:
+  type: bool
+  default: true
+  when: false
+  validator: "{% if not strict_typescript %}TypeScript strict mode is required{% endif %}"
+
+# --- Derived values ---
+
+package_name:
+  type: str
+  default: "{{ project_name | lower }}"
+  when: false
+  validator: "{% if not package_name %}package_name cannot be empty{% endif %}"
+
+module_name:
+  type: str
+  default: "{{ project_name | lower | replace('-', '_') }}"
+  when: false
+  validator: "{% if not module_name.isidentifier() %}project_name '{{ project_name }}' must produce a valid module identifier{% endif %}"
+
+env_prefix:
+  type: str
+  default: "{{ module_name | upper }}_"
+  help: "Environment variable prefix (auto-derived, may be overridden)"
+  validator: "{% if not env_prefix.endswith('_') %}env_prefix must end with underscore{% endif %}"
+
+# --- Post-scaffold tasks ---
+
+_tasks:
+  - "bun install"
