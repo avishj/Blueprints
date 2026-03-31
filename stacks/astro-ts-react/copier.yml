@@ -36,4 +36,16 @@ copyright_year:
   default: "2026"
   help: "Copyright year"
 
+runtime:
+  type: str
+  default: "bun"
+  when: false
+  validator: "{% if runtime != 'bun' %}Runtime is locked to bun{% endif %}"
+
+strict_typescript:
+  type: bool
+  default: true
+  when: false
+  validator: "{% if not strict_typescript %}TypeScript strict mode is required{% endif %}"
+
 # --- Derived values are added in follow-up commits ---
