@@ -22,6 +22,7 @@ class CliResult(NamedTuple):
 @pytest.fixture
 def invoke(capsys: pytest.CaptureFixture[str]) -> Callable[..., CliResult]:
     """Invoke the CLI app and return a result with exit_code and output."""
+
     def _invoke(*args: str) -> CliResult:
         try:
             app.meta(list(args))
@@ -32,4 +33,5 @@ def invoke(capsys: pytest.CaptureFixture[str]) -> Callable[..., CliResult]:
             raw = exc.code
             code = raw if isinstance(raw, int) else (0 if raw is None else 1)
             return CliResult(exit_code=code, output=captured.out)
+
     return _invoke

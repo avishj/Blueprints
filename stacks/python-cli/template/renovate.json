@@ -5,7 +5,7 @@
     ":enablePreCommit"
   ],
   "timezone": "America/New_York",
-  "schedule": ["0 0 * * 0"],
+  "schedule": ["* 0 * * 0"],
   "minimumReleaseAge": "3 days",
   "abandonmentThreshold": "2 years",
   "osvVulnerabilityAlerts": true,
@@ -25,14 +25,9 @@
   "semanticCommitType": "chore",
   "semanticCommitScope": "deps",
   "lockFileMaintenance": {
-    "schedule": ["0 0 * * 0"]
+    "schedule": ["* 0 * * 0"]
   },
   "packageRules": [
-    {
-      "description": "Label major updates",
-      "matchUpdateTypes": ["major"],
-      "addLabels": ["major"]
-    },
     {
       "description": "Label and pin GitHub Actions updates",
       "matchManagers": ["github-actions"],
