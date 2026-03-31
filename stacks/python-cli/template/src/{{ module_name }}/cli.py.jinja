@@ -24,6 +24,7 @@ app = App(
     version=__version__,
     version_flags=["--version", "-V"],
 )
+app.register_install_completion_command()
 console = Console()
 
 
