@@ -8,7 +8,9 @@ import logging
 import json as _json
 from datetime import datetime, timezone
 
+import cyclopts
 from rich.logging import RichHandler
+from rich.traceback import install as _install_traceback
 
 from {{ module_name }}.config import LogFormat
 
@@ -38,6 +40,7 @@ def setup_logging(*, verbose: bool, log_format: LogFormat) -> None:
         verbose: When True, sets log level to DEBUG; otherwise INFO.
         log_format: Output format — pretty (RichHandler) or json.
     """
+    _install_traceback(show_locals=True, suppress=[cyclopts])
     level = logging.DEBUG if verbose else logging.INFO
     root = logging.getLogger()
     root.setLevel(level)
