@@ -10,31 +10,35 @@ _envops:
 
 project_name:
   type: str
-  help: "Package/project name (e.g. my-app)"
+  help: "Project/package name (kebab-case recommended, e.g. my-app)"
+  validator: "{% if ' ' in project_name %}project_name cannot contain spaces{% endif %}"
 
 owner:
   type: str
-  help: "GitHub username or org (e.g. avishj)"
+  help: "GitHub owner (username or organization, e.g. avishj)"
+  validator: "{% if not owner %}owner cannot be empty{% endif %}"
 
 description:
   type: str
   default: "A modern Astro + React application."
-  help: "Short project description"
+  help: "Short one-line project description"
 
 author_name:
   type: str
   default: "Avish J"
-  help: "Author display name"
+  help: "Primary author display name"
 
 author_email:
   type: str
   default: "avish.j@pm.me"
-  help: "Author email"
+  help: "Primary author email"
+  validator: "{% if '@' not in author_email %}author_email must contain '@'{% endif %}"
 
 copyright_year:
   type: str
   default: "2026"
-  help: "Copyright year"
+  help: "Copyright year used in notices"
+  validator: "{% if not copyright_year.isdigit() %}copyright_year must be numeric{% endif %}"
 
 runtime:
   type: str
@@ -65,7 +69,7 @@ module_name:
 env_prefix:
   type: str
   default: "{{ module_name | upper }}_"
-  help: "Environment variable prefix (auto-derived)"
+  help: "Environment variable prefix (auto-derived, may be overridden)"
   validator: "{% if not env_prefix.endswith('_') %}env_prefix must end with underscore{% endif %}"
 
 # --- Post-scaffold tasks ---
