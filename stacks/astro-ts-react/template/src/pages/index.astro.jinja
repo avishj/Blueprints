@@ -1,9 +1,11 @@
 ---
+import BaseLayout from "@layouts/BaseLayout.astro";
 ---
 
-<html lang="en">
-  <body>
-    <h1>{{ project_name }}</h1>
-    <p>Scaffold generated from astro-ts-react blueprint.</p>
-  </body>
-</html>
+<BaseLayout>
+  <main class="mx-auto flex min-h-screen w-full max-w-5xl flex-col items-start justify-center gap-6 px-6 py-16 sm:px-10">
+    <p class="text-sm uppercase tracking-[0.18em] text-muted">Astro + React + TypeScript + Bun</p>
+    <h1 class="text-4xl font-semibold leading-tight sm:text-5xl">{{ project_name }}</h1>
+    <p class="max-w-2xl text-base text-muted sm:text-lg">{{ description }}</p>
+  </main>
+</BaseLayout>
