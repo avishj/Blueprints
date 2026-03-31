@@ -1,6 +1,6 @@
 _subdirectory: template
 _templates_suffix: ".jinja"
-_min_copier_version: "9.14.0"
+_min_copier_version: "9.14.1"
 _envops:
   trim_blocks: true
   lstrip_blocks: true
