@@ -1,0 +1,31 @@
+import type gsap from "gsap";
+
+export type DisposeFn = () => void;
+
+export function createDisposer() {
+  const disposers: DisposeFn[] = [];
+
+  return {
+    add(disposer: DisposeFn): void {
+      disposers.push(disposer);
+    },
+    flush(): void {
+      while (disposers.length > 0) {
+        const disposer = disposers.pop();
+        if (!disposer) {
+          continue;
+        }
+
+        disposer();
+      }
+    },
+  };
+}
+
+export function killTimeline(timeline: gsap.core.Timeline | null | undefined): void {
+  if (!timeline) {
+    return;
+  }
+
+  timeline.kill();
+}
