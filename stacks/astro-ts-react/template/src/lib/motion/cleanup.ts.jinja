@@ -1,5 +1,3 @@
-import type gsap from "gsap";
-
 export type DisposeFn = () => void;
 
 export function createDisposer() {
@@ -22,7 +20,11 @@ export function createDisposer() {
   };
 }
 
-export function killTimeline(timeline: gsap.core.Timeline | null | undefined): void {
+export interface TimelineLike {
+  kill: () => void;
+}
+
+export function killTimeline(timeline: TimelineLike | null | undefined): void {
   if (!timeline) {
     return;
   }
