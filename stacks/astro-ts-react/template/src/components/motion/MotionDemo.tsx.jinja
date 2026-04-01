@@ -1,0 +1,49 @@
+import { useMemo, useState } from "react";
+import MotionReveal from "@components/motion/MotionReveal";
+import MotionStagger from "@components/motion/MotionStagger";
+import { motionTokens } from "@lib/motion/tokens";
+
+const SAMPLE_ITEMS = [
+  "Tokenized durations and easing",
+  "Reduced-motion aware transitions",
+  "GSAP timeline orchestration",
+];
+
+export default function MotionDemo() {
+  const [visible, setVisible] = useState(true);
+  const profile = useMemo(() => motionTokens.profile, []);
+
+  return (
+    <section className="w-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p className="text-xs uppercase tracking-[0.14em] text-muted">Motion Demo</p>
+          <h2 className="mt-2 text-xl font-semibold">GSAP baseline primitives</h2>
+          <p className="mt-1 text-sm text-muted">Profile: <span className="text-fg">{profile}</span></p>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setVisible((state) => !state)}
+          className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-black transition hover:brightness-110"
+        >
+          {visible ? "Hide block" : "Show block"}
+        </button>
+      </div>
+
+      {visible && (
+        <MotionReveal className="mt-6 rounded-lg border border-white/10 bg-black/20 p-4" preset="fadeIn">
+          <p className="text-sm text-muted">This block enters with the shared motion preset catalog.</p>
+        </MotionReveal>
+      )}
+
+      <MotionStagger className="mt-6 space-y-2">
+        {SAMPLE_ITEMS.map((item) => (
+          <p key={item} data-motion-item className="rounded-md border border-white/10 px-3 py-2 text-sm">
+            {item}
+          </p>
+        ))}
+      </MotionStagger>
+    </section>
+  );
+}
