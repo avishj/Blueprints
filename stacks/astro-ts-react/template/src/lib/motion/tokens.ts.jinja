@@ -1,0 +1,83 @@
+export type MotionProfile = "minimal" | "balanced" | "cinematic";
+
+export interface MotionTimingTokens {
+  instant: number;
+  fast: number;
+  base: number;
+  slow: number;
+  linger: number;
+}
+
+export interface MotionEaseTokens {
+  standard: string;
+  emphasize: string;
+  exit: string;
+  linear: string;
+}
+
+export interface MotionTokenSet {
+  profile: MotionProfile;
+  durations: MotionTimingTokens;
+  easings: MotionEaseTokens;
+  staggerStep: number;
+}
+
+const PROFILE_MAP: Record<MotionProfile, Omit<MotionTokenSet, "profile">> = {
+  minimal: {
+    durations: {
+      instant: 0,
+      fast: 0.12,
+      base: 0.2,
+      slow: 0.28,
+      linger: 0.4,
+    },
+    easings: {
+      standard: "power1.out",
+      emphasize: "power2.out",
+      exit: "power1.in",
+      linear: "none",
+    },
+    staggerStep: 0.04,
+  },
+  balanced: {
+    durations: {
+      instant: 0,
+      fast: 0.16,
+      base: 0.28,
+      slow: 0.42,
+      linger: 0.6,
+    },
+    easings: {
+      standard: "power2.out",
+      emphasize: "power3.out",
+      exit: "power2.in",
+      linear: "none",
+    },
+    staggerStep: 0.06,
+  },
+  cinematic: {
+    durations: {
+      instant: 0,
+      fast: 0.24,
+      base: 0.4,
+      slow: 0.64,
+      linger: 0.9,
+    },
+    easings: {
+      standard: "expo.out",
+      emphasize: "power4.out",
+      exit: "expo.in",
+      linear: "none",
+    },
+    staggerStep: 0.09,
+  },
+};
+
+const ACTIVE_PROFILE: MotionProfile = "{{ motion_profile }}";
+
+export const motionTokens: MotionTokenSet = {
+  profile: ACTIVE_PROFILE,
+  ...PROFILE_MAP[ACTIVE_PROFILE],
+};
+
+export const MOTION_SCROLL_REVEAL_ENABLED = {{ "true" if motion_scroll_reveal else "false" }};
