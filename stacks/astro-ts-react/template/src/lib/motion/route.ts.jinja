@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { motionPresets } from "@lib/motion/presets";
+import { motionTokens } from "@lib/motion/tokens";
 import { getMotionDuration, shouldAnimate } from "@lib/motion/reduced-motion";
 
 export function animateRouteEnter(element: Element): gsap.core.Tween | null {
@@ -26,7 +27,7 @@ export function animateRouteExit(element: Element): gsap.core.Tween | null {
   return gsap.to(element, {
     autoAlpha: 0,
     y: -8,
-    duration: getMotionDuration(0.16),
-    ease: "power1.in",
+    duration: getMotionDuration(motionTokens.durations.fast),
+    ease: motionTokens.easings.exit,
   });
 }

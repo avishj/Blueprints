@@ -45,8 +45,8 @@ export default function MotionDemo() {
         </button>
       </div>
 
-      {visible && (
-        <section ref={revealRegionRef}>
+      <section ref={revealRegionRef}>
+        {visible && (
           <MotionReveal
             as="section"
             className="mt-6 rounded-lg border border-white/10 bg-black/20 p-4"
@@ -54,8 +54,8 @@ export default function MotionDemo() {
           >
             <p className="text-sm text-muted">This block enters with the shared motion preset catalog.</p>
           </MotionReveal>
-        </section>
-      )}
+        )}
+      </section>
 
       <MotionStagger className="mt-6 space-y-2">
         {SAMPLE_ITEMS.map((item) => (
