@@ -1,5 +1,6 @@
 ---
 import App from "@components/App";
+import MotionDemo from "@components/motion/MotionDemo";
 import BaseLayout from "@layouts/BaseLayout.astro";
 ---
 
@@ -10,5 +11,9 @@ import BaseLayout from "@layouts/BaseLayout.astro";
     <p class="max-w-2xl text-base text-muted sm:text-lg">{{ description }}</p>
 
     <App client:load projectName="{{ project_name }}" />
+
+    {% if include_motion_demo %}
+    <MotionDemo client:load />
+    {% endif %}
   </main>
 </BaseLayout>
