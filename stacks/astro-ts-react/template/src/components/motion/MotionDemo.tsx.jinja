@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import MotionReveal from "@components/motion/MotionReveal";
 import MotionStagger from "@components/motion/MotionStagger";
+import { setA11yHidden } from "@lib/motion/a11y";
 import { motionTokens } from "@lib/motion/tokens";
 
 const SAMPLE_ITEMS = [
@@ -12,6 +13,19 @@ const SAMPLE_ITEMS = [
 export default function MotionDemo() {
   const [visible, setVisible] = useState(true);
   const profile = useMemo(() => motionTokens.profile, []);
+  const revealRegionRef = useRef<HTMLElement | null>(null);
+
+  const handleVisibilityToggle = () => {
+    setVisible((state) => {
+      const next = !state;
+      const region = revealRegionRef.current;
+      if (region) {
+        setA11yHidden(region, !next);
+      }
+
+      return next;
+    });
+  };
 
   return (
     <section className="w-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur">
@@ -24,7 +38,7 @@ export default function MotionDemo() {
 
         <button
           type="button"
-          onClick={() => setVisible((state) => !state)}
+          onClick={handleVisibilityToggle}
           className="rounded-md bg-accent px-4 py-2 text-sm font-medium text-black transition hover:brightness-110"
         >
           {visible ? "Hide block" : "Show block"}
@@ -32,9 +46,15 @@ export default function MotionDemo() {
       </div>
 
       {visible && (
-        <MotionReveal className="mt-6 rounded-lg border border-white/10 bg-black/20 p-4" preset="fadeIn">
-          <p className="text-sm text-muted">This block enters with the shared motion preset catalog.</p>
-        </MotionReveal>
+        <section ref={revealRegionRef}>
+          <MotionReveal
+            as="section"
+            className="mt-6 rounded-lg border border-white/10 bg-black/20 p-4"
+            preset="fadeIn"
+          >
+            <p className="text-sm text-muted">This block enters with the shared motion preset catalog.</p>
+          </MotionReveal>
+        </section>
       )}
 
       <MotionStagger className="mt-6 space-y-2">

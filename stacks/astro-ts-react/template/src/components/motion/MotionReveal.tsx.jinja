@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect, useRef } from "react";
 import gsap from "gsap";
+import { ensureFocusableVisibility } from "@lib/motion/a11y";
 import { createDisposer, killTimeline } from "@lib/motion/cleanup";
 import { createInViewObserver } from "@lib/motion/in-view";
 import { motionPresets, type MotionPresetName } from "@lib/motion/presets";
@@ -38,6 +39,7 @@ export default function MotionReveal({
 
     if (!shouldAnimate()) {
       gsap.set(element, toTarget);
+      ensureFocusableVisibility(element);
       return;
     }
 
@@ -54,6 +56,9 @@ export default function MotionReveal({
           ...toTarget,
           duration,
           ease,
+        });
+        timeline.eventCallback("onComplete", () => {
+          ensureFocusableVisibility(element);
         });
 
         disposer.add(() => {
