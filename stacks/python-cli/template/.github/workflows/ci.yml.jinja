@@ -341,7 +341,7 @@ jobs:
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Run complexipy
-        run: uv run complexipy src/ --max-complexity 15 --output-format sarif --output complexipy.sarif
+        run: uv run complexipy src/ --max-complexity-allowed 15 --output-format sarif --output complexipy.sarif
 
       - name: Upload SARIF
         if: always()

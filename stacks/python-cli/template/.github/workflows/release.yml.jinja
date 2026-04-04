@@ -20,8 +20,6 @@ jobs:
     name: Check Published State
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    permissions:
-      contents: read
     outputs:
       pypi: ${{ steps.check.outputs.pypi }}
       ghcr: ${{ steps.check.outputs.ghcr }}
@@ -43,11 +41,17 @@ jobs:
           exists() { "$@" > /dev/null 2>&1 && echo true || echo false; }
 
 {% endraw %}
-          echo "pypi=$(exists curl -sf "https://pypi.org/pypi/{{ project_name }}/$V/json")" >> "$GITHUB_OUTPUT"
+          pypi_exists=$(exists curl -sf "https://pypi.org/pypi/{{ project_name }}/$V/json")
+          echo "pypi=$pypi_exists" >> "$GITHUB_OUTPUT"
 {% raw %}
-          echo "ghcr=$(exists docker manifest inspect "ghcr.io/${{ github.repository }}:$V")" >> "$GITHUB_OUTPUT"
-          echo "dockerhub=$(exists curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V")" >> "$GITHUB_OUTPUT"
-          echo "release=$(exists gh release view "$VERSION" --repo "${{ github.repository }}")" >> "$GITHUB_OUTPUT"
+          ghcr_exists=$(exists docker manifest inspect "ghcr.io/${{ github.repository }}:$V")
+          echo "ghcr=$ghcr_exists" >> "$GITHUB_OUTPUT"
+
+          dockerhub_exists=$(exists curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V")
+          echo "dockerhub=$dockerhub_exists" >> "$GITHUB_OUTPUT"
+
+          release_exists=$(exists gh release view "$VERSION" --repo "${{ github.repository }}")
+          echo "release=$release_exists" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build Distribution
@@ -218,7 +222,7 @@ jobs:
         if: needs.check.outputs[matrix.check_key] == 'true'
         run: echo "published=true" >> "$GITHUB_OUTPUT"
 
-      - name: Harden runner
+      - name: Setup
         if: '!steps.skip.outputs.published'
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
@@ -277,33 +281,45 @@ jobs:
 
       - name: Sign image
         if: '!steps.skip.outputs.published'
+        env:
+          REPO: ${{ github.repository }}
+          WORKFLOW: ${{ github.workflow }}
+          REF: ${{ github.ref }}
+          IMAGE: ${{ matrix.image }}@${{ steps.push.outputs.digest }}
         run: |
           cosign sign --yes --recursive \
-            -a repo=${{ github.repository }} \
-            -a workflow=${{ github.workflow }} \
-            -a ref=${{ github.ref }} \
-            "${{ matrix.image }}@${{ steps.push.outputs.digest }}"
+            -a "repo=$REPO" \
+            -a "workflow=$WORKFLOW" \
+            -a "ref=$REF" \
+            "$IMAGE"
 
       - name: Verify image signature & attestations
         if: '!steps.skip.outputs.published'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          WORKFLOW: ${{ github.workflow }}
+          REF: ${{ github.ref }}
+          SHA: ${{ github.sha }}
+          TRIGGER: ${{ github.event_name }}
+          IMAGE: ${{ matrix.image }}@${{ steps.push.outputs.digest }}
         run: |
-          IMAGE="${{ matrix.image }}@${{ steps.push.outputs.digest }}"
           cosign verify \
-            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/release.yml@${{ github.ref }}" \
+            --certificate-identity "https://github.com/$REPO/.github/workflows/release.yml@$REF" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            --certificate-github-workflow-name "${{ github.workflow }}" \
-            --certificate-github-workflow-repository "${{ github.repository }}" \
-            --certificate-github-workflow-ref "${{ github.ref }}" \
-            --certificate-github-workflow-sha "${{ github.sha }}" \
-            --certificate-github-workflow-trigger "${{ github.event_name }}" \
+            --certificate-github-workflow-name "$WORKFLOW" \
+            --certificate-github-workflow-repository "$REPO" \
+            --certificate-github-workflow-ref "$REF" \
+            --certificate-github-workflow-sha "$SHA" \
+            --certificate-github-workflow-trigger "$TRIGGER" \
             "$IMAGE"
-          gh attestation verify "oci://$IMAGE" --repo "${{ github.repository }}"
+          gh attestation verify "oci://$IMAGE" --repo "$REPO"
 
       - name: Verify published image
         if: '!steps.skip.outputs.published'
-        run: docker run --rm ${{ matrix.image }}@${{ steps.push.outputs.digest }} --help
+        env:
+          IMAGE: ${{ matrix.image }}@${{ steps.push.outputs.digest }}
+        run: docker run --rm "$IMAGE" --help
 
   trivy:
     name: Trivy Image Scan
