@@ -1,0 +1,26 @@
+---
+name: PR Labeler
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions: {}
+
+jobs:
+  label:
+    name: Label PR
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@fe104658747b27e96e4f7e80cd0a94068e53901d  # v2.16.1
+        with:
+          egress-policy: audit
+
+      - name: Label PR
+        uses: actions/labeler@634933edcd8ababfe52f92936142cc22ac488b1b  # v6.0.1
+        with:
+          sync-labels: true
