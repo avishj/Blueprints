@@ -4,9 +4,9 @@
 
 """Logging configuration."""
 
-import logging
 import json as _json
-from datetime import datetime, timezone
+import logging
+from datetime import UTC, datetime
 
 import cyclopts
 from rich.logging import RichHandler
@@ -21,9 +21,7 @@ class _JSONFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         """Format a log record as a JSON string."""
         entry = {
-            "timestamp": datetime.fromtimestamp(
-                record.created, tz=timezone.utc
-            ).isoformat(),
+            "timestamp": datetime.fromtimestamp(record.created, tz=UTC).isoformat(),
             "level": record.levelname,
             "logger": record.name,
             "message": record.getMessage(),
