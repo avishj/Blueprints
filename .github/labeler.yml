@@ -1,0 +1,22 @@
+---
+"stack: python-cli":
+  - changed-files:
+      - any-glob-to-any-file: stacks/python-cli/**
+
+"stack: astro-ts-react":
+  - changed-files:
+      - any-glob-to-any-file: stacks/astro-ts-react/**
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - LICENSE
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file: renovate.json
