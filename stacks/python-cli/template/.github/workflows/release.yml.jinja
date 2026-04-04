@@ -42,11 +42,17 @@ jobs:
           exists() { "$@" > /dev/null 2>&1 && echo true || echo false; }
 
 {% endraw %}
-          echo "pypi=$(exists curl -sf "https://pypi.org/pypi/{{ project_name }}/$V/json")" >> "$GITHUB_OUTPUT"
+          pypi_exists=$(exists curl -sf "https://pypi.org/pypi/{{ project_name }}/$V/json")
+          echo "pypi=$pypi_exists" >> "$GITHUB_OUTPUT"
 {% raw %}
-          echo "ghcr=$(exists docker manifest inspect "ghcr.io/${{ github.repository }}:$V")" >> "$GITHUB_OUTPUT"
-          echo "dockerhub=$(exists curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V")" >> "$GITHUB_OUTPUT"
-          echo "release=$(exists gh release view "$VERSION" --repo "${{ github.repository }}")" >> "$GITHUB_OUTPUT"
+          ghcr_exists=$(exists docker manifest inspect "ghcr.io/${{ github.repository }}:$V")
+          echo "ghcr=$ghcr_exists" >> "$GITHUB_OUTPUT"
+
+          dockerhub_exists=$(exists curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V")
+          echo "dockerhub=$dockerhub_exists" >> "$GITHUB_OUTPUT"
+
+          release_exists=$(exists gh release view "$VERSION" --repo "${{ github.repository }}")
+          echo "release=$release_exists" >> "$GITHUB_OUTPUT"
 
   build:
     name: Build Distribution
