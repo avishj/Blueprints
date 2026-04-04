@@ -14,6 +14,9 @@ from rich.panel import Panel
 from rich.text import Text
 
 
+from {{ module_name }}.exit_codes import ExitCode
+
+
 class LogFormat(StrEnum):
     """Supported log output formats."""
 
@@ -51,4 +54,4 @@ except ValidationError as exc:
             expand=False,
         ),
     )
-    sys.exit(78)
+    sys.exit(ExitCode.CONFIG)
