@@ -4,7 +4,8 @@
 
 """Structured exit codes for CLI commands.
 
-Cyclopts owns exit code 1 (parse/validation errors) and 130 (Ctrl-C).
+Cyclopts may return exit code 1 for parse/validation errors and 130 for Ctrl-C.
+Command-level failures also use ExitCode.ERROR = 1.
 Commands return an ExitCode; the default result_action calls sys.exit(n).
 """
 
