@@ -69,8 +69,6 @@ jobs:
     name: Secret Scan
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      contents: read
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
