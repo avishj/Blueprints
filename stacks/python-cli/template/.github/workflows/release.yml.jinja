@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      contents: read
     outputs:
       pypi: ${{ steps.check.outputs.pypi }}
       ghcr: ${{ steps.check.outputs.ghcr }}
