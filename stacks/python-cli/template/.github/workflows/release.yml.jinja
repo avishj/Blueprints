@@ -223,7 +223,7 @@ jobs:
         if: needs.check.outputs[matrix.check_key] == 'true'
         run: echo "published=true" >> "$GITHUB_OUTPUT"
 
-      - name: Harden runner
+      - name: Setup
         if: '!steps.skip.outputs.published'
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
         with:
