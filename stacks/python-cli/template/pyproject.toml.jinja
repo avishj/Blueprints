@@ -146,6 +146,10 @@ ignore = [
     "SLF001", # private member access in tests
     "FBT",    # boolean traps in tests
 ]
+"tests/e2e/*.py" = [
+    "S603",   # subprocess.run is intentional in CLI end-to-end tests
+    "S607",   # console scripts from PATH are intentional in CLI end-to-end tests
+]
 
 [tool.ruff.lint.isort]
 known-first-party = ["{{ module_name }}"]
