@@ -42,3 +42,10 @@ jobs:
           args: --exclude-path 'stacks/*/template' '**/*.md'
           fail: true
           jobSummary: true
+
+      - name: Validate schemas
+        if: '!cancelled()'
+        run: |
+          pipx run check-jsonschema --builtin-schema vendor.renovate renovate.json
+          pipx run check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
+          pipx run check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
