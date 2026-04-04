@@ -282,33 +282,45 @@ jobs:
 
       - name: Sign image
         if: '!steps.skip.outputs.published'
+        env:
+          REPO: ${{ github.repository }}
+          WORKFLOW: ${{ github.workflow }}
+          REF: ${{ github.ref }}
+          IMAGE: ${{ matrix.image }}@${{ steps.push.outputs.digest }}
         run: |
           cosign sign --yes --recursive \
-            -a repo=${{ github.repository }} \
-            -a workflow=${{ github.workflow }} \
-            -a ref=${{ github.ref }} \
-            "${{ matrix.image }}@${{ steps.push.outputs.digest }}"
+            -a "repo=$REPO" \
+            -a "workflow=$WORKFLOW" \
+            -a "ref=$REF" \
+            "$IMAGE"
 
       - name: Verify image signature & attestations
         if: '!steps.skip.outputs.published'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          WORKFLOW: ${{ github.workflow }}
+          REF: ${{ github.ref }}
+          SHA: ${{ github.sha }}
+          TRIGGER: ${{ github.event_name }}
+          IMAGE: ${{ matrix.image }}@${{ steps.push.outputs.digest }}
         run: |
-          IMAGE="${{ matrix.image }}@${{ steps.push.outputs.digest }}"
           cosign verify \
-            --certificate-identity "https://github.com/${{ github.repository }}/.github/workflows/release.yml@${{ github.ref }}" \
+            --certificate-identity "https://github.com/$REPO/.github/workflows/release.yml@$REF" \
             --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
-            --certificate-github-workflow-name "${{ github.workflow }}" \
-            --certificate-github-workflow-repository "${{ github.repository }}" \
-            --certificate-github-workflow-ref "${{ github.ref }}" \
-            --certificate-github-workflow-sha "${{ github.sha }}" \
-            --certificate-github-workflow-trigger "${{ github.event_name }}" \
+            --certificate-github-workflow-name "$WORKFLOW" \
+            --certificate-github-workflow-repository "$REPO" \
+            --certificate-github-workflow-ref "$REF" \
+            --certificate-github-workflow-sha "$SHA" \
+            --certificate-github-workflow-trigger "$TRIGGER" \
             "$IMAGE"
-          gh attestation verify "oci://$IMAGE" --repo "${{ github.repository }}"
+          gh attestation verify "oci://$IMAGE" --repo "$REPO"
 
       - name: Verify published image
         if: '!steps.skip.outputs.published'
-        run: docker run --rm ${{ matrix.image }}@${{ steps.push.outputs.digest }} --help
+        env:
+          IMAGE: ${{ matrix.image }}@${{ steps.push.outputs.digest }}
+        run: docker run --rm "$IMAGE" --help
 
   trivy:
     name: Trivy Image Scan
