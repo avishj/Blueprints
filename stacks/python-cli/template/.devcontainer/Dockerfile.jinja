@@ -10,4 +10,4 @@ FROM mcr.microsoft.com/devcontainers/python:3.13@sha256:9b0762901a555c31c2c63824
 
 COPY --from=uv /uv /uvx /usr/local/bin/
 
-RUN UV_TOOL_BIN_DIR=/usr/local/bin uv tool install just==1.48.1
+RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install just==1.48.1
