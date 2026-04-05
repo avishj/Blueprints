@@ -1,0 +1,18 @@
+{
+  "recommendations": [
+    "astro-build.astro-vscode",
+    "biomejs.biome",
+    "nefrob.vscode-just-syntax",
+    "EditorConfig.EditorConfig",
+    "ms-playwright.playwright",
+    "GitHub.vscode-github-actions",
+    "ms-vscode-remote.remote-containers",
+    "GitHub.vscode-pull-request-github",
+    "usernamehw.errorlens",
+    "DavidAnson.vscode-markdownlint"
+  ],
+  "unwantedRecommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint"
+  ]
+}
