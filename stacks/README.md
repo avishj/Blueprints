@@ -11,4 +11,4 @@ rm -rf /tmp/blueprints
 Supported:
 
 - [python-cli](./python-cli/): CLI tools, scripts and command-line applications built with Python.
-- [ts-astro-react](./ts-astro-react/): Content-driven websites and apps using Astro with React islands and TypeScript.
+- [ts-astro-react](./astro-ts-react/): Content-driven websites and apps using Astro with React islands and TypeScript.
