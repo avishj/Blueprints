@@ -11,7 +11,10 @@ _envops:
 project_name:
   type: str
   help: "Project/package name (kebab-case recommended, e.g. my-app)"
-  validator: "{% if ' ' in project_name %}project_name cannot contain spaces{% endif %}"
+  validator: >-
+    {% if ' ' in project_name %}project_name cannot contain spaces
+    {% elif '"' in project_name or '\\' in project_name %}project_name cannot contain quotes or backslashes
+    {% endif %}
 
 owner:
   type: str
@@ -22,6 +25,9 @@ description:
   type: str
   default: "A modern Astro + React application."
   help: "Short one-line project description"
+  validator: >-
+    {% if '"' in description or '\\' in description %}description cannot contain quotes or backslashes
+    {% endif %}
 
 author_name:
   type: str
