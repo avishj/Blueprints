@@ -14,6 +14,7 @@ project_name:
   validator: >-
     {% if ' ' in project_name %}project_name cannot contain spaces
     {% elif '"' in project_name or '\\' in project_name %}project_name cannot contain quotes or backslashes
+    {% elif '\n' in project_name or '\r' in project_name %}project_name cannot contain newlines
     {% endif %}
 
 owner:
