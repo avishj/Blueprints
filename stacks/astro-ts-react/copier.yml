@@ -28,6 +28,7 @@ description:
   help: "Short one-line project description"
   validator: >-
     {% if '"' in description or '\\' in description %}description cannot contain quotes or backslashes
+    {% elif '\n' in description or '\r' in description %}description cannot contain newlines
     {% endif %}
 
 author_name:
