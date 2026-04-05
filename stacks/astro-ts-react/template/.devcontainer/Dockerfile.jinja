@@ -13,5 +13,5 @@ COPY --from=uv /uv /uvx /usr/local/bin/
 COPY --from=bun /usr/local/bin/bun /usr/local/bin/bunx /usr/local/bin/
 
 # just 1.48.1, pre-commit 4.5.1
-RUN UV_TOOL_BIN_DIR=/usr/local/bin uv tool install just==1.48.1 \
-  && UV_TOOL_BIN_DIR=/usr/local/bin uv tool install pre-commit==4.5.1
+RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install just==1.48.1 \
+  && UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install pre-commit==4.5.1
