@@ -1,0 +1,66 @@
+---
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  checks:
+    name: Checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: {}
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@fe104658747b27e96e4f7e80cd0a94068e53901d  # v2.16.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Spell check
+        uses: crate-ci/typos@631208b7aac2daa8b707f55e7331f9112b0e062d  # v1.44.0
+
+      - name: Check links
+        if: '!cancelled()'
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
+        with:
+          args: --exclude-path 'stacks/[^/]+/template' '**/*.md'
+          fail: true
+          jobSummary: true
+
+      - name: Validate stack structure
+        if: '!cancelled()'
+        run: |
+          failed=0
+          for stack in stacks/*/; do
+            name=$(basename "$stack")
+            for required in copier.yml README.md VERIFICATION.md template; do
+              if [ ! -e "$stack$required" ]; then
+                echo "::error::stacks/$name is missing $required"
+                failed=1
+              fi
+            done
+          done
+          exit $failed
+
+      - name: Validate schemas
+        if: '!cancelled()'
+        run: |
+          pipx run check-jsonschema --builtin-schema vendor.renovate renovate.json
+          pipx run check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
+          pipx run check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
