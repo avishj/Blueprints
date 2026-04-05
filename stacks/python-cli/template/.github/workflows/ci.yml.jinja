@@ -334,8 +334,6 @@ jobs:
     needs: [changes]
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      security-events: write
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
