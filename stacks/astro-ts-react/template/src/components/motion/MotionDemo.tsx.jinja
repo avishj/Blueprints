@@ -1,7 +1,6 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useState } from "react";
 import MotionReveal from "@components/motion/MotionReveal";
 import MotionStagger from "@components/motion/MotionStagger";
-import { setA11yHidden } from "@lib/motion/a11y";
 import { motionTokens } from "@lib/motion/tokens";
 
 const SAMPLE_ITEMS = [
@@ -12,20 +11,9 @@ const SAMPLE_ITEMS = [
 
 export default function MotionDemo() {
   const [visible, setVisible] = useState(true);
-  const profile = useMemo(() => motionTokens.profile, []);
-  const revealRegionRef = useRef<HTMLElement | null>(null);
+  const profile = motionTokens.profile;
 
-  const handleVisibilityToggle = () => {
-    setVisible((state) => {
-      const next = !state;
-      const region = revealRegionRef.current;
-      if (region) {
-        setA11yHidden(region, !next);
-      }
-
-      return next;
-    });
-  };
+  const handleVisibilityToggle = () => setVisible((v) => !v);
 
   return (
     <section className="w-full rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur">
@@ -45,7 +33,7 @@ export default function MotionDemo() {
         </button>
       </div>
 
-      <section ref={revealRegionRef}>
+      <section>
         {visible && (
           <MotionReveal
             className="mt-6 rounded-lg border border-white/10 bg-black/20 p-4"
