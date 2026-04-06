@@ -9,11 +9,11 @@ export function setA11yHidden(element: HTMLElement, hidden: boolean): void {
   element.inert = false;
 }
 
-export function ensureFocusableVisibility(element: HTMLElement): void {
+export function ensureFocusableVisibility(container: HTMLElement): void {
   const activeElement = document.activeElement;
-  if (!activeElement || !element.contains(activeElement)) {
+  if (!(activeElement instanceof Element) || !container.contains(activeElement)) {
     return;
   }
 
-  element.classList.add("focus-visible:outline", "focus-visible:outline-2", "focus-visible:outline-offset-2");
+  activeElement.classList.add("focus-visible:outline", "focus-visible:outline-2", "focus-visible:outline-offset-2");
 }
