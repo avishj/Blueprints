@@ -1,0 +1,33 @@
+import gsap from "gsap";
+import { motionPresets } from "@lib/motion/presets";
+import { motionTokens } from "@lib/motion/tokens";
+import { getMotionDuration, shouldAnimate } from "@lib/motion/reduced-motion";
+
+export function animateRouteEnter(element: Element): gsap.core.Tween | null {
+  if (!shouldAnimate()) {
+    gsap.set(element, { autoAlpha: 1, y: 0 });
+    return null;
+  }
+
+  const preset = motionPresets.routeSwap;
+
+  gsap.set(element, preset.from);
+
+  return gsap.to(element, {
+    ...preset.to,
+    duration: getMotionDuration(preset.to.duration),
+  });
+}
+
+export function animateRouteExit(element: Element): gsap.core.Tween | null {
+  if (!shouldAnimate()) {
+    return null;
+  }
+
+  return gsap.to(element, {
+    autoAlpha: 0,
+    y: -8,
+    duration: getMotionDuration(motionTokens.durations.fast),
+    ease: motionTokens.easings.exit,
+  });
+}

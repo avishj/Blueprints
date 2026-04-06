@@ -60,6 +60,26 @@ strict_typescript:
   when: false
   validator: "{% if not strict_typescript %}TypeScript strict mode is required{% endif %}"
 
+motion_profile:
+  type: str
+  default: "balanced"
+  choices:
+    - "balanced"
+    - "minimal"
+    - "cinematic"
+  help: "Default motion intensity profile for generated presets"
+  validator: "{% if motion_profile not in ['balanced', 'minimal', 'cinematic'] %}motion_profile must be balanced|minimal|cinematic{% endif %}"
+
+include_motion_demo:
+  type: bool
+  default: true
+  help: "Include GSAP demo island in the scaffolded landing page"
+
+motion_scroll_reveal:
+  type: bool
+  default: true
+  help: "Enable in-view reveal helper defaults for generated components"
+
 # --- Derived values ---
 
 package_name:
