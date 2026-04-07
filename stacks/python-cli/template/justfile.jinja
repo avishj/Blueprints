@@ -21,14 +21,14 @@ build:
     uv run --with dist/*.whl --no-project -- {{ project_name }} --help
 
 docs:
-    uv run mkdocs build --strict
-    uv run mkdocs serve
+    uv run zensical build
+    uv run zensical serve
 
 ci:
     uvx pre-commit run --all-files
     uv run pytest --cov --cov-report=term --cov-report=html --cov-fail-under=70 -n auto
     just build
-    uv run mkdocs build --strict
+    uv run zensical build
 
 clean:
     rm -rf build/ dist/ *.egg-info/ .pytest_cache/ .ruff_cache/ .coverage htmlcov/ coverage.xml results.xml site/ .ty/

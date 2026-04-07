@@ -10,7 +10,7 @@ on:
     branches: [main]
     paths:
       - "docs/**"
-      - "mkdocs.yml"
+      - "zensical.toml"
       - "src/**"
   workflow_dispatch:
 
@@ -32,7 +32,7 @@ jobs:
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
 
       - name: Build docs
-        run: uv run mkdocs build --strict
+        run: uv run zensical build
 
       - name: Upload pages artifact
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b  # v4.0.0
