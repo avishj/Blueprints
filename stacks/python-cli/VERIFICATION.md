@@ -163,12 +163,11 @@
 - [ ] Heading, description, install command, and quick-start command all use app name (no `myapp`)
 - [ ] Structure matches template (Installation + Quick start sections at minimum)
 
-**`mkdocs.yml`:**
+**`zensical.toml`:**
 
 - [ ] `site_name`, `site_description` use app name (no `myapp`)
 - [ ] `site_url`, `repo_url`, `repo_name` point to correct owner/repo
 - [ ] `copyright` has correct year and project name
-- [ ] `watch` path points to `src/myapp` (replace `myapp` with your app name)
 - [ ] `edit_uri` is `edit/main/docs/`
 - [ ] All remaining config (theme, plugins, markdown_extensions, nav) matches template exactly
 
@@ -263,8 +262,8 @@
 
 **`docs.yml`:**
 
-- [ ] Copy 1:1 from template — builds mkdocs with `--strict`, deploys to GitHub Pages
-- [ ] Triggers on push to `main` for `docs/**`, `mkdocs.yml`, `src/**` paths + `workflow_dispatch`
+- [ ] Copy 1:1 from template — builds zensical docs, deploys to GitHub Pages
+- [ ] Triggers on push to `main` for `docs/**`, `zensical.toml`, `src/**` paths + `workflow_dispatch`
 - [ ] All remaining `docs.yml` behavior matches the template exactly
 
 **`weekly.yml`:**
@@ -354,7 +353,7 @@
 - [ ] `build.dockerfile` points to `Dockerfile` (no community features)
 - [ ] `updateContentCommand` is `uv sync`
 - [ ] `postCreateCommand` is `uv run pre-commit install`
-- [ ] `forwardPorts` includes `8000`, `portsAttributes` labels it as `MkDocs`
+- [ ] `forwardPorts` includes `8000`, `portsAttributes` labels it as `Zensical`
 - [ ] Extensions list matches `.vscode/extensions.json` minus `ms-vscode-remote.remote-containers`
 
 **Copy 1:1 from template (no changes needed):**
@@ -391,8 +390,8 @@
 - [ ] `just lint` — all pre-commit hooks pass (ruff fix + format, ty, complexipy, validate-pyproject, yamllint, reuse, gitleaks, typos)
 - [ ] `just test` — all unit, integration, and e2e tests pass with coverage report
 - [ ] `just build` — sdist + wheel built, twine check passes, entry point smoke test passes
-- [ ] `just docs` — mkdocs serves without errors
-- [ ] `just ci` — full composite gate (lint + test with coverage ≥ 70% + build + docs strict build)
+- [ ] `just docs` — zensical serves without errors
+- [ ] `just ci` — full composite gate (lint + test with coverage ≥ 70% + build + docs build)
 
 ### Section 10 — Global Grep Sanity Check
 

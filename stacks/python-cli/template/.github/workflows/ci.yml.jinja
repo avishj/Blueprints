@@ -61,7 +61,7 @@ jobs:
               - 'uv.lock'
             docs:
               - 'docs/**'
-              - 'mkdocs.yml'
+              - 'zensical.toml'
               - '**/*.md'
               - 'src/**'
               - 'pyproject.toml'
@@ -101,7 +101,7 @@ jobs:
               ("YAML lint",            "uvx yamllint -d '{extends: default, rules: {line-length: disable, truthy: disable}}' ."),
               ("EditorConfig",         "uvx --from editorconfig-checker ec"),
               ("Validate pyproject",   "uvx validate-pyproject pyproject.toml"),
-              ("Docs build",           "uv run mkdocs build --strict"),
+              ("Docs build",           "uv run zensical build"),
               ("Schema: workflows",    "uvx check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml"),
               ("Schema: issue forms",  "uvx check-jsonschema --builtin-schema vendor.github-issue-forms .github/ISSUE_TEMPLATE/bug_report.yml .github/ISSUE_TEMPLATE/feature_request.yml"),
               ("Schema: renovate",     "uvx check-jsonschema --builtin-schema vendor.renovate renovate.json"),
@@ -110,7 +110,6 @@ jobs:
               ("Schema: funding",      "uvx check-jsonschema --schemafile https://www.schemastore.org/github-funding.json .github/FUNDING.yml"),
               ("Schema: labeler",      "uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml"),
               ("Schema: pyproject",    "uvx check-jsonschema --schemafile https://www.schemastore.org/pyproject.json pyproject.toml"),
-              ("Schema: mkdocs",       "uvx check-jsonschema --schemafile https://www.schemastore.org/mkdocs-1.6.json mkdocs.yml"),
               ("Schema: REUSE",        "uvx check-jsonschema --schemafile https://reuse.software/reuse-toml-v1.schema.json REUSE.toml"),
           ]
 

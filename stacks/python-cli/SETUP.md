@@ -83,8 +83,8 @@ These items are intentionally not templated by Copier (hardcoded defaults). Chan
 - [ ] `just lint` — all pre-commit hooks pass (ruff fix + format, ty, complexipy, validate-pyproject, reuse, gitleaks, typos, yamllint)
 - [ ] `just test` — all tests pass with coverage report
 - [ ] `just build` — sdist + wheel built, twine check passes, entry point smoke test passes
-- [ ] `just docs` — mkdocs serves without errors
-- [ ] `just ci` — full composite gate (lint + test with coverage threshold + build + docs strict build)
+- [ ] `just docs` — zensical serves without errors
+- [ ] `just ci` — full composite gate (lint + test with coverage threshold + build + docs build)
 
 ## GitHub repo settings
 

@@ -1,0 +1,61 @@
+# SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+[project]
+site_name = "{{ project_name }}"
+site_description = "{{ project_name }} documentation."
+site_url = "https://{{ owner }}.github.io/{{ project_name }}/"
+repo_url = "https://github.com/{{ owner }}/{{ project_name }}"
+repo_name = "{{ owner }}/{{ project_name }}"
+edit_uri = "edit/main/docs/"
+copyright = "Copyright &copy; {{ copyright_year }} &ndash; Present {{ author_name }} and contributors"
+nav = [
+    { "Home" = "index.md" },
+]
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "material/brightness-7"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "material/brightness-4"
+toggle.name = "Switch to light mode"
+
+[project.theme]
+features = [
+    "content.action.edit",
+    "content.action.view",
+    "content.code.annotate",
+    "content.code.copy",
+    "content.tabs.link",
+    "navigation.expand",
+    "navigation.footer",
+    "navigation.indexes",
+    "navigation.instant",
+    "navigation.instant.prefetch",
+    "navigation.instant.progress",
+    "navigation.path",
+    "navigation.sections",
+    "navigation.tabs",
+    "navigation.top",
+    "navigation.tracking",
+    "search.highlight",
+    "toc.follow",
+]
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["src"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+show_source = true
+show_root_heading = true
+show_symbol_type_heading = true
+show_symbol_type_toc = true
+docstring_style = "google"
+merge_init_into_class = true
+members_order = "source"
