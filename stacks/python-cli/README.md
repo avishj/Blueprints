@@ -101,27 +101,43 @@ Files with `.jinja` suffix are Copier templates — the suffix is stripped durin
 
 ```text
 stacks/python-cli/
+├── README.md
+├── SETUP.md
+├── VERIFICATION.md
+├── actions/
+│   └── setup/
+│       └── action.yml                # Shared CI setup action
 ├── copier.yml                         # Copier config (questions, derived vars, tasks)
+├── actions/
+│   └── setup/
+│       └── action.yml                # Shared CI setup action
 ├── template/
 │   ├── {{ _copier_conf.answers_file }}.jinja  # Copier answers (auto-generated)
 │   ├── .github/
+│   │   ├── FUNDING.yml.jinja
 │   │   ├── ISSUE_TEMPLATE/
 │   │   │   ├── bug_report.yml.jinja
 │   │   │   └── feature_request.yml.jinja
-│   │   ├── workflows/
-│   │   │   ├── _codeql.yml.jinja
-│   │   │   ├── _osv-scanner.yml.jinja
-│   │   │   ├── _security.yml.jinja
-│   │   │   ├── _trivy-image.yml.jinja
-│   │   │   ├── ci.yml.jinja
-│   │   │   ├── docs.yml.jinja
-│   │   │   ├── labeler.yml.jinja
-│   │   │   ├── release.yml.jinja
-│   │   │   └── weekly.yml.jinja
-│   │   ├── FUNDING.yml.jinja
 │   │   ├── labeler.yml.jinja
 │   │   ├── PULL_REQUEST_TEMPLATE.md.jinja
-│   │   └── settings.yml.jinja
+│   │   ├── settings.yml.jinja
+│   │   └── workflows/
+│   │       ├── _codeql.yml.jinja
+│   │       ├── _osv-scanner.yml.jinja
+│   │       ├── _security.yml.jinja
+│   │       ├── _trivy-image.yml.jinja
+│   │       ├── ci.yml.jinja
+│   │       ├── docs.yml.jinja
+│   │       ├── labeler.yml.jinja
+│   │       ├── release.yml.jinja
+│   │       └── weekly.yml.jinja
+│   ├── .devcontainer/
+│   │   ├── devcontainer.json.jinja
+│   │   └── Dockerfile.jinja
+│   ├── .vscode/
+│   │   ├── extensions.json
+│   │   ├── launch.json.jinja
+│   │   └── settings.json
 │   ├── docs/
 │   │   └── index.md.jinja
 │   ├── src/
@@ -134,27 +150,20 @@ stacks/python-cli/
 │   │       ├── logging.py.jinja
 │   │       └── py.typed
 │   ├── tests/
+│   │   ├── __init__.py.jinja
+│   │   ├── conftest.py.jinja
 │   │   ├── e2e/
 │   │   │   ├── __init__.py.jinja
 │   │   │   └── test_entrypoint.py.jinja
 │   │   ├── integration/
 │   │   │   ├── __init__.py.jinja
 │   │   │   └── test_cli.py.jinja
-│   │   ├── unit/
-│   │   │   ├── __init__.py.jinja
-│   │   │   ├── test_config.py.jinja
-│   │   │   ├── test_exit_codes.py.jinja
-│   │   │   ├── test_logging.py.jinja
-│   │   │   └── test_version.py.jinja
-│   │   ├── __init__.py.jinja
-│   │   └── conftest.py.jinja
-│   ├── .devcontainer/
-│   │   ├── devcontainer.json.jinja
-│   │   └── Dockerfile.jinja
-│   ├── .vscode/
-│   │   ├── extensions.json
-│   │   ├── launch.json.jinja
-│   │   └── settings.json
+│   │   └── unit/
+│   │       ├── __init__.py.jinja
+│   │       ├── test_config.py.jinja
+│   │       ├── test_exit_codes.py.jinja
+│   │       ├── test_logging.py.jinja
+│   │       └── test_version.py.jinja
 │   ├── .dockerignore.jinja
 │   ├── .editorconfig.jinja
 │   ├── .gitattributes.jinja
@@ -172,10 +181,10 @@ stacks/python-cli/
 │   ├── SECURITY.md.jinja
 │   ├── codecov.yml.jinja
 │   ├── justfile.jinja
-│   ├── zensical.toml.jinja
 │   ├── pyproject.toml.jinja
 │   ├── renovate.json
-│   └── sonar-project.properties.jinja
+│   ├── sonar-project.properties.jinja
+│   └── zensical.toml.jinja
 ├── README.md
 ├── SETUP.md
 └── VERIFICATION.md
