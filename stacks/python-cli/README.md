@@ -30,7 +30,7 @@ See [SETUP.md](SETUP.md) for prerequisites, variable reference, non-interactive 
 10. commitizen - Conventional commits and versioning.
 11. Gitleaks - Secret scanner.
 12. OSV-Scanner - Dependency vulnerability scanner.
-13. mkdocs-material - Documentation site generator.
+13. zensical - Documentation site generator.
 14. REUSE - SPDX license/copyright compliance checker.
 15. semgrep - Static application security testing.
 16. validate-pyproject - pyproject.toml validation.
@@ -172,7 +172,7 @@ stacks/python-cli/
 │   ├── SECURITY.md.jinja
 │   ├── codecov.yml.jinja
 │   ├── justfile.jinja
-│   ├── mkdocs.yml.jinja
+│   ├── zensical.toml.jinja
 │   ├── pyproject.toml.jinja
 │   ├── renovate.json
 │   └── sonar-project.properties.jinja
