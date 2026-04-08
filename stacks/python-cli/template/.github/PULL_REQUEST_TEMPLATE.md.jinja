@@ -31,4 +31,3 @@ Closes #
 - [ ] Self-reviewed the diff
 - [ ] No secrets, credentials, or PII in the changeset
 - [ ] Documentation updated (if applicable)
-- [ ] Changelog entry added (if user-facing)
