@@ -90,7 +90,6 @@ These items are intentionally not templated by Copier (hardcoded defaults). Chan
 
 - [ ] Create GitHub repo (public, default branch `main`)
 - [ ] Enable GitHub Pages (source: GitHub Actions) for docs
-- [ ] Add repo secret: `CODECOV_TOKEN`
 - [ ] Add repo secret: `SONAR_TOKEN`
 - [ ] Add repo secrets: `DOCKERHUB_USERNAME`, `DOCKERHUB_TOKEN`
 - [ ] Create GitHub environment: `pypi` (with trusted publisher configured)
