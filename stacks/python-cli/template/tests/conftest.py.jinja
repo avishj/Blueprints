@@ -13,10 +13,17 @@ from {{ module_name }}.cli import app
 
 
 class CliResult(NamedTuple):
-    """Captures exit code and stdout from a cyclopts app invocation."""
+    """Captures exit code, stdout, and stderr from a cyclopts app invocation."""
 
     exit_code: int
     output: str
+    errors: str
+
+
+@pytest.fixture(scope="session")
+def profiles_dir() -> Path:
+    """Return the directory containing shared JSON profile fixtures."""
+    return Path(__file__).resolve().parent / "fixtures" / "profiles"
 
 
 @pytest.fixture
@@ -27,11 +34,11 @@ def invoke(capsys: pytest.CaptureFixture[str]) -> Callable[..., CliResult]:
         try:
             app.meta(list(args))
             captured = capsys.readouterr()
-            return CliResult(exit_code=0, output=captured.out)
+            return CliResult(exit_code=0, output=captured.out, errors=captured.err)
         except SystemExit as exc:
             captured = capsys.readouterr()
             raw = exc.code
             code = raw if isinstance(raw, int) else (0 if raw is None else 1)
-            return CliResult(exit_code=code, output=captured.out)
+            return CliResult(exit_code=code, output=captured.out, errors=captured.err)
 
     return _invoke
