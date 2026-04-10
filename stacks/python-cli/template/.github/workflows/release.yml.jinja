@@ -387,8 +387,8 @@ jobs:
 
       - name: Generate checksums
         run: |
-          (cd dist && sha256sum *) > SHA256SUMS
-          (cd sbom && sha256sum *) >> SHA256SUMS
+          (cd dist && sha256sum ./*) > SHA256SUMS
+          (cd sbom && sha256sum ./*) >> SHA256SUMS
 
       - name: Create GitHub release
         env:
