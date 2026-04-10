@@ -141,6 +141,7 @@ jobs:
           pyflakes: true
           flags: "-color"
 
+      # TODO: remove once raven-actions/actionlint does auto cleanup
       - name: Clean up actionlint artifacts
         if: '!cancelled()'
         run: rm -rf node_modules package-lock.json
