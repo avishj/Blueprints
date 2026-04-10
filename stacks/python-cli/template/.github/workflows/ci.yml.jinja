@@ -141,6 +141,10 @@ jobs:
           pyflakes: true
           flags: "-color"
 
+      - name: Clean up actionlint artifacts
+        if: '!cancelled()'
+        run: rm -rf node_modules package-lock.json
+
       - name: Run hadolint
         if: '!cancelled()'
         uses: hadolint/hadolint-action@2332a7b74a6de0dda2e2221d575162eba76ba5e5  # v3.3.0
