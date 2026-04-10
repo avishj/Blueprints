@@ -31,8 +31,8 @@ jobs:
           setup-python: "false"
       - name: Checkout target branch
         run: |
-          git fetch origin $GITHUB_BASE_REF
-          git checkout --track origin/$GITHUB_BASE_REF
+          git fetch origin "$GITHUB_BASE_REF"
+          git checkout --track "origin/$GITHUB_BASE_REF"
           git submodule update --recursive
       - name: Run scanner on existing code
         uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
@@ -46,7 +46,7 @@ jobs:
       - name: Checkout current branch
         # Use -f in case any changes were made by osv-scanner (there should be no changes)
         run: |
-          git checkout -f $GITHUB_SHA
+          git checkout -f "$GITHUB_SHA"
           git submodule update --recursive
       - name: Run scanner on new code
         uses: google/osv-scanner-action/osv-scanner-action@c51854704019a247608d928f370c98740469d4b5  # v2.3.5
