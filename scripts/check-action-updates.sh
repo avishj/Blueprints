@@ -6,7 +6,11 @@ actions=$(grep -rh 'uses:' --include='*.yml' --include='*.yaml' --include='*.jin
   | grep '@' \
   | grep -v '@main' \
   | sed 's/ *#.*//' \
-  | sort -u)
+  | sort -u || true)
+
+if [ -z "$actions" ]; then
+  exit 0
+fi
 
 printf "%-50s %-14s %-14s %-12s %s\n" "ACTION" "CURRENT SHA" "LATEST SHA" "LATEST TAG" "STATUS"
 printf '%.0s-' {1..140}; echo
