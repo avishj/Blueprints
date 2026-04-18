@@ -6,8 +6,8 @@ FROM ghcr.io/astral-sh/uv:0.11.2@sha256:c4f5de312ee66d46810635ffc5df34a1973ba753
 # bun v1.3.11
 FROM oven/bun:1.3.11@sha256:0733e50325078969732ebe3b15ce4c4be5082f18c4ac1a0f0ca4839c2e4e42a7 AS bun
 
-# debian
-FROM mcr.microsoft.com/devcontainers/base:debian@sha256:aa263c6fdd7c1bc990eead3922224fe8afbf5d85eaf3b6b9260786ab94d74933
+# 2.1.7
+FROM mcr.microsoft.com/devcontainers/base:2.1.7@sha256:aa263c6fdd7c1bc990eead3922224fe8afbf5d85eaf3b6b9260786ab94d74933
 
 COPY --from=uv /uv /uvx /usr/local/bin/
 COPY --from=bun /usr/local/bin/bun /usr/local/bin/bunx /usr/local/bin/
