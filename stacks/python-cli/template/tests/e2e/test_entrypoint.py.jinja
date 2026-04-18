@@ -5,18 +5,16 @@
 """End-to-end tests invoking the CLI as a subprocess."""
 
 import subprocess
-from pathlib import Path
 
 import pytest
 
 pytestmark = pytest.mark.e2e
 
-_FIXTURES = Path(__file__).resolve().parent.parent / "fixtures" / "profiles"
 
-
-def _run(*args: str) -> subprocess.CompletedProcess[str]:
+def _run(*args: str, input_data: str | None = None) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         ["{{ project_name }}", *args],
+        input=input_data,
         capture_output=True,
         text=True,
         check=False,

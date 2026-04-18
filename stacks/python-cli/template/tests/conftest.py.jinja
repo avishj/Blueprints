@@ -22,9 +22,9 @@ class CliResult(NamedTuple):
 
 
 @pytest.fixture(scope="session")
-def profiles_dir() -> Path:
-    """Return the directory containing shared JSON profile fixtures."""
-    return Path(__file__).resolve().parent / "fixtures" / "profiles"
+def fixtures_dir() -> Path:
+    """Return the directory containing shared fixtures."""
+    return Path(__file__).resolve().parent / "fixtures"
 
 
 @pytest.fixture
