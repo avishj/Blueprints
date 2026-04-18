@@ -38,7 +38,9 @@ while IFS= read -r entry; do
     fi
   fi
 
-  if [[ "$current_sha" == "$latest_sha" ]]; then
+  if [[ -z "$latest_tag" || "$latest_tag" == "UNKNOWN" || -z "$latest_sha" ]]; then
+    status="❓ unknown"
+  elif [[ "$current_sha" == "$latest_sha" ]]; then
     status="✅ up-to-date"
   else
     status="⚠️  update available"
