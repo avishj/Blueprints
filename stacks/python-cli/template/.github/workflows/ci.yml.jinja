@@ -164,11 +164,6 @@ jobs:
         if: '!cancelled()'
         uses: crate-ci/typos@cf5f1c29a8ac336af8568821ec41919923b05a83  # v1.45.1
 
-      # TODO: remove once crate-ci/typos does auto cleanup
-      - name: Clean up typos binary
-        if: '!cancelled()'
-        run: rm -f ./typos
-
       - name: Check links
         if: '!cancelled()'
         uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
