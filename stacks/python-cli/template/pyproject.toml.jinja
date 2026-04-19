@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 
 [build-system]
-requires = ["hatchling"]
 build-backend = "hatchling.build"
+requires = ["hatchling"]
 
 [project]
 name = "{{ project_name }}"
@@ -36,11 +36,11 @@ dependencies = [
 {{ project_name }} = "{{ module_name }}.cli:entrypoint"
 
 [project.urls]
-Homepage = "https://github.com/{{ owner }}/{{ project_name }}"
-Documentation = "https://{{ owner }}.github.io/{{ project_name }}"
-Repository = "https://github.com/{{ owner }}/{{ project_name }}"
 Changelog = "https://github.com/{{ owner }}/{{ project_name }}/blob/main/CHANGELOG.md"
+Documentation = "https://{{ owner }}.github.io/{{ project_name }}"
+Homepage = "https://github.com/{{ owner }}/{{ project_name }}"
 Issues = "https://github.com/{{ owner }}/{{ project_name }}/issues"
+Repository = "https://github.com/{{ owner }}/{{ project_name }}"
 
 [dependency-groups]
 dev = [
@@ -70,11 +70,11 @@ python-preference = "managed"
 src = ["src", "tests"]
 
 [tool.ruff.lint]
-select = ["ALL"]
 ignore = [
     "COM812", # conflicts with formatter
     "ISC001", # conflicts with formatter
 ]
+select = ["ALL"]
 
 [tool.ruff.lint.isort]
 known-first-party = ["{{ module_name }}"]
@@ -84,12 +84,12 @@ convention = "google"
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**/*.py" = [
-    "S101",   # assert allowed in tests
     "ANN",    # annotations not required in tests
-    "D",      # docstrings not required in tests
     "ARG",    # unused arguments (fixtures)
-    "PLR2004", # magic values in tests
+    "D",      # docstrings not required in tests
     "FBT",    # boolean traps in tests
+    "PLR2004", # magic values in tests
+    "S101",   # assert allowed in tests
 ]
 "tests/e2e/*.py" = [
     "S603",   # subprocess.run is intentional in CLI end-to-end tests
@@ -97,44 +97,44 @@ convention = "google"
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
-pythonpath = ["src"]
 addopts = [
-    "--strict-markers",
-    "--strict-config",
     "-ra",
+    "--strict-config",
+    "--strict-markers",
 ]
-markers = [
-    "unit: fast isolated tests with no external dependencies",
-    "integration: tests exercising multiple components together (e.g. CliRunner)",
-    "e2e: end-to-end tests invoking the installed CLI via subprocess",
-]
-timeout = 60
 filterwarnings = ["error"]
+markers = [
+    "e2e: end-to-end tests invoking the installed CLI via subprocess",
+    "integration: tests exercising multiple components together (e.g. CliRunner)",
+    "unit: fast isolated tests with no external dependencies",
+]
+pythonpath = ["src"]
+testpaths = ["tests"]
+timeout = 60
 xfail_strict = true
 
 [tool.coverage.run]
-source = ["{{ module_name }}"]
 branch = true
 core = "ctrace"
 parallel = true
-relative_files = true
 patch = ["subprocess"]
+relative_files = true
+source = ["{{ module_name }}"]
 
 [tool.coverage.report]
-fail_under = 70
-show_missing = true
-skip_empty = true
 exclude_also = [
     "@overload",
     "if __name__ == .__main__.:",
     "raise NotImplementedError",
 ]
+fail_under = 70
+show_missing = true
+skip_empty = true
 
 [tool.commitizen]
-version = "0.0.1"
 tag_format = "v$version"
+update_changelog_on_bump = true
+version = "0.0.1"
 version_files = [
     "pyproject.toml:version",
 ]
-update_changelog_on_bump = true
