@@ -22,7 +22,12 @@ while IFS= read -r entry; do
   # For sub-path actions like github/codeql-action/init, the repo is the first two segments
   gh_repo=$(echo "$repo" | cut -d'/' -f1-2)
 
-  latest_tag=$(gh release view --repo "$gh_repo" --json tagName -q '.tagName' 2>/dev/null || echo "")
+  if [[ "$gh_repo" == "github/codeql-action" ]]; then
+    latest_tag=$(gh api "repos/$gh_repo/tags" -q '.[].name' 2>/dev/null | grep -E '^v[0-9]' | head -n 1 || echo "")
+  else
+    latest_tag=$(gh release view --repo "$gh_repo" --json tagName -q '.tagName' 2>/dev/null || echo "")
+  fi
+
   if [[ -z "$latest_tag" ]]; then
     # Fallback to latest tag by date if no release exists
     latest_tag=$(gh api "repos/$gh_repo/tags?per_page=1" -q '.[0].name' 2>/dev/null || echo "UNKNOWN")
