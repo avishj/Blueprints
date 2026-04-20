@@ -1,10 +1,10 @@
 # syntax=docker/dockerfile:1
 
-# uv v0.11.2
-FROM ghcr.io/astral-sh/uv:0.11.2@sha256:c4f5de312ee66d46810635ffc5df34a1973ba753e7241ce3a08ef979ddd7bea5 AS uv
+# uv v0.11.7
+FROM ghcr.io/astral-sh/uv:0.11.7@sha256:240fb85ab0f263ef12f492d8476aa3a2e4e1e333f7d67fbdd923d00a506a516a AS uv
 
-# bun v1.3.11
-FROM oven/bun:1.3.11@sha256:0733e50325078969732ebe3b15ce4c4be5082f18c4ac1a0f0ca4839c2e4e42a7 AS bun
+# bun v1.3.12
+FROM oven/bun:1.3.12@sha256:8956c7667fa17beb6e3c664115e66bdacfe502da5d99603626e74c197bdef160 AS bun
 
 # 2.1.7
 FROM mcr.microsoft.com/devcontainers/base:2.1.7@sha256:aa263c6fdd7c1bc990eead3922224fe8afbf5d85eaf3b6b9260786ab94d74933
@@ -12,6 +12,6 @@ FROM mcr.microsoft.com/devcontainers/base:2.1.7@sha256:aa263c6fdd7c1bc990eead392
 COPY --from=uv /uv /uvx /usr/local/bin/
 COPY --from=bun /usr/local/bin/bun /usr/local/bin/bunx /usr/local/bin/
 
-# just 1.48.1, pre-commit 4.5.1
-RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install just==1.48.1 \
+# rust-just 1.49.0, pre-commit 4.5.1
+RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.49.0 \
   && UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install pre-commit==4.5.1
