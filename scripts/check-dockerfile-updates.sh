@@ -30,7 +30,7 @@ printf '%.0s-' {1..250}; echo
 
 while IFS='|' read -r image_tag current_digest; do
   latest_digest=$(docker buildx imagetools inspect "$image_tag" 2>&1 \
-    | grep '^Digest:' | awk '{print $2}')
+    | grep '^Digest:' | awk '{print $2}' || true)
 
   if [[ -z "$latest_digest" ]]; then
     status="❌ lookup failed"
