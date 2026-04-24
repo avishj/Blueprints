@@ -102,3 +102,18 @@ jobs:
     permissions:
       security-events: write
     secrets: inherit
+
+  ci-passed:
+    name: CI Passed
+    if: always()
+    needs: [checks, security]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Check results
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" || "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "::error::One or more jobs failed or were cancelled."
+            exit 1
+          fi
