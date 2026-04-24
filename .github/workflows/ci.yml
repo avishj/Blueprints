@@ -95,3 +95,10 @@ jobs:
           globs: |
             **/*.md
             !stacks/*/template/**
+
+  security:
+    name: Security Scans
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      security-events: write
+    secrets: inherit
