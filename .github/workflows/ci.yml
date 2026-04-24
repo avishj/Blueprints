@@ -32,6 +32,9 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+
       - name: Spell check
         uses: crate-ci/typos@cf5f1c29a8ac336af8568821ec41919923b05a83  # v1.45.1
 
@@ -61,6 +64,6 @@ jobs:
       - name: Validate schemas
         if: '!cancelled()'
         run: |
-          pipx run check-jsonschema --builtin-schema vendor.renovate renovate.json
-          pipx run check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
-          pipx run check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
+          uvx check-jsonschema --builtin-schema vendor.renovate renovate.json
+          uvx check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
+          uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
