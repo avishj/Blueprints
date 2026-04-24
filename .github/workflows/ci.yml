@@ -68,9 +68,22 @@ jobs:
           uvx check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
           uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
 
+      - name: YAML lint
+        if: '!cancelled()'
+        run: >-
+          uvx yamllint
+          -d '{extends: default, rules: {line-length: disable, truthy: disable}, ignore: "stacks/*/template/**"}'
+          .
+
       - name: Run actionlint
         if: '!cancelled()'
         uses: raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8  # v2.1.2
         with:
           matcher: true
+          shellcheck: true
           flags: "-color"
+
+      # TODO: remove once raven-actions/actionlint does auto cleanup
+      - name: Clean up actionlint artifacts
+        if: '!cancelled()'
+        run: rm -rf node_modules package-lock.json
