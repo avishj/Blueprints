@@ -33,3 +33,21 @@ repos:
       # --- Branch protection ---
       - id: no-commit-to-branch
         args: [--branch=main]
+
+  # --- Linting & formatting ---
+  - repo: https://github.com/adrienverge/yamllint
+    rev: cba56bcde1fdd01c1deb3f945e69764c291a6530  # v1.38.0
+    hooks:
+      - id: yamllint
+        args: [-d, '{extends: default, rules: {line-length: disable, truthy: disable}}']
+
+  - repo: https://github.com/crate-ci/typos
+    rev: cf5f1c29a8ac336af8568821ec41919923b05a83  # v1.45.1
+    hooks:
+      - id: typos
+
+  # --- Commit hygiene ---
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: 2ca29f9297911f8f5a4e8f97100b7832f045e8d3  # v4.13.10
+    hooks:
+      - id: commitizen
