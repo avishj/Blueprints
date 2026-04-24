@@ -1,3 +1,4 @@
+---
 _subdirectory: template
 _templates_suffix: ".jinja"
 _min_copier_version: "9.14.1"
