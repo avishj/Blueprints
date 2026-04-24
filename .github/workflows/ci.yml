@@ -99,6 +99,7 @@ jobs:
           globs: |
             **/*.md
             !stacks/*/template/**
+            #gitignore
 
   security:
     name: Security Scans
