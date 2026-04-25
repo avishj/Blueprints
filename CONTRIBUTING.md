@@ -44,7 +44,7 @@ Thanks for your interest in contributing!
 
 ## Reporting Bugs
 
-Open a [GitHub issue](https://github.com/avishj/blueprints/issues/new/choose) using the appropriate template.
+Open a [GitHub issue](https://github.com/avishj/blueprints/issues/new) with steps to reproduce.
 
 ## Security
 
