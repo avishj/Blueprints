@@ -32,7 +32,7 @@ rm -rf /tmp/blueprints
 Copier will prompt for:
 
 | Variable | Description | Example |
-|---|---|---|
+| --- | --- | --- |
 | `project_name` | PyPI/CLI name (may contain hyphens) | `my-tool` |
 | `owner` | GitHub username | `avishj` |
 | `description` | Project description | `A CLI application.` |
