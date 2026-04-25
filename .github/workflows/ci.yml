@@ -100,7 +100,7 @@ jobs:
     name: Security Scans
     uses: ./.github/workflows/_security.yml
     permissions:
-      security-events: write
+      security-events: write  # passed to _security.yml for SARIF upload
 
   ci-passed:
     name: CI Passed
