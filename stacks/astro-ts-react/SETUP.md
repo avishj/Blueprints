@@ -22,7 +22,7 @@ rm -rf /tmp/blueprints
 Copier will prompt for:
 
 | Variable | Description | Example |
-|---|---|---|
+| --- | --- | --- |
 | `project_name` | Project/package name | `my-app` |
 | `owner` | GitHub owner | `avishj` |
 | `description` | One-line summary | `A modern Astro + React app.` |
