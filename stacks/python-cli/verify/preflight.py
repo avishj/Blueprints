@@ -20,14 +20,14 @@ import sys
 from pathlib import Path
 
 
-CHECKS: list[tuple[str, list[str]]] = [
-    ("uv sync", ["uv", "sync", "--frozen"]),
-    ("ruff check", ["uv", "run", "ruff", "check", "."]),
-    ("ruff format", ["uv", "run", "ruff", "format", "--check", "."]),
-    ("ty check", ["uv", "run", "ty", "check", "src/", "tests/"]),
-    ("pytest unit", ["uv", "run", "pytest", "-m", "unit"]),
-    ("uv build", ["uv", "build"]),
-    ("twine check", ["uvx", "twine", "check", "dist/*"]),
+CHECKS: list[tuple[str, str]] = [
+    ("uv sync", "uv sync --frozen"),
+    ("ruff check", "uv run ruff check ."),
+    ("ruff format", "uv run ruff format --check ."),
+    ("ty check", "uv run ty check src/ tests/"),
+    ("pytest unit", "uv run pytest -m unit"),
+    ("uv build", "uv build"),
+    ("twine check", "uvx twine check dist/*"),
 ]
 
 
@@ -39,7 +39,7 @@ def main() -> int:
     failed: list[str] = []
     for name, cmd in CHECKS:
         print(f"::group::{name}", flush=True)
-        rc = subprocess.run(cmd, cwd=args.project_dir).returncode
+        rc = subprocess.run(cmd, cwd=args.project_dir, shell=True).returncode
         print("::endgroup::", flush=True)
         if rc != 0:
             failed.append(name)
