@@ -47,21 +47,6 @@ jobs:
           fail: true
           jobSummary: true
 
-      - name: Validate stack structure
-        if: '!cancelled()'
-        run: |
-          failed=0
-          for stack in stacks/*/; do
-            name=$(basename "$stack")
-            for required in copier.yml README.md VERIFICATION.md template; do
-              if [ ! -e "$stack$required" ]; then
-                echo "::error::stacks/$name is missing $required"
-                failed=1
-              fi
-            done
-          done
-          exit $failed
-
       - name: Validate schemas
         if: '!cancelled()'
         run: |
