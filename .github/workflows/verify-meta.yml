@@ -123,5 +123,30 @@ jobs:
       matrix:
         stack: ${{ fromJson(needs.stack-contract-matrix.outputs.stacks) }}
     steps:
-      - name: Scaffold
-        run: echo "Validating stack: ${{ matrix.stack }}"
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Validate stack file existence
+        shell: python
+        run: |
+          import os, sys
+          stack = "${{ matrix.stack }}"
+          required = [
+              "copier.yml",
+              "template",
+              "README.md",
+              "VERIFICATION.md",
+              "verify/answers.yml",
+              "verify/preflight.py",
+              "verify/trigger.py",
+              "verify/README.md"
+          ]
+          failed = False
+          for req in required:
+              path = os.path.join("stacks", stack, req)
+              if not os.path.exists(path):
+                  print(f"::error::stacks/{stack} is missing {req}")
+                  failed = True
+          sys.exit(1 if failed else 0)
