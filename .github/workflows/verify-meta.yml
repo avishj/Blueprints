@@ -50,14 +50,14 @@ jobs:
       - name: Validate schemas
         if: '!cancelled()'
         run: |
-          uvx check-jsonschema --builtin-schema vendor.renovate renovate.json
-          uvx check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
-          uvx check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
+          uvx check-jsonschema==0.37.1 --builtin-schema vendor.renovate renovate.json
+          uvx check-jsonschema==0.37.1 --builtin-schema vendor.github-workflows .github/workflows/*.yml
+          uvx check-jsonschema==0.37.1 --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
 
       - name: YAML lint
         if: '!cancelled()'
         run: >-
-          uvx yamllint
+          uvx yamllint==1.38.0
           -d '{extends: default, rules: {line-length: disable, truthy: disable}, ignore: "stacks/*/template/**"}'
           .
 
@@ -168,4 +168,4 @@ jobs:
           PY
 
       - name: Validate copier --pretend with stack answers
-        run: uvx copier copy --defaults --trust --pretend --vcs-ref=HEAD --data-file stacks/${{ matrix.stack }}/verify/answers.yml stacks/${{ matrix.stack }} /tmp/throwaway-${{ matrix.stack }}
+        run: uvx copier==9.14.3 copy --defaults --trust --pretend --vcs-ref=HEAD --data-file stacks/${{ matrix.stack }}/verify/answers.yml stacks/${{ matrix.stack }} /tmp/throwaway-${{ matrix.stack }}
