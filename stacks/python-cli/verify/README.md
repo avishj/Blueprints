@@ -12,26 +12,31 @@ These files let CI regenerate the template and prove the result still works.
 
 - `answers.yml` — Copier inputs. Values match the smoke repo so generated
   names (PyPI, Sonar, Docker) line up.
-- `preflight.py` — Runs `uv sync`, ruff, ty, pytest, `uv build`, twine in the
-  regenerated project.
 - `trigger.py` — Edits a smoke-repo PR branch to fire every path-filtered job
   in the generated `ci.yml`.
+- `README.md` — Documents the verify contract and local repro flow.
 
 ## Run locally
 
 ```bash
 uv tool install copier
+uv tool install rust-just
 copier copy --defaults --vcs-ref=HEAD \
   --data-file stacks/python-cli/verify/answers.yml \
   stacks/python-cli /tmp/python-cli-out
-./stacks/python-cli/verify/preflight.py /tmp/python-cli-out
+cd /tmp/python-cli-out
+git init --quiet
+just install
+just lint
+just build
 ```
 
 ## How it runs in CI
 
 On every Blueprints PR, `verify-stack.yml`:
 
-1. Regenerates the template and runs `preflight.py`.
+1. Regenerates the template, initializes a temporary git repo, and runs
+   `just install`, `just lint`, `just build`.
 2. Force-pushes the regenerated project to `main` of
    `blueprints-smoke-python-cli` and waits for that repo's CI.
 3. Opens a trivial PR there using `trigger.py` and waits for PR CI.
