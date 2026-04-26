@@ -131,7 +131,6 @@ jobs:
               "README.md",
               "VERIFICATION.md",
               "verify/answers.yml",
-              "verify/preflight.py",
               "verify/trigger.py",
               "verify/README.md",
           ):
@@ -139,7 +138,7 @@ jobs:
               if not path.exists():
                   errors.append(f"::error file={path.as_posix()}::missing required file")
 
-          for relative_path in ("verify/preflight.py", "verify/trigger.py"):
+          for relative_path in ("verify/trigger.py",):
               path = stack_dir / relative_path
               if not path.exists():
                   continue
