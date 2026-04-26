@@ -221,3 +221,6 @@ jobs:
               print(f"::error::stacks/{stack}/copier.yml questions missing help or type: {failed}")
               sys.exit(1)
           '
+
+      - name: Validate copier --pretend with stack answers
+        run: uvx copier copy --defaults --trust --pretend --vcs-ref=HEAD --data-file stacks/${{ matrix.stack }}/verify/answers.yml stacks/${{ matrix.stack }} /tmp/throwaway-${{ matrix.stack }}
