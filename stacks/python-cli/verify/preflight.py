@@ -20,12 +20,34 @@ import sys
 from pathlib import Path
 
 
+CHECKS: list[tuple[str, list[str]]] = [
+    ("uv sync", ["uv", "sync", "--frozen"]),
+    ("ruff check", ["uv", "run", "ruff", "check", "."]),
+    ("ruff format", ["uv", "run", "ruff", "format", "--check", "."]),
+    ("ty check", ["uv", "run", "ty", "check", "src/", "tests/"]),
+    ("pytest unit", ["uv", "run", "pytest", "-m", "unit"]),
+    ("uv build", ["uv", "build"]),
+    ("twine check", ["uvx", "twine", "check", "dist/*"]),
+]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project_dir", type=Path)
     args = parser.parse_args()
 
-    return subprocess.run(["uv", "sync", "--frozen"], cwd=args.project_dir).returncode
+    failed: list[str] = []
+    for name, cmd in CHECKS:
+        print(f"::group::{name}", flush=True)
+        rc = subprocess.run(cmd, cwd=args.project_dir).returncode
+        print("::endgroup::", flush=True)
+        if rc != 0:
+            failed.append(name)
+
+    if failed:
+        print(f"::error::preflight failed: {', '.join(failed)}")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":
