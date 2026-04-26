@@ -36,10 +36,10 @@ labels:
     color: "0366d6"
     description: "Dependency updates"
   - name: "stack: python-cli"
-    color: "fbca04"
+    color: "3776ab"
     description: "Changes to the python-cli stack"
   - name: "stack: astro-ts-react"
-    color: "fbca04"
+    color: "ff5a1f"
     description: "Changes to the astro-ts-react stack"
 
 branches:
