@@ -174,3 +174,25 @@ jobs:
                   print(f"::error::stacks/{stack}/{script} is missing PEP 723 # /// script block")
                   failed = True
           sys.exit(1 if failed else 0)
+
+      - name: Validate copier.yml structure
+        shell: python
+        run: |
+          import os, sys
+          stack = "${{ matrix.stack }}"
+          path = os.path.join("stacks", stack, "copier.yml")
+          if not os.path.exists(path):
+              sys.exit(0)
+          with open(path, "r") as f:
+              content = f.read()
+
+          failed = False
+          if "_subdirectory: template" not in content:
+              print(f"::error::stacks/{stack}/copier.yml _subdirectory must be 'template'")
+              failed = True
+
+          if "_min_copier_version:" not in content:
+              print(f"::error::stacks/{stack}/copier.yml _min_copier_version is missing")
+              failed = True
+
+          sys.exit(1 if failed else 0)
