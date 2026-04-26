@@ -10,5 +10,5 @@ FROM mcr.microsoft.com/devcontainers/python:3.0.6-3.13@sha256:9b0762901a555c31c2
 
 COPY --from=uv /uv /uvx /usr/local/bin/
 
-# 1.49.0
-RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.49.0
+# 1.50.0
+RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.50.0
