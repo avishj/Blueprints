@@ -38,8 +38,16 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
 
+      - name: Install just
+        run: uv tool install rust-just
+
       - name: Regen template
         run: uvx copier copy --defaults --trust --vcs-ref=HEAD --data-file stacks/${{ inputs.stack }}/verify/answers.yml stacks/${{ inputs.stack }} /tmp/out
 
-      - name: Run preflight script
-        run: ./stacks/${{ inputs.stack }}/verify/preflight.py /tmp/out
+      - name: Run preflight commands
+        working-directory: /tmp/out
+        run: |
+          git init --quiet
+          just install
+          just lint
+          just build
