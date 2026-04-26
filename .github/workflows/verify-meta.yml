@@ -10,4 +10,9 @@ on:
 
 permissions: {}
 
-jobs: {}
+jobs:
+  meta-security:
+    name: Security Scans
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      security-events: write  # passed to _security.yml for SARIF upload
