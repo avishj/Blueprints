@@ -196,3 +196,28 @@ jobs:
               failed = True
 
           sys.exit(1 if failed else 0)
+
+      - name: Validate copier.yml questions completeness
+        run: |
+          uv run --with pyyaml python -c '
+          import os, sys, yaml
+          stack = "${{ matrix.stack }}"
+          path = os.path.join("stacks", stack, "copier.yml")
+          if not os.path.exists(path):
+              sys.exit(0)
+          with open(path) as f:
+              data = yaml.safe_load(f)
+          
+          failed = []
+          for k, v in data.items():
+              if k.startswith("_"):
+                  continue
+              if not isinstance(v, dict):
+                  continue
+              if "help" not in v or "type" not in v:
+                  failed.append(k)
+          
+          if failed:
+              print(f"::error::stacks/{stack}/copier.yml questions missing help or type: {failed}")
+              sys.exit(1)
+          '
