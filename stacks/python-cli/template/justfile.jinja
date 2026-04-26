@@ -7,6 +7,10 @@ set dotenv-load
 default:
     @just --list
 
+install:
+    uv sync --frozen
+    uv run pre-commit install
+
 lint:
     uvx pre-commit run --all-files
 
