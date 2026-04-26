@@ -351,7 +351,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 - [ ] `FROM ghcr.io/astral-sh/uv:...` pinned with `@sha256:` digest
 - [ ] `FROM mcr.microsoft.com/devcontainers/python:3.13` pinned with `@sha256:` digest
 - [ ] `COPY --from=uv /uv /uvx /usr/local/bin/`
-- [ ] `uv tool install just==<version>` installs just
+- [ ] `uv tool install rust-just==1.50.0` installs just
 
 **`.devcontainer/devcontainer.json`:**
 
