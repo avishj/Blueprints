@@ -42,7 +42,7 @@ jobs:
         run: uv tool install rust-just==1.50.0
 
       - name: Regen template
-        run: uvx copier copy --defaults --trust --vcs-ref=HEAD --data-file stacks/${{ inputs.stack }}/verify/answers.yml stacks/${{ inputs.stack }} /tmp/out
+        run: uvx copier==9.14.3 copy --defaults --trust --vcs-ref=HEAD --data-file stacks/${{ inputs.stack }}/verify/answers.yml stacks/${{ inputs.stack }} /tmp/out
 
       - name: Run preflight commands
         working-directory: /tmp/out
