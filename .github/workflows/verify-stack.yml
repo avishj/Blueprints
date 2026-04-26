@@ -39,7 +39,7 @@ jobs:
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
 
       - name: Install just
-        run: uv tool install rust-just
+        run: uv tool install rust-just==1.50.0
 
       - name: Regen template
         run: uvx copier copy --defaults --trust --vcs-ref=HEAD --data-file stacks/${{ inputs.stack }}/verify/answers.yml stacks/${{ inputs.stack }} /tmp/out
