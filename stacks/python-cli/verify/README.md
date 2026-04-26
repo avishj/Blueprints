@@ -17,8 +17,8 @@ These files let CI regenerate the template and prove the result still works.
 ## Run locally
 
 ```bash
-uv tool install copier
-uv tool install rust-just
+uv tool install copier==9.14.3
+uv tool install rust-just==1.50.0
 copier copy --defaults --vcs-ref=HEAD \
   --data-file stacks/python-cli/verify/answers.yml \
   stacks/python-cli /tmp/python-cli-out
