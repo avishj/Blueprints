@@ -150,3 +150,27 @@ jobs:
                   print(f"::error::stacks/{stack} is missing {req}")
                   failed = True
           sys.exit(1 if failed else 0)
+
+      - name: Validate verify scripts shebang and mode
+        shell: python
+        run: |
+          import os, sys
+          stack = "${{ matrix.stack }}"
+          scripts = ["verify/preflight.py", "verify/trigger.py"]
+          failed = False
+          for script in scripts:
+              path = os.path.join("stacks", stack, script)
+              if not os.path.exists(path):
+                  continue
+              if not os.access(path, os.X_OK):
+                  print(f"::error::stacks/{stack}/{script} is not executable")
+                  failed = True
+              with open(path, "r") as f:
+                  content = f.read()
+              if not content.startswith("#!/usr/bin/env -S uv run --script"):
+                  print(f"::error::stacks/{stack}/{script} has incorrect shebang")
+                  failed = True
+              if "# /// script" not in content:
+                  print(f"::error::stacks/{stack}/{script} is missing PEP 723 # /// script block")
+                  failed = True
+          sys.exit(1 if failed else 0)
