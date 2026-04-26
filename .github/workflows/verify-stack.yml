@@ -48,6 +48,7 @@ jobs:
         working-directory: /tmp/out
         run: |
           git init --quiet
+          git switch -c verify/preflight
           just install
           just lint
           just build
