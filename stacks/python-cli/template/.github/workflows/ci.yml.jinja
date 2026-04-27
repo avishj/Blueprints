@@ -101,7 +101,7 @@ jobs:
               ("YAML lint",            "uvx yamllint==1.38.0 -d '{extends: default, rules: {line-length: disable, truthy: disable}}' ."),
               ("EditorConfig",         "uvx --from editorconfig-checker==3.6.1 ec"),
               ("Validate pyproject",   "uvx validate-pyproject==0.25 pyproject.toml"),
-              ("Docs build",           "uv run zensical==0.0.36 build"),
+              ("Docs build",           "uv run zensical build"),
               ("Schema: workflows",    "uvx check-jsonschema==0.37.1 --builtin-schema vendor.github-workflows .github/workflows/*.yml"),
               ("Schema: issue forms",  "uvx check-jsonschema==0.37.1 --builtin-schema vendor.github-issue-forms .github/ISSUE_TEMPLATE/bug_report.yml .github/ISSUE_TEMPLATE/feature_request.yml"),
               ("Schema: renovate",     "uvx check-jsonschema==0.37.1 --builtin-schema vendor.renovate renovate.json"),

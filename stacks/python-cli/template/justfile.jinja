@@ -25,8 +25,8 @@ build:
     uv run --with dist/*.whl --no-project -- {{ project_name }} --help
 
 docs:
-    uv run zensical==0.0.36 build
-    uv run zensical==0.0.36 serve
+    uv run zensical build
+    uv run zensical serve
 
 ci:
     uvx pre-commit==4.6.0 run --all-files
