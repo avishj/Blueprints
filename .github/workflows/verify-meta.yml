@@ -171,4 +171,14 @@ jobs:
           PY
 
       - name: Validate copier --pretend with stack answers
-        run: uvx copier==9.14.3 copy --defaults --trust --pretend --vcs-ref=HEAD --data-file stacks/${{ matrix.stack }}/verify/answers.yml stacks/${{ matrix.stack }} /tmp/throwaway-${{ matrix.stack }}
+        env:
+          STACK: ${{ matrix.stack }}
+        run: |
+          uvx copier==9.14.3 copy \
+            --defaults \
+            --trust \
+            --pretend \
+            --vcs-ref=HEAD \
+            --data-file "stacks/$STACK/verify/answers.yml" \
+            "stacks/$STACK" \
+            "/tmp/throwaway-$STACK"
