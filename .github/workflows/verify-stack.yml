@@ -173,7 +173,7 @@ jobs:
               with open(summary, "a", encoding="utf-8") as fh:
                   fh.write(f"## Smoke push CI ({repo}@{sha[:7]})\n\n")
                   for r in runs:
-                      icon = "✅" if r["conclusion"] == "success" else "❌"
+                      icon = "✅" if r["conclusion"] in ("success", "skipped", "neutral") else "❌"
                       fh.write(f"- {icon} [{r['name']}]({r['url']}) — {r['conclusion']}\n")
           if failed:
               names = ", ".join(r["name"] for r in failed)
@@ -264,7 +264,7 @@ jobs:
               with open(summary, "a", encoding="utf-8") as fh:
                   fh.write(f"## Smoke PR CI ({repo}@{sha[:7]})\n\n")
                   for r in runs:
-                      icon = "✅" if r["conclusion"] == "success" else "❌"
+                      icon = "✅" if r["conclusion"] in ("success", "skipped", "neutral") else "❌"
                       fh.write(f"- {icon} [{r['name']}]({r['url']}) — {r['conclusion']}\n")
           if failed:
               names = ", ".join(r["name"] for r in failed)
