@@ -61,3 +61,32 @@ jobs:
           just install
           just lint
           just build
+
+  smoke:
+    name: Smoke
+    needs: preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions: {}
+    concurrency:
+      group: smoke-${{ inputs.stack }}
+      cancel-in-progress: false
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df  # v2.18.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+
+      - name: Placeholder
+        env:
+          STACK: ${{ inputs.stack }}
+        run: echo "smoke for $STACK"
