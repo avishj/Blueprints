@@ -97,3 +97,20 @@ jobs:
             --data-file "stacks/$STACK/verify/answers.yml" \
             "stacks/$STACK" \
             /tmp/out
+
+      - name: Force-push regen to smoke main
+        id: push
+        working-directory: /tmp/out
+        env:
+          STACK: ${{ inputs.stack }}
+          REF: ${{ inputs.ref }}
+          SMOKE_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: |
+          git init --quiet
+          git config user.name "blueprints-verify[bot]"
+          git config user.email "blueprints-verify@users.noreply.github.com"
+          git add -A
+          git commit --quiet -m "smoke: regen from $REF"
+          git remote add origin "https://x-access-token:$SMOKE_TOKEN@github.com/avishj/blueprints-smoke-$STACK.git"
+          git push --force --quiet origin HEAD:main
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
