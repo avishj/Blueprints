@@ -143,7 +143,7 @@ jobs:
           sha = os.environ["SHA"]
           deadline = time.time() + 20 * 60
           poll_interval = 15
-          settle_grace = 60  # tolerate empty results briefly while runs register
+          settle_window = 30  # min seconds before trusting "all completed" — lets slower runs register
 
           def list_runs() -> list[dict]:
               result = subprocess.run(
@@ -156,9 +156,10 @@ jobs:
           started = time.time()
           while True:
               runs = list_runs()
-              if runs and all(r["status"] == "completed" for r in runs):
+              elapsed = time.time() - started
+              if runs and all(r["status"] == "completed" for r in runs) and elapsed >= settle_window:
                   break
-              if not runs and time.time() - started > settle_grace:
+              if not runs and elapsed > settle_window * 2:
                   print(f"::error::no workflow runs registered for {sha} on {repo}")
                   sys.exit(1)
               if time.time() > deadline:
@@ -233,7 +234,7 @@ jobs:
           sha = os.environ["SHA"]
           deadline = time.time() + 20 * 60
           poll_interval = 15
-          settle_grace = 60
+          settle_window = 30  # min seconds before trusting "all completed" — lets slower runs register
 
           def list_runs() -> list[dict]:
               result = subprocess.run(
@@ -246,9 +247,10 @@ jobs:
           started = time.time()
           while True:
               runs = list_runs()
-              if runs and all(r["status"] == "completed" for r in runs):
+              elapsed = time.time() - started
+              if runs and all(r["status"] == "completed" for r in runs) and elapsed >= settle_window:
                   break
-              if not runs and time.time() - started > settle_grace:
+              if not runs and elapsed > settle_window * 2:
                   print(f"::error::no workflow runs registered for PR {sha} on {repo}")
                   sys.exit(1)
               if time.time() > deadline:
