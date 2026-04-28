@@ -67,7 +67,8 @@ jobs:
     needs: preflight
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    permissions: {}
+    permissions:
+      pull-requests: write  # rolling smoke summary on the Blueprints PR
     concurrency:
       group: smoke-${{ inputs.stack }}
       cancel-in-progress: false
@@ -274,3 +275,45 @@ jobs:
           else
             gh api -X DELETE "repos/$repo/git/refs/heads/$BRANCH" || true
           fi
+
+      - name: Find smoke comment
+        if: always() && github.event_name == 'pull_request'
+        id: find-comment
+        uses: peter-evans/find-comment@3eae4d37986fb5a8592848f6a574fdf654e61f9e  # v3.1.0
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: github-actions[bot]
+          body-includes: <!-- blueprints-smoke-${{ inputs.stack }} -->
+
+      - name: Render smoke comment body
+        if: always() && github.event_name == 'pull_request'
+        id: body
+        env:
+          STACK: ${{ inputs.stack }}
+          REF: ${{ inputs.ref }}
+          PUSH_CI: ${{ steps.push-ci.outcome }}
+          PR_CI: ${{ steps.pr-ci.outcome }}
+          PR_URL: ${{ steps.pr.outputs.url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          icon() { [[ "$1" == "success" ]] && echo "✅" || echo "❌"; }
+          {
+            echo "<!-- blueprints-smoke-$STACK -->"
+            echo "### Smoke: \`$STACK\`"
+            echo
+            echo "- $(icon "$PUSH_CI") push CI"
+            echo "- $(icon "$PR_CI") PR CI"
+            echo
+            echo "Verify run: $RUN_URL"
+            echo "Smoke PR: ${PR_URL:-_not opened_}"
+            echo "Ref: \`$REF\`"
+          } > /tmp/smoke-comment.md
+
+      - name: Post smoke comment
+        if: always() && github.event_name == 'pull_request'
+        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9  # v5.0.0
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          body-path: /tmp/smoke-comment.md
+          edit-mode: replace
