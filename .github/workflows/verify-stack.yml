@@ -259,3 +259,18 @@ jobs:
               print(f"::error::PR CI failures on {repo}@{sha}: {names}")
               sys.exit(1)
           PY
+
+      - name: Cleanup verify PR and branch
+        if: always() && steps.pr.outputs.branch != ''
+        env:
+          STACK: ${{ inputs.stack }}
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          BRANCH: ${{ steps.pr.outputs.branch }}
+          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: |
+          repo="avishj/blueprints-smoke-$STACK"
+          if [[ -n "$PR_NUMBER" ]]; then
+            gh pr close "$PR_NUMBER" --repo "$repo" --delete-branch || true
+          else
+            gh api -X DELETE "repos/$repo/git/refs/heads/$BRANCH" || true
+          fi
