@@ -169,3 +169,38 @@ jobs:
               print(f"::error::push CI failures on {repo}@{sha}: {names}")
               sys.exit(1)
           PY
+
+      - name: Open verify PR on smoke repo
+        id: pr
+        env:
+          STACK: ${{ inputs.stack }}
+          RUN_ID: ${{ github.run_id }}
+          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: |
+          repo="avishj/blueprints-smoke-$STACK"
+          branch="verify/$RUN_ID"
+          trigger="$GITHUB_WORKSPACE/stacks/$STACK/verify/trigger.py"
+
+          gh repo clone "$repo" /tmp/smoke-clone -- --depth 1
+          cd /tmp/smoke-clone
+          git config user.name "blueprints-verify[bot]"
+          git config user.email "blueprints-verify@users.noreply.github.com"
+          git switch -c "$branch"
+          "$trigger"
+          git add -A
+          git commit --quiet -m "verify: trigger run $RUN_ID"
+          git push --quiet --set-upstream origin "$branch"
+
+          pr_url=$(gh pr create \
+            --repo "$repo" \
+            --base main \
+            --head "$branch" \
+            --title "verify: $RUN_ID" \
+            --body "Automated verify PR from Blueprints run $RUN_ID." \
+            --label verify)
+          pr_number="${pr_url##*/}"
+          echo "number=$pr_number" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "url=$pr_url" >> "$GITHUB_OUTPUT"
+          sha=$(git rev-parse HEAD)
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
