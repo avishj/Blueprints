@@ -16,7 +16,7 @@ This stack is a [Copier](https://copier.readthedocs.io/) template. Scaffold a ne
 
 ```bash
 git clone https://github.com/avishj/blueprints /tmp/blueprints
-uvx copier==9.14.3 copy /tmp/blueprints/stacks/python-cli my-project --trust
+uvx copier@9.14.3 copy /tmp/blueprints/stacks/python-cli my-project --trust
 rm -rf /tmp/blueprints
 ```
 
