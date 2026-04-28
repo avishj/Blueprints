@@ -26,6 +26,35 @@ jobs:
     permissions:
       security-events: write  # passed through to _security.yml for SARIF upload
 
+  changes:
+    name: Detect Changed Stacks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      stacks: ${{ steps.filter.outputs.changes }}
+    steps:
+      - name: Harden runner
+        uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df  # v2.18.0
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Detect changed stacks
+        id: filter
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d  # v4.0.1
+        with:
+          filters: |
+            astro-ts-react:
+              - 'stacks/astro-ts-react/**'
+            python-cli:
+              - 'stacks/python-cli/**'
+
   ci-passed:
     name: CI Passed
     if: always()
