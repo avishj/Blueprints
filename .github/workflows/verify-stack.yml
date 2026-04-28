@@ -69,6 +69,10 @@ jobs:
   smoke:
     name: Smoke
     needs: preflight
+    # Skip on fork PRs: SMOKE_TOKEN is unavailable to forked workflows.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
