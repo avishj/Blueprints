@@ -55,6 +55,22 @@ jobs:
             python-cli:
               - 'stacks/python-cli/**'
 
+  verify-stack:
+    name: Verify Stack
+    needs: changes
+    if: needs.changes.outputs.stacks != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: ${{ fromJson(needs.changes.outputs.stacks) }}
+    uses: ./.github/workflows/verify-stack.yml
+    with:
+      stack: ${{ matrix.stack }}
+      ref: ${{ github.event.pull_request.head.sha || github.sha }}
+    permissions:
+      pull-requests: write  # smoke job posts rolling comment on the PR
+    secrets: inherit
+
   ci-passed:
     name: CI Passed
     if: always()
