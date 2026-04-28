@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      pull-requests: read
+      pull-requests: read  # dorny/paths-filter reads PR file list via the API on pull_request events
     outputs:
       stacks: ${{ steps.filter.outputs.changes }}
     steps:
