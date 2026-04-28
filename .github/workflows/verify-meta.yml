@@ -118,6 +118,10 @@ jobs:
           shebang = "#!/usr/bin/env -S uv run --script"
           errors: list[str] = []
 
+          def report(path: Path, message: str) -> None:
+              location = path.as_posix()
+              errors.append(f"::error file={location}::{location}: {message}")
+
           for relative_path in (
               "copier.yml",
               "template",
@@ -129,41 +133,36 @@ jobs:
           ):
               path = stack_dir / relative_path
               if not path.exists():
-                  errors.append(f"::error file={path.as_posix()}::missing required file")
+                  report(path, "missing required file")
 
-          for relative_path in ("verify/trigger.py",):
-              path = stack_dir / relative_path
-              if not path.exists():
-                  continue
-
-              content = path.read_text(encoding="utf-8")
+          trigger_path = stack_dir / "verify/trigger.py"
+          if trigger_path.exists():
+              content = trigger_path.read_text(encoding="utf-8")
               for message, valid in (
-                  ("script must be executable", os.access(path, os.X_OK)),
+                  ("script must be executable", os.access(trigger_path, os.X_OK)),
                   ("script must start with the uv shebang", content.startswith(shebang)),
                   ("script must include a PEP 723 block", "# /// script" in content),
               ):
                   if not valid:
-                      errors.append(f"::error file={path.as_posix()}::{message}")
+                      report(trigger_path, message)
 
           if copier_path.exists():
               content = copier_path.read_text(encoding="utf-8")
               if "_subdirectory: template" not in content:
-                  errors.append(f"::error file={copier_path.as_posix()}::_subdirectory must be 'template'")
+                  report(copier_path, "_subdirectory must be 'template'")
               if "_min_copier_version:" not in content:
-                  errors.append(f"::error file={copier_path.as_posix()}::_min_copier_version is required")
+                  report(copier_path, "_min_copier_version is required")
 
               data = yaml.safe_load(content) or {}
               if not isinstance(data, dict):
-                  errors.append(f"::error file={copier_path.as_posix()}::copier.yml must be a mapping")
+                  report(copier_path, "copier.yml must be a mapping")
               else:
                   for question_name, question in data.items():
                       if question_name.startswith("_") or not isinstance(question, dict):
                           continue
                       for field in ("help", "type"):
                           if field not in question:
-                              errors.append(
-                                  f"::error file={copier_path.as_posix()}::question '{question_name}' is missing {field}"
-                              )
+                              report(copier_path, f"question '{question_name}' is missing {field}")
 
           if errors:
               print("\n".join(errors))
