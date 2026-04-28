@@ -204,3 +204,58 @@ jobs:
           echo "url=$pr_url" >> "$GITHUB_OUTPUT"
           sha=$(git rev-parse HEAD)
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for smoke PR CI
+        id: pr-ci
+        env:
+          STACK: ${{ inputs.stack }}
+          SHA: ${{ steps.pr.outputs.sha }}
+          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: |
+          python <<'PY'
+          import json
+          import os
+          import subprocess
+          import sys
+          import time
+
+          repo = f"avishj/blueprints-smoke-{os.environ['STACK']}"
+          sha = os.environ["SHA"]
+          deadline = time.time() + 20 * 60
+          poll_interval = 15
+          settle_grace = 60
+
+          def list_runs() -> list[dict]:
+              result = subprocess.run(
+                  ["gh", "run", "list", "--repo", repo, "--commit", sha,
+                   "--json", "databaseId,status,conclusion,name,url"],
+                  check=True, capture_output=True, text=True,
+              )
+              return json.loads(result.stdout)
+
+          started = time.time()
+          while True:
+              runs = list_runs()
+              if runs and all(r["status"] == "completed" for r in runs):
+                  break
+              if not runs and time.time() - started > settle_grace:
+                  print(f"::error::no workflow runs registered for PR {sha} on {repo}")
+                  sys.exit(1)
+              if time.time() > deadline:
+                  print(f"::error::timed out waiting for PR CI on {repo}@{sha}")
+                  sys.exit(1)
+              time.sleep(poll_interval)
+
+          failed = [r for r in runs if r["conclusion"] not in ("success", "skipped", "neutral")]
+          summary = os.environ.get("GITHUB_STEP_SUMMARY")
+          if summary:
+              with open(summary, "a", encoding="utf-8") as fh:
+                  fh.write(f"## Smoke PR CI ({repo}@{sha[:7]})\n\n")
+                  for r in runs:
+                      icon = "✅" if r["conclusion"] == "success" else "❌"
+                      fh.write(f"- {icon} [{r['name']}]({r['url']}) — {r['conclusion']}\n")
+          if failed:
+              names = ", ".join(r["name"] for r in failed)
+              print(f"::error::PR CI failures on {repo}@{sha}: {names}")
+              sys.exit(1)
+          PY
