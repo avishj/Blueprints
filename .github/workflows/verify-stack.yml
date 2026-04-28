@@ -16,6 +16,10 @@ on:
         description: 'Git ref to checkout and verify'
         type: string
         required: true
+    secrets:
+      SMOKE_TOKEN:
+        description: 'PAT with Contents/PRs R/W on the smoke repo'
+        required: true
 
 jobs:
   preflight:
