@@ -86,7 +86,14 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
 
-      - name: Placeholder
+      - name: Regen template
         env:
           STACK: ${{ inputs.stack }}
-        run: echo "smoke for $STACK"
+        run: |
+          uvx copier@9.14.3 copy \
+            --defaults \
+            --trust \
+            --vcs-ref=HEAD \
+            --data-file "stacks/$STACK/verify/answers.yml" \
+            "stacks/$STACK" \
+            /tmp/out
