@@ -50,14 +50,14 @@ jobs:
       - name: Validate schemas
         if: '!cancelled()'
         run: |
-          uvx check-jsonschema==0.37.1 --builtin-schema vendor.renovate renovate.json
-          uvx check-jsonschema==0.37.1 --builtin-schema vendor.github-workflows .github/workflows/*.yml
-          uvx check-jsonschema==0.37.1 --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
+          uvx check-jsonschema@0.37.1 --builtin-schema vendor.renovate renovate.json
+          uvx check-jsonschema@0.37.1 --builtin-schema vendor.github-workflows .github/workflows/*.yml
+          uvx check-jsonschema@0.37.1 --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
 
       - name: YAML lint
         if: '!cancelled()'
         run: >-
-          uvx yamllint==1.38.0
+          uvx yamllint@1.38.0
           -d '{extends: default, rules: {line-length: disable, truthy: disable}, ignore: "stacks/*/template/**"}'
           .
 
@@ -174,7 +174,7 @@ jobs:
         env:
           STACK: ${{ matrix.stack }}
         run: |
-          uvx copier==9.14.3 copy \
+          uvx copier@9.14.3 copy \
             --defaults \
             --trust \
             --pretend \

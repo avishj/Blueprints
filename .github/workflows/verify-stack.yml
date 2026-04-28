@@ -45,7 +45,7 @@ jobs:
         env:
           STACK: ${{ inputs.stack }}
         run: |
-          uvx copier==9.14.3 copy \
+          uvx copier@9.14.3 copy \
             --defaults \
             --trust \
             --vcs-ref=HEAD \
