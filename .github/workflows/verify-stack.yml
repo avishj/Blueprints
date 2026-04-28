@@ -75,6 +75,7 @@ jobs:
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    environment: smoke  # scopes SMOKE_TOKEN to this job; gate via env protection rules
     permissions:
       pull-requests: write  # rolling smoke summary on the Blueprints PR
     concurrency:
