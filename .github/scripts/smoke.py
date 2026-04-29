@@ -20,6 +20,8 @@ Subcommands:
 - ``open-pr``: clone the smoke repo, run the stack's ``verify/trigger.py``,
   push a verify branch, and open the verify PR. Emits PR metadata as step
   outputs.
+- ``cleanup``: close the verify PR (deleting its branch) or, if no PR was
+  ever opened, delete the dangling branch ref. Best-effort; never fails.
 """
 
 from __future__ import annotations
@@ -173,6 +175,21 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_cleanup(args: argparse.Namespace) -> int:
+    """Close the verify PR (or fall back to deleting its branch). Never fails."""
+    repo = smoke_repo(args.stack)
+    if args.pr_number:
+        cmd = ["pr", "close", args.pr_number, "--repo", repo, "--delete-branch"]
+    else:
+        cmd = ["api", "-X", "DELETE", f"repos/{repo}/git/refs/heads/{args.branch}"]
+    try:
+        gh(*cmd)
+    except subprocess.CalledProcessError:
+        # Idempotent: PR already closed / branch already deleted is fine.
+        pass
+    return 0
+
+
 # --- argparse glue ---
 
 
@@ -198,6 +215,12 @@ def _build_parser() -> argparse.ArgumentParser:
     p_pr.add_argument("--stack", required=True)
     p_pr.add_argument("--run-id", required=True, help="github.run_id of this verify run.")
     p_pr.set_defaults(func=cmd_open_pr)
+
+    p_cleanup = sub.add_parser("cleanup", help="Close the verify PR (or delete its branch).")
+    p_cleanup.add_argument("--stack", required=True)
+    p_cleanup.add_argument("--pr-number", default="", help="Empty when no PR was opened.")
+    p_cleanup.add_argument("--branch", default="", help="Branch name to delete as fallback.")
+    p_cleanup.set_defaults(func=cmd_cleanup)
 
     return parser
 
