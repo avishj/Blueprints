@@ -213,10 +213,10 @@ def cmd_comment(args: argparse.Namespace) -> int:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--stack", required=True)
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     p_wait = sub.add_parser("wait", help="Wait for smoke-repo CI runs to complete.")
-    p_wait.add_argument("--stack", required=True)
     p_wait.add_argument("--sha", required=True)
     p_wait.add_argument("--kind", choices=("push", "pr"), required=True)
     p_wait.add_argument("--timeout", type=int, default=20 * 60, help="Seconds.")
@@ -230,18 +230,15 @@ def _build_parser() -> argparse.ArgumentParser:
     p_wait.set_defaults(func=cmd_wait)
 
     p_pr = sub.add_parser("open-pr", help="Open the verify PR on the smoke repo.")
-    p_pr.add_argument("--stack", required=True)
     p_pr.add_argument("--run-id", required=True, help="github.run_id of this verify run.")
     p_pr.set_defaults(func=cmd_open_pr)
 
     p_cleanup = sub.add_parser("cleanup", help="Close the verify PR (or delete its branch).")
-    p_cleanup.add_argument("--stack", required=True)
     p_cleanup.add_argument("--pr-number", default="", help="Empty when no PR was opened.")
     p_cleanup.add_argument("--branch", default="", help="Branch name to delete as fallback.")
     p_cleanup.set_defaults(func=cmd_cleanup)
 
     p_comment = sub.add_parser("comment", help="Upsert the smoke summary comment on the Blueprints PR.")
-    p_comment.add_argument("--stack", required=True)
     p_comment.add_argument("--ref", required=True)
     p_comment.add_argument("--push-outcome", required=True, help="steps.push-ci.outcome")
     p_comment.add_argument("--pr-outcome", required=True, help="steps.pr-ci.outcome")

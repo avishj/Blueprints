@@ -132,7 +132,7 @@ jobs:
           STACK: ${{ inputs.stack }}
           SHA: ${{ steps.push.outputs.sha }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: python .github/scripts/smoke.py wait --kind push --stack "$STACK" --sha "$SHA"
+        run: python .github/scripts/smoke.py --stack "$STACK" wait --kind push --sha "$SHA"
 
       - name: Open verify PR on smoke repo
         id: pr
@@ -140,7 +140,7 @@ jobs:
           STACK: ${{ inputs.stack }}
           RUN_ID: ${{ github.run_id }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: python .github/scripts/smoke.py open-pr --stack "$STACK" --run-id "$RUN_ID"
+        run: python .github/scripts/smoke.py --stack "$STACK" open-pr --run-id "$RUN_ID"
 
       - name: Wait for smoke PR CI
         id: pr-ci
@@ -148,7 +148,7 @@ jobs:
           STACK: ${{ inputs.stack }}
           SHA: ${{ steps.pr.outputs.sha }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: python .github/scripts/smoke.py wait --kind pr --stack "$STACK" --sha "$SHA"
+        run: python .github/scripts/smoke.py --stack "$STACK" wait --kind pr --sha "$SHA"
 
       - name: Cleanup verify PR and branch
         if: always() && steps.pr.outputs.branch != ''
@@ -158,8 +158,8 @@ jobs:
           BRANCH: ${{ steps.pr.outputs.branch }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
         run: >-
-          python .github/scripts/smoke.py cleanup
-          --stack "$STACK" --pr-number "$PR_NUMBER" --branch "$BRANCH"
+          python .github/scripts/smoke.py --stack "$STACK" cleanup
+          --pr-number "$PR_NUMBER" --branch "$BRANCH"
 
       - name: Post smoke summary on Blueprints PR
         if: always() && github.event_name == 'pull_request'
@@ -173,8 +173,8 @@ jobs:
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           BP_PR: ${{ github.event.pull_request.number }}
         run: >-
-          python .github/scripts/smoke.py comment
-          --stack "$STACK" --ref "$REF"
+          python .github/scripts/smoke.py --stack "$STACK" comment
+          --ref "$REF"
           --push-outcome "$PUSH_OUTCOME" --pr-outcome "$PR_OUTCOME"
           --smoke-pr-url "$SMOKE_PR_URL" --run-url "$RUN_URL"
           --blueprints-pr "$BP_PR"
