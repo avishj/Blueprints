@@ -17,6 +17,9 @@ Subcommands:
 
 - ``wait``: poll smoke-repo CI runs for a SHA until all complete; mirror
   outcomes to the job summary; exit non-zero on failure or timeout.
+- ``open-pr``: clone the smoke repo, run the stack's ``verify/trigger.py``,
+  push a verify branch, and open the verify PR. Emits PR metadata as step
+  outputs.
 """
 
 from __future__ import annotations
@@ -27,9 +30,13 @@ import os
 import subprocess
 import sys
 import time
+from pathlib import Path
 from typing import Any
 
 OK_CONCLUSIONS = frozenset({"success", "skipped", "neutral"})
+
+GIT_AUTHOR_NAME = "blueprints-verify[bot]"
+GIT_AUTHOR_EMAIL = "blueprints-verify@users.noreply.github.com"
 
 
 # --- shared helpers ---
@@ -39,6 +46,23 @@ def gh(*args: str, parse_json: bool = False) -> Any:
     """Run ``gh`` with ``args``; return stdout (parsed as JSON when requested)."""
     proc = subprocess.run(["gh", *args], check=True, capture_output=True, text=True)
     return json.loads(proc.stdout) if parse_json else proc.stdout
+
+
+def git(*args: str, cwd: Path | None = None) -> str:
+    """Run ``git`` with ``args`` in ``cwd``; return stdout."""
+    proc = subprocess.run(
+        ["git", *args], check=True, capture_output=True, text=True, cwd=cwd,
+    )
+    return proc.stdout
+
+
+def set_output(key: str, value: str) -> None:
+    """Append ``key=value`` to ``$GITHUB_OUTPUT`` (no-op outside Actions)."""
+    path = os.environ.get("GITHUB_OUTPUT")
+    if not path:
+        return
+    with open(path, "a", encoding="utf-8") as fh:
+        fh.write(f"{key}={value}\n")
 
 
 def step_summary(markdown: str) -> None:
@@ -112,6 +136,43 @@ def cmd_wait(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_open_pr(args: argparse.Namespace) -> int:
+    """Clone smoke repo, run the stack trigger, push a verify branch, open the PR."""
+    repo = smoke_repo(args.stack)
+    branch = f"verify/{args.run_id}"
+    workspace = Path(os.environ["GITHUB_WORKSPACE"])
+    trigger = workspace / "stacks" / args.stack / "verify" / "trigger.py"
+    clone_dir = Path("/tmp/smoke-clone")
+
+    gh("repo", "clone", repo, str(clone_dir), "--", "--depth", "1")
+
+    git("config", "user.name", GIT_AUTHOR_NAME, cwd=clone_dir)
+    git("config", "user.email", GIT_AUTHOR_EMAIL, cwd=clone_dir)
+    git("switch", "-c", branch, cwd=clone_dir)
+    subprocess.run([str(trigger)], cwd=clone_dir, check=True)
+    git("add", "-A", cwd=clone_dir)
+    git("commit", "--quiet", "-m", f"verify: trigger run {args.run_id}", cwd=clone_dir)
+    git("push", "--quiet", "--set-upstream", "origin", branch, cwd=clone_dir)
+
+    pr_url = gh(
+        "pr", "create",
+        "--repo", repo,
+        "--base", "main",
+        "--head", branch,
+        "--title", f"verify: {args.run_id}",
+        "--body", f"Automated verify PR from Blueprints run {args.run_id}.",
+        "--label", "verify",
+    ).strip()
+    pr_number = pr_url.rsplit("/", 1)[-1]
+    sha = git("rev-parse", "HEAD", cwd=clone_dir).strip()
+
+    set_output("number", pr_number)
+    set_output("branch", branch)
+    set_output("url", pr_url)
+    set_output("sha", sha)
+    return 0
+
+
 # --- argparse glue ---
 
 
@@ -132,6 +193,11 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Min seconds before trusting 'all completed' — lets slower runs register.",
     )
     p_wait.set_defaults(func=cmd_wait)
+
+    p_pr = sub.add_parser("open-pr", help="Open the verify PR on the smoke repo.")
+    p_pr.add_argument("--stack", required=True)
+    p_pr.add_argument("--run-id", required=True, help="github.run_id of this verify run.")
+    p_pr.set_defaults(func=cmd_open_pr)
 
     return parser
 
