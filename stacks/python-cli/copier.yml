@@ -77,4 +77,4 @@ copyright_holder:
 
 _tasks:
   - "uv sync"
-  - "pre-commit install"
+  - "uv run pre-commit install"
