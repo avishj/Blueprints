@@ -68,18 +68,13 @@ def smoke_repo(stack: str) -> str:
     return f"avishj/blueprints-smoke-{stack}"
 
 
-def kind_label(kind: str) -> str:
-    """Human label for the wait kind in messages and summaries."""
-    return "PR" if kind == "pr" else "push"
-
-
 # --- subcommands ---
 
 
 def cmd_wait(args: argparse.Namespace) -> int:
     """Poll smoke-repo CI for a SHA until all runs complete; mirror to job summary."""
     repo = smoke_repo(args.stack)
-    label = kind_label(args.kind)
+    label = "PR" if args.kind == "pr" else "push"
     deadline = time.time() + args.timeout
     started = time.time()
 
