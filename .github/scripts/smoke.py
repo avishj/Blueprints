@@ -240,7 +240,7 @@ def cmd_comment(args: argparse.Namespace) -> int:
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="smoke", description=__doc__.splitlines()[0])
+    parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     p_wait = sub.add_parser("wait", help="Wait for smoke-repo CI runs to complete.")
