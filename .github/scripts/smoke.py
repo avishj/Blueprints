@@ -22,6 +22,9 @@ Subcommands:
   outputs.
 - ``cleanup``: close the verify PR (deleting its branch) or, if no PR was
   ever opened, delete the dangling branch ref. Best-effort; never fails.
+- ``comment``: render the smoke summary and idempotently upsert it as a
+  rolling comment on the Blueprints PR (one comment per stack, identified
+  by an HTML marker).
 """
 
 from __future__ import annotations
@@ -190,6 +193,49 @@ def cmd_cleanup(args: argparse.Namespace) -> int:
     return 0
 
 
+def _outcome_icon(outcome: str) -> str:
+    return "✅" if outcome == "success" else "❌"
+
+
+def cmd_comment(args: argparse.Namespace) -> int:
+    """Render and idempotently upsert the rolling smoke comment on the Blueprints PR."""
+    repo = os.environ["GITHUB_REPOSITORY"]
+    marker = f"<!-- blueprints-smoke-{args.stack} -->"
+    body = "\n".join([
+        marker,
+        f"### Smoke: `{args.stack}`",
+        "",
+        f"- {_outcome_icon(args.push_outcome)} push CI",
+        f"- {_outcome_icon(args.pr_outcome)} PR CI",
+        "",
+        f"Verify run: {args.run_url}",
+        f"Smoke PR: {args.smoke_pr_url or '_not opened_'}",
+        f"Ref: `{args.ref}`",
+        "",
+    ])
+
+    jq_filter = (
+        '.[] | select(.user.login=="github-actions[bot]" '
+        f'and (.body | contains("{marker}"))) | .id'
+    )
+    existing_ids = gh(
+        "api", "--paginate", f"repos/{repo}/issues/{args.blueprints_pr}/comments",
+        "--jq", jq_filter,
+    ).split()
+
+    if existing_ids:
+        endpoint = ["api", "-X", "PATCH", f"repos/{repo}/issues/comments/{existing_ids[0]}"]
+    else:
+        endpoint = ["api", "-X", "POST", f"repos/{repo}/issues/{args.blueprints_pr}/comments"]
+
+    # Stream body via stdin so we don't have to manage a tempfile.
+    subprocess.run(
+        ["gh", *endpoint, "-F", "body=@-"],
+        input=body, text=True, check=True,
+    )
+    return 0
+
+
 # --- argparse glue ---
 
 
@@ -221,6 +267,16 @@ def _build_parser() -> argparse.ArgumentParser:
     p_cleanup.add_argument("--pr-number", default="", help="Empty when no PR was opened.")
     p_cleanup.add_argument("--branch", default="", help="Branch name to delete as fallback.")
     p_cleanup.set_defaults(func=cmd_cleanup)
+
+    p_comment = sub.add_parser("comment", help="Upsert the smoke summary comment on the Blueprints PR.")
+    p_comment.add_argument("--stack", required=True)
+    p_comment.add_argument("--ref", required=True)
+    p_comment.add_argument("--push-outcome", required=True, help="steps.push-ci.outcome")
+    p_comment.add_argument("--pr-outcome", required=True, help="steps.pr-ci.outcome")
+    p_comment.add_argument("--smoke-pr-url", default="", help="Empty when no PR was opened.")
+    p_comment.add_argument("--run-url", required=True, help="URL of this verify run.")
+    p_comment.add_argument("--blueprints-pr", required=True, help="Blueprints PR number to comment on.")
+    p_comment.set_defaults(func=cmd_comment)
 
     return parser
 

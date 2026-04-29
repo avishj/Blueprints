@@ -161,42 +161,20 @@ jobs:
           python .github/scripts/smoke.py cleanup
           --stack "$STACK" --pr-number "$PR_NUMBER" --branch "$BRANCH"
 
-      - name: Render smoke comment body
-        if: always() && github.event_name == 'pull_request'
-        env:
-          STACK: ${{ inputs.stack }}
-          REF: ${{ inputs.ref }}
-          PUSH_CI: ${{ steps.push-ci.outcome }}
-          PR_CI: ${{ steps.pr-ci.outcome }}
-          PR_URL: ${{ steps.pr.outputs.url }}
-          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        run: |
-          icon() { [[ "$1" == "success" ]] && echo "✅" || echo "❌"; }
-          {
-            echo "<!-- blueprints-smoke-$STACK -->"
-            echo "### Smoke: \`$STACK\`"
-            echo
-            echo "- $(icon "$PUSH_CI") push CI"
-            echo "- $(icon "$PR_CI") PR CI"
-            echo
-            echo "Verify run: $RUN_URL"
-            echo "Smoke PR: ${PR_URL:-_not opened_}"
-            echo "Ref: \`$REF\`"
-          } > /tmp/smoke-comment.md
-
-      - name: Post smoke comment
+      - name: Post smoke summary on Blueprints PR
         if: always() && github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          PR: ${{ github.event.pull_request.number }}
-          MARKER: <!-- blueprints-smoke-${{ inputs.stack }} -->
-        run: |
-          existing=$(gh api --paginate "repos/$REPO/issues/$PR/comments" \
-            --jq ".[] | select(.user.login==\"github-actions[bot]\" and (.body | contains(\"$MARKER\"))) | .id" \
-            | head -n1)
-          if [[ -n "$existing" ]]; then
-            gh api -X PATCH "repos/$REPO/issues/comments/$existing" -F body=@/tmp/smoke-comment.md
-          else
-            gh api -X POST "repos/$REPO/issues/$PR/comments" -F body=@/tmp/smoke-comment.md
-          fi
+          STACK: ${{ inputs.stack }}
+          REF: ${{ inputs.ref }}
+          PUSH_OUTCOME: ${{ steps.push-ci.outcome }}
+          PR_OUTCOME: ${{ steps.pr-ci.outcome }}
+          SMOKE_PR_URL: ${{ steps.pr.outputs.url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BP_PR: ${{ github.event.pull_request.number }}
+        run: >-
+          python .github/scripts/smoke.py comment
+          --stack "$STACK" --ref "$REF"
+          --push-outcome "$PUSH_OUTCOME" --pr-outcome "$PR_OUTCOME"
+          --smoke-pr-url "$SMOKE_PR_URL" --run-url "$RUN_URL"
+          --blueprints-pr "$BP_PR"
