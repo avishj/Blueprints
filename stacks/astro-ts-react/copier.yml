@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
 # --- Copier metadata ---
 _subdirectory: template
 _templates_suffix: ".jinja"
@@ -52,12 +57,14 @@ runtime:
   type: str
   default: "bun"
   when: false
+  help: "JS runtime (locked to bun)"
   validator: "{% if runtime != 'bun' %}Runtime is locked to bun{% endif %}"
 
 strict_typescript:
   type: bool
   default: true
   when: false
+  help: "Enable TypeScript strict mode (required)"
   validator: "{% if not strict_typescript %}TypeScript strict mode is required{% endif %}"
 
 motion_profile:
@@ -86,12 +93,14 @@ package_name:
   type: str
   default: "{{ project_name | lower }}"
   when: false
+  help: "NPM package name (auto-derived)"
   validator: "{% if not package_name %}package_name cannot be empty{% endif %}"
 
 module_name:
   type: str
   default: "{{ project_name | lower | replace('-', '_') }}"
   when: false
+  help: "Derived internal module name"
   validator: "{% if not module_name.isidentifier() %}project_name '{{ project_name }}' must produce a valid module identifier{% endif %}"
 
 env_prefix:

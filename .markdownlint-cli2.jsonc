@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: {{ copyright_year }} {{ copyright_holder }}
+// SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
@@ -7,6 +7,6 @@
     "MD013": false,
     "MD033": false
   },
-  "globs": ["**/*.md", "!.venv/**"],
+  "globs": ["**/*.md", "!stacks/*/template/**"],
   "gitignore": true
 }

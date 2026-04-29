@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
 ---
 name: CI
 
@@ -16,11 +20,20 @@ concurrency:
 permissions: {}
 
 jobs:
-  checks:
-    name: Checks
+  verify-meta:
+    name: Verify Meta
+    uses: ./.github/workflows/verify-meta.yml
+    permissions:
+      security-events: write  # passed through to _security.yml for SARIF upload
+
+  changes:
+    name: Detect Changed Stacks
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    permissions: {}
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read  # dorny/paths-filter reads PR file list via the API on pull_request events
+    outputs:
+      stacks: ${{ steps.filter.outputs.changes }}
     steps:
       - name: Harden runner
         uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df  # v2.18.0
@@ -32,35 +45,47 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Spell check
-        uses: crate-ci/typos@cf5f1c29a8ac336af8568821ec41919923b05a83  # v1.45.1
-
-      - name: Check links
-        if: '!cancelled()'
-        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
+      - name: Detect changed stacks
+        id: filter
+        uses: dorny/paths-filter@fbd0ab8f3e69293af611ebaee6363fc25e6d187d  # v4.0.1
         with:
-          args: --exclude-path 'stacks/[^/]+/template' '**/*.md'
-          fail: true
-          jobSummary: true
+          filters: |
+            astro-ts-react:
+              - 'stacks/astro-ts-react/**'
+            python-cli:
+              - 'stacks/python-cli/**'
 
-      - name: Validate stack structure
-        if: '!cancelled()'
-        run: |
-          failed=0
-          for stack in stacks/*/; do
-            name=$(basename "$stack")
-            for required in copier.yml README.md VERIFICATION.md template; do
-              if [ ! -e "$stack$required" ]; then
-                echo "::error::stacks/$name is missing $required"
-                failed=1
-              fi
-            done
-          done
-          exit $failed
+  verify-stack:
+    name: Verify Stack
+    needs: changes
+    if: needs.changes.outputs.stacks != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: ${{ fromJson(needs.changes.outputs.stacks) }}
+    uses: ./.github/workflows/verify-stack.yml
+    with:
+      stack: ${{ matrix.stack }}
+      ref: ${{ github.event.pull_request.head.sha || github.sha }}
+    permissions:
+      pull-requests: write  # smoke job posts rolling comment on the PR
+    secrets:
+      SMOKE_TOKEN: ${{ secrets.SMOKE_TOKEN }}
 
-      - name: Validate schemas
-        if: '!cancelled()'
+  ci-passed:
+    name: CI Passed
+    if: always()
+    needs: [verify-meta, changes, verify-stack]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Check results
+        env:
+          HAS_FAILURE: ${{ contains(needs.*.result, 'failure') }}
+          HAS_CANCELLED: ${{ contains(needs.*.result, 'cancelled') }}
         run: |
-          pipx run check-jsonschema --builtin-schema vendor.renovate renovate.json
-          pipx run check-jsonschema --builtin-schema vendor.github-workflows .github/workflows/*.yml
-          pipx run check-jsonschema --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
+          if [[ "$HAS_FAILURE" == "true" || "$HAS_CANCELLED" == "true" ]]; then
+            echo "::error::One or more jobs failed or were cancelled."
+            exit 1
+          fi

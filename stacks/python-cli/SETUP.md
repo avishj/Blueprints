@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # Setup
 
 ## Prerequisites
@@ -15,7 +21,7 @@ Clone the Blueprints repo and run Copier against the `python-cli` stack:
 
 ```bash
 git clone https://github.com/avishj/blueprints /tmp/blueprints
-uvx copier copy /tmp/blueprints/stacks/python-cli my-project --trust
+uvx copier@9.14.3 copy /tmp/blueprints/stacks/python-cli my-project --trust
 rm -rf /tmp/blueprints
 ```
 
@@ -26,7 +32,7 @@ rm -rf /tmp/blueprints
 Copier will prompt for:
 
 | Variable | Description | Example |
-|---|---|---|
+| --- | --- | --- |
 | `project_name` | PyPI/CLI name (may contain hyphens) | `my-tool` |
 | `owner` | GitHub username | `avishj` |
 | `description` | Project description | `A CLI application.` |
@@ -44,7 +50,7 @@ Copier will prompt for:
 For non-interactive scaffolding (CI or scripting):
 
 ```bash
-uvx copier copy /tmp/blueprints/stacks/python-cli my-project \
+uvx copier@9.14.3 copy /tmp/blueprints/stacks/python-cli my-project \
   --trust \
   --data project_name=my-tool \
   --data owner=avishj \
@@ -107,7 +113,7 @@ When the template changes upstream, pull updates into an existing project:
 ```bash
 git clone https://github.com/avishj/blueprints /tmp/blueprints
 cd my-project
-uvx copier update --vcs-ref=<TAG> --trust
+uvx copier@9.14.3 update --vcs-ref=<TAG> --trust
 rm -rf /tmp/blueprints
 ```
 

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # Python CLI
 
 ## What is this stack for?
@@ -10,7 +16,7 @@ This stack is a [Copier](https://copier.readthedocs.io/) template. Scaffold a ne
 
 ```bash
 git clone https://github.com/avishj/blueprints /tmp/blueprints
-uvx copier copy /tmp/blueprints/stacks/python-cli my-project --trust
+uvx copier@9.14.3 copy /tmp/blueprints/stacks/python-cli my-project --trust
 rm -rf /tmp/blueprints
 ```
 

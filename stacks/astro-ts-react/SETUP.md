@@ -1,22 +1,28 @@
+<!--
+SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # Setup
 
 ## Prerequisites
 
 - [ ] Bun installed
-- [ ] Copier available (`uvx copier`)
+- [ ] Copier available (`uvx copier@9.14.3`)
 
 ## Scaffold (interactive)
 
 ```bash
 git clone https://github.com/avishj/blueprints /tmp/blueprints
-uvx copier copy /tmp/blueprints/stacks/astro-ts-react my-project --trust
+uvx copier@9.14.3 copy /tmp/blueprints/stacks/astro-ts-react my-project --trust
 rm -rf /tmp/blueprints
 ```
 
 Copier will prompt for:
 
 | Variable | Description | Example |
-|---|---|---|
+| --- | --- | --- |
 | `project_name` | Project/package name | `my-app` |
 | `owner` | GitHub owner | `avishj` |
 | `description` | One-line summary | `A modern Astro + React app.` |
@@ -57,7 +63,7 @@ Branch 2 currently scaffolds:
 
 ```bash
 git clone https://github.com/avishj/blueprints /tmp/blueprints
-uvx copier copy /tmp/blueprints/stacks/astro-ts-react my-project \
+uvx copier@9.14.3 copy /tmp/blueprints/stacks/astro-ts-react my-project \
   --trust \
   --data project_name=my-app \
   --data owner=avishj \
