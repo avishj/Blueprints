@@ -31,10 +31,10 @@ GIT_AUTHOR_EMAIL = "blueprints-verify@users.noreply.github.com"
 # --- shared helpers ---
 
 
-def gh(*args: str, parse_json: bool = False) -> Any:
-    """Run ``gh`` with ``args``; return stdout (parsed as JSON when requested)."""
+def gh(*args: str) -> Any:
+    """Run ``gh`` with ``args``; return stdout."""
     proc = subprocess.run(["gh", *args], check=True, capture_output=True, text=True)
-    return json.loads(proc.stdout) if parse_json else proc.stdout
+    return proc.stdout
 
 
 def git(*args: str, cwd: Path | None = None) -> str:
@@ -85,11 +85,10 @@ def cmd_wait(args: argparse.Namespace) -> int:
 
     runs: list[dict[str, Any]] = []
     while True:
-        runs = gh(
+        runs = json.loads(gh(
             "run", "list", "--repo", repo, "--commit", args.sha,
             "--json", "databaseId,status,conclusion,name,url",
-            parse_json=True,
-        )
+        ))
         elapsed = time.time() - started
         all_done = runs and all(r["status"] == "completed" for r in runs)
         if all_done and elapsed >= args.settle_window:
