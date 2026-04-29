@@ -8,23 +8,7 @@
 # ///
 """Helper for `verify-stack.yml` smoke job orchestration.
 
-This file is *not* a workflow — `.github/workflows/` only loads `*.yml`/`*.yaml`.
-It is invoked from `run:` steps in `verify-stack.yml` via subcommands, and
-centralises the gh CLI subprocess wrapper, `$GITHUB_OUTPUT` writes, and
-`$GITHUB_STEP_SUMMARY` appends so the workflow YAML stays declarative.
-
-Subcommands:
-
-- ``wait``: poll smoke-repo CI runs for a SHA until all complete; mirror
-  outcomes to the job summary; exit non-zero on failure or timeout.
-- ``open-pr``: clone the smoke repo, run the stack's ``verify/trigger.py``,
-  push a verify branch, and open the verify PR. Emits PR metadata as step
-  outputs.
-- ``cleanup``: close the verify PR (deleting its branch) or, if no PR was
-  ever opened, delete the dangling branch ref. Best-effort; never fails.
-- ``comment``: render the smoke summary and idempotently upsert it as a
-  rolling comment on the Blueprints PR (one comment per stack, identified
-  by an HTML marker).
+It is invoked from `run:` steps in `verify-stack.yml` via subcommands.
 """
 
 from __future__ import annotations
