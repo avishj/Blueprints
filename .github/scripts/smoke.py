@@ -46,20 +46,14 @@ def git(*args: str, cwd: Path | None = None) -> str:
 
 
 def set_output(key: str, value: str) -> None:
-    """Append ``key=value`` to ``$GITHUB_OUTPUT`` (no-op outside Actions)."""
-    path = os.environ.get("GITHUB_OUTPUT")
-    if not path:
-        return
-    with open(path, "a", encoding="utf-8") as fh:
+    """Append ``key=value`` to ``$GITHUB_OUTPUT``."""
+    with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
         fh.write(f"{key}={value}\n")
 
 
 def step_summary(markdown: str) -> None:
-    """Append ``markdown`` to ``$GITHUB_STEP_SUMMARY`` (no-op outside Actions)."""
-    path = os.environ.get("GITHUB_STEP_SUMMARY")
-    if not path:
-        return
-    with open(path, "a", encoding="utf-8") as fh:
+    """Append ``markdown`` to ``$GITHUB_STEP_SUMMARY``."""
+    with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as fh:
         fh.write(markdown)
 
 
