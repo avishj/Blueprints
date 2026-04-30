@@ -63,7 +63,6 @@ jobs:
     uses: ./.github/workflows/verify-stack.yml
     with:
       stack: ${{ matrix.stack }}
-      ref: ${{ github.event.pull_request.head.sha || github.sha }}
     permissions:
       pull-requests: write  # smoke job posts rolling comment on the PR
     secrets:

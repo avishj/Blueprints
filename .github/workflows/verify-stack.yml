@@ -12,10 +12,6 @@ on:
         description: 'Name of the stack to verify (e.g. python-cli)'
         type: string
         required: true
-      ref:
-        description: 'Git ref to checkout and verify'
-        type: string
-        required: true
     secrets:
       SMOKE_TOKEN:
         description: 'PAT with Contents/PRs R/W on the smoke repo'
@@ -28,34 +24,12 @@ jobs:
     timeout-minutes: 10
     permissions: {}
     steps:
-      - name: Harden runner
-        uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df  # v2.18.0
+      - name: Setup
+        uses: avishj/blueprints/.github/actions/setup@main
         with:
-          egress-policy: audit
-
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-        with:
-          ref: ${{ inputs.ref }}
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
-
-      - name: Install just
-        run: uv tool install rust-just==1.50.0
-
-      - name: Regen template
-        env:
-          STACK: ${{ inputs.stack }}
-        run: |
-          uvx copier@9.14.3 copy \
-            --defaults \
-            --trust \
-            --vcs-ref=HEAD \
-            --data-file "stacks/$STACK/verify/answers.yml" \
-            "stacks/$STACK" \
-            /tmp/out
+          pre-commit: "false"
+          regen: "true"
+          regen-stack: ${{ inputs.stack }}
 
       - name: Run preflight commands
         working-directory: /tmp/out
@@ -82,38 +56,20 @@ jobs:
       group: smoke-${{ inputs.stack }}
       cancel-in-progress: false
     steps:
-      - name: Harden runner
-        uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df  # v2.18.0
+      - name: Setup
+        uses: avishj/blueprints/.github/actions/setup@main
         with:
-          egress-policy: audit
-
-      - name: Checkout
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
-        with:
-          ref: ${{ inputs.ref }}
-          persist-credentials: false
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
-
-      - name: Regen template
-        env:
-          STACK: ${{ inputs.stack }}
-        run: |
-          uvx copier@9.14.3 copy \
-            --defaults \
-            --trust \
-            --vcs-ref=HEAD \
-            --data-file "stacks/$STACK/verify/answers.yml" \
-            "stacks/$STACK" \
-            /tmp/out
+          just: "false"
+          pre-commit: "false"
+          regen: "true"
+          regen-stack: ${{ inputs.stack }}
 
       - name: Force-push regen to smoke main
         id: push
         working-directory: /tmp/out
         env:
           STACK: ${{ inputs.stack }}
-          REF: ${{ inputs.ref }}
+          REF: ${{ github.sha }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
         run: |
           gh auth setup-git
@@ -161,7 +117,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           STACK: ${{ inputs.stack }}
-          REF: ${{ inputs.ref }}
+          REF: ${{ github.sha }}
           PUSH_OUTCOME: ${{ steps.push-ci.outcome }}
           PR_OUTCOME: ${{ steps.pr-ci.outcome }}
           SMOKE_PR_URL: ${{ steps.pr.outputs.url }}
