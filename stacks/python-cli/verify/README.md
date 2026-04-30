@@ -41,7 +41,7 @@ On every Blueprints PR, `verify-stack.yml`:
 ## Troubleshooting
 
 - **Push CI failed**: open the linked run on `avishj/blueprints-smoke-python-cli`. `main` there reflects the last verified PR.
-- **PR CI failed**: same repo, look for the open `verify/<run-id>` PR (closed automatically on success, kept open on failure for triage).
+- **PR CI failed**: open the linked workflow run and use the Blueprints smoke summary comment to jump to the smoke PR URL. Cleanup runs `if: always()`, so the verify PR may already be closed after the run.
 - **Stale verify branches**: cleanup runs `if: always()`, so stale branches mean the cleanup step itself failed — check job logs.
 
 ## PAT rotation
