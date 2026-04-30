@@ -218,7 +218,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p_wait.add_argument(
         "--settle-window",
         type=int,
-        default=30,
+        default=60,
         help="Min seconds before trusting 'all completed' — lets slower runs register.",
     )
     p_wait.set_defaults(func=cmd_wait)
