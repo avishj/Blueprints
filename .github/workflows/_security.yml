@@ -24,6 +24,7 @@ jobs:
           uv: "false"
           just: "false"
           pre-commit: "false"
+          bun: "false"
 
       - name: Run Gitleaks
         uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7  # v2.3.9
@@ -43,6 +44,7 @@ jobs:
           uv: "false"
           just: "false"
           pre-commit: "false"
+          bun: "false"
 
       - name: Run zizmor
         uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e  # v0.5.3

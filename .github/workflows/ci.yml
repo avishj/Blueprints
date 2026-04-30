@@ -41,6 +41,7 @@ jobs:
           uv: "false"
           just: "false"
           pre-commit: "false"
+          bun: "false"
 
       - name: Detect changed stacks
         id: filter
