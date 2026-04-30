@@ -149,16 +149,12 @@ jobs:
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
         run: python .github/scripts/smoke.py --stack "$STACK" wait --sha "$SHA"
 
-      - name: Cleanup verify PR and branch
+      - name: Cleanup verify branch
         if: always()
         env:
           STACK: ${{ inputs.stack }}
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
-          BRANCH: ${{ steps.pr.outputs.branch || format('verify/{0}', github.run_id) }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: >-
-          python .github/scripts/smoke.py --stack "$STACK" cleanup
-          --pr-number "$PR_NUMBER" --branch "$BRANCH"
+        run: python .github/scripts/smoke.py --stack "$STACK" cleanup
 
       - name: Post smoke summary on Blueprints PR
         if: always() && github.event_name == 'pull_request'

@@ -137,27 +137,21 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
         "--title", f"verify: {run_id}",
         "--body", f"Automated verify PR from Blueprints run {run_id}.",
     ).strip()
-    pr_number = pr_url.rsplit("/", 1)[-1]
     sha = git("rev-parse", "HEAD", cwd=clone_dir).strip()
 
-    set_output("number", pr_number)
-    set_output("branch", branch)
     set_output("url", pr_url)
     set_output("sha", sha)
     return 0
 
 
 def cmd_cleanup(args: argparse.Namespace) -> int:
-    """Close the verify PR (or fall back to deleting its branch). Never fails."""
+    """Delete the verify branch (auto-closes its PR). Never fails."""
     repo = smoke_repo(args.stack)
-    if args.pr_number:
-        cmd = ["pr", "close", args.pr_number, "--repo", repo, "--delete-branch"]
-    else:
-        cmd = ["api", "-X", "DELETE", f"repos/{repo}/git/refs/heads/{args.branch}"]
+    branch = f"verify/{os.environ['GITHUB_RUN_ID']}"
     try:
-        gh(*cmd)
+        gh("api", "-X", "DELETE", f"repos/{repo}/git/refs/heads/{branch}")
     except subprocess.CalledProcessError:
-        # Idempotent: PR already closed / branch already deleted is fine.
+        # Idempotent: branch already deleted is fine.
         pass
     return 0
 
@@ -220,9 +214,7 @@ def _build_parser() -> argparse.ArgumentParser:
     p_pr = sub.add_parser("open-pr", help="Open the verify PR on the smoke repo.")
     p_pr.set_defaults(func=cmd_open_pr)
 
-    p_cleanup = sub.add_parser("cleanup", help="Close the verify PR (or delete its branch).")
-    p_cleanup.add_argument("--pr-number", default="", help="Empty when no PR was opened.")
-    p_cleanup.add_argument("--branch", default="", help="Branch name to delete as fallback.")
+    p_cleanup = sub.add_parser("cleanup", help="Delete the verify branch on the smoke repo.")
     p_cleanup.set_defaults(func=cmd_cleanup)
 
     p_comment = sub.add_parser("comment", help="Upsert the smoke summary comment on the Blueprints PR.")
