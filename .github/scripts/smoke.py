@@ -27,6 +27,10 @@ OK_CONCLUSIONS = frozenset({"success", "skipped", "neutral"})
 GIT_AUTHOR_NAME = "blueprints-verify[bot]"
 GIT_AUTHOR_EMAIL = "blueprints-verify@users.noreply.github.com"
 
+WAIT_TIMEOUT_S = 20 * 60
+POLL_INTERVAL_S = 15
+SETTLE_WINDOW_S = 60
+
 
 # --- shared helpers ---
 
@@ -69,7 +73,7 @@ def cmd_wait(args: argparse.Namespace) -> int:
     """Poll smoke-repo CI for a SHA until all runs complete; mirror to job summary."""
     repo = smoke_repo(args.stack)
     label = "PR" if args.kind == "pr" else "push"
-    deadline = time.time() + args.timeout
+    deadline = time.time() + WAIT_TIMEOUT_S
     started = time.time()
 
     runs: list[dict[str, Any]] = []
@@ -80,7 +84,7 @@ def cmd_wait(args: argparse.Namespace) -> int:
         ))
         elapsed = time.time() - started
         all_done = runs and all(r["status"] == "completed" for r in runs)
-        if all_done and elapsed >= args.settle_window:
+        if all_done and elapsed >= SETTLE_WINDOW_S:
             break
         if time.time() > deadline:
             print(
@@ -88,7 +92,7 @@ def cmd_wait(args: argparse.Namespace) -> int:
                 file=sys.stderr,
             )
             return 1
-        time.sleep(args.poll_interval)
+        time.sleep(POLL_INTERVAL_S)
 
     summary = [f"## Smoke {label} CI ({repo}@{args.sha[:7]})\n\n"]
     for r in runs:
@@ -213,14 +217,6 @@ def _build_parser() -> argparse.ArgumentParser:
     p_wait = sub.add_parser("wait", help="Wait for smoke-repo CI runs to complete.")
     p_wait.add_argument("--sha", required=True)
     p_wait.add_argument("--kind", choices=("push", "pr"), required=True)
-    p_wait.add_argument("--timeout", type=int, default=20 * 60, help="Seconds.")
-    p_wait.add_argument("--poll-interval", type=int, default=15, help="Seconds.")
-    p_wait.add_argument(
-        "--settle-window",
-        type=int,
-        default=60,
-        help="Min seconds before trusting 'all completed' — lets slower runs register.",
-    )
     p_wait.set_defaults(func=cmd_wait)
 
     p_pr = sub.add_parser("open-pr", help="Open the verify PR on the smoke repo.")
