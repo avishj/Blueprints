@@ -136,7 +136,6 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
         "--head", branch,
         "--title", f"verify: {run_id}",
         "--body", f"Automated verify PR from Blueprints run {run_id}.",
-        "--label", "verify",
     ).strip()
     pr_number = pr_url.rsplit("/", 1)[-1]
     sha = git("rev-parse", "HEAD", cwd=clone_dir).strip()
