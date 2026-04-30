@@ -132,7 +132,7 @@ jobs:
           STACK: ${{ inputs.stack }}
           SHA: ${{ steps.push.outputs.sha }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: python .github/scripts/smoke.py --stack "$STACK" wait --kind push --sha "$SHA"
+        run: python .github/scripts/smoke.py --stack "$STACK" wait --sha "$SHA"
 
       - name: Open verify PR on smoke repo
         id: pr
@@ -148,7 +148,7 @@ jobs:
           STACK: ${{ inputs.stack }}
           SHA: ${{ steps.pr.outputs.sha }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: python .github/scripts/smoke.py --stack "$STACK" wait --kind pr --sha "$SHA"
+        run: python .github/scripts/smoke.py --stack "$STACK" wait --sha "$SHA"
 
       - name: Cleanup verify PR and branch
         if: always()

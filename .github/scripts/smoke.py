@@ -72,7 +72,6 @@ def smoke_repo(stack: str) -> str:
 def cmd_wait(args: argparse.Namespace) -> int:
     """Poll smoke-repo CI for a SHA until all runs complete; mirror to job summary."""
     repo = smoke_repo(args.stack)
-    label = "PR" if args.kind == "pr" else "push"
     deadline = time.time() + WAIT_TIMEOUT_S
     started = time.time()
 
@@ -88,13 +87,13 @@ def cmd_wait(args: argparse.Namespace) -> int:
             break
         if time.time() > deadline:
             print(
-                f"::error::timed out waiting for {label} CI on {repo}@{args.sha}",
+                f"::error::timed out waiting for smoke CI on {repo}@{args.sha}",
                 file=sys.stderr,
             )
             return 1
         time.sleep(POLL_INTERVAL_S)
 
-    summary = [f"## Smoke {label} CI ({repo}@{args.sha[:7]})\n\n"]
+    summary = [f"## Smoke CI ({repo}@{args.sha[:7]})\n\n"]
     for r in runs:
         icon = "✅" if r["conclusion"] in OK_CONCLUSIONS else "❌"
         summary.append(f"- {icon} [{r['name']}]({r['url']}) — {r['conclusion']}\n")
@@ -104,7 +103,7 @@ def cmd_wait(args: argparse.Namespace) -> int:
     if failed:
         names = ", ".join(r["name"] for r in failed)
         print(
-            f"::error::{label} CI failures on {repo}@{args.sha}: {names}",
+            f"::error::smoke CI failures on {repo}@{args.sha}: {names}",
             file=sys.stderr,
         )
         return 1
@@ -216,7 +215,6 @@ def _build_parser() -> argparse.ArgumentParser:
 
     p_wait = sub.add_parser("wait", help="Wait for smoke-repo CI runs to complete.")
     p_wait.add_argument("--sha", required=True)
-    p_wait.add_argument("--kind", choices=("push", "pr"), required=True)
     p_wait.set_defaults(func=cmd_wait)
 
     p_pr = sub.add_parser("open-pr", help="Open the verify PR on the smoke repo.")
