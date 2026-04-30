@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+name: Weekly
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  verify-meta:
+    name: Verify Meta
+    uses: ./.github/workflows/verify-meta.yml
+    permissions:
+      security-events: write  # passed through to _security.yml for SARIF upload
