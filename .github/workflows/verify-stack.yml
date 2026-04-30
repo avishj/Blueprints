@@ -138,9 +138,8 @@ jobs:
         id: pr
         env:
           STACK: ${{ inputs.stack }}
-          RUN_ID: ${{ github.run_id }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: python .github/scripts/smoke.py --stack "$STACK" open-pr --run-id "$RUN_ID"
+        run: python .github/scripts/smoke.py --stack "$STACK" open-pr
 
       - name: Wait for smoke PR CI
         id: pr-ci

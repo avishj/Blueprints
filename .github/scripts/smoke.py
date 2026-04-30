@@ -113,7 +113,8 @@ def cmd_wait(args: argparse.Namespace) -> int:
 def cmd_open_pr(args: argparse.Namespace) -> int:
     """Clone smoke repo, run the stack trigger, push a verify branch, open the PR."""
     repo = smoke_repo(args.stack)
-    branch = f"verify/{args.run_id}"
+    run_id = os.environ["GITHUB_RUN_ID"]
+    branch = f"verify/{run_id}"
     workspace = Path(os.environ["GITHUB_WORKSPACE"])
     trigger = workspace / "stacks" / args.stack / "verify" / "trigger.py"
     clone_dir = Path("/tmp/smoke-clone")
@@ -125,7 +126,7 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
     git("switch", "-c", branch, cwd=clone_dir)
     subprocess.run([str(trigger)], cwd=clone_dir, check=True)
     git("add", "-A", cwd=clone_dir)
-    git("commit", "--quiet", "-m", f"verify: trigger run {args.run_id}", cwd=clone_dir)
+    git("commit", "--quiet", "-m", f"verify: trigger run {run_id}", cwd=clone_dir)
     git("push", "--quiet", "--set-upstream", "origin", branch, cwd=clone_dir)
 
     pr_url = gh(
@@ -133,8 +134,8 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
         "--repo", repo,
         "--base", "main",
         "--head", branch,
-        "--title", f"verify: {args.run_id}",
-        "--body", f"Automated verify PR from Blueprints run {args.run_id}.",
+        "--title", f"verify: {run_id}",
+        "--body", f"Automated verify PR from Blueprints run {run_id}.",
         "--label", "verify",
     ).strip()
     pr_number = pr_url.rsplit("/", 1)[-1]
@@ -218,7 +219,6 @@ def _build_parser() -> argparse.ArgumentParser:
     p_wait.set_defaults(func=cmd_wait)
 
     p_pr = sub.add_parser("open-pr", help="Open the verify PR on the smoke repo.")
-    p_pr.add_argument("--run-id", required=True, help="github.run_id of this verify run.")
     p_pr.set_defaults(func=cmd_open_pr)
 
     p_cleanup = sub.add_parser("cleanup", help="Close the verify PR (or delete its branch).")
