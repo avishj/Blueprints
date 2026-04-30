@@ -124,7 +124,8 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
     git("config", "user.name", GIT_AUTHOR_NAME, cwd=clone_dir)
     git("config", "user.email", GIT_AUTHOR_EMAIL, cwd=clone_dir)
     git("switch", "-c", branch, cwd=clone_dir)
-    subprocess.run([str(trigger)], cwd=clone_dir, check=True)
+    trigger_env = {k: v for k, v in os.environ.items() if k not in {"GH_TOKEN", "GITHUB_TOKEN"}}
+    subprocess.run([str(trigger)], cwd=clone_dir, check=True, env=trigger_env)
     git("add", "-A", cwd=clone_dir)
     git("commit", "--quiet", "-m", f"verify: trigger run {run_id}", cwd=clone_dir)
     git("push", "--quiet", "--set-upstream", "origin", branch, cwd=clone_dir)
