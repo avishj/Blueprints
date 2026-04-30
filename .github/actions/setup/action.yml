@@ -1,0 +1,76 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+name: Blueprints Setup
+description: Harden runner, optional checkout, optional toolchain install, and optional copier regen.
+
+inputs:
+  checkout:
+    description: Whether to check out the repository.
+    required: false
+    default: "true"
+  fetch-depth:
+    description: Checkout history depth. Use 0 for full history.
+    required: false
+    default: "1"
+  uv:
+    description: Whether to install uv. Required when just or pre-commit is true.
+    required: false
+    default: "true"
+  just:
+    description: Whether to install just. Requires uv.
+    required: false
+    default: "true"
+  pre-commit:
+    description: Whether to install pre-commit. Requires uv.
+    required: false
+    default: "true"
+  regen:
+    description: Whether to run copier regen against a stack.
+    required: false
+    default: "false"
+  regen-stack:
+    description: Stack to regen (required when regen is true).
+    required: false
+    default: ""
+  regen-pretend:
+    description: Pass --pretend to copier (skips post-scaffold tasks).
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Validate inputs
+      shell: bash
+      env:
+        UV: ${{ inputs.uv }}
+        JUST: ${{ inputs.just }}
+        PRE_COMMIT: ${{ inputs.pre-commit }}
+        REGEN: ${{ inputs.regen }}
+        REGEN_STACK: ${{ inputs.regen-stack }}
+      run: |
+        fail=0
+        if [ "$UV" != "true" ] && { [ "$JUST" = "true" ] || [ "$PRE_COMMIT" = "true" ]; }; then
+          echo "::error::just and pre-commit require uv=true"
+          fail=1
+        fi
+        if [ "$REGEN" = "true" ] && [ -z "$REGEN_STACK" ]; then
+          echo "::error::regen=true requires regen-stack"
+          fail=1
+        fi
+        [ "$fail" = "0" ]
+
+    - name: Harden runner
+      uses: step-security/harden-runner@6c3c2f2c1c457b00c10c4848d6f5491db3b629df  # v2.18.0
+      with:
+        egress-policy: audit
+
+    - name: Checkout
+      if: ${{ inputs.checkout == 'true' }}
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        persist-credentials: false
