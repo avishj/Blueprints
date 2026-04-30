@@ -76,5 +76,6 @@ copyright_holder:
 # --- Post-scaffold tasks ---
 
 _tasks:
+  - "git init -q"
   - "uv sync"
   - "uv run pre-commit install"
