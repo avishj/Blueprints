@@ -42,6 +42,20 @@ Thanks for your interest in contributing!
 - **Keep PRs focused** with one logical change per PR.
 - **Follow existing code style** enforced by CI.
 
+## Verifying changes
+
+Blueprints uses two verification layers:
+
+- **Meta verification** (`.github/workflows/verify-meta.yml`): repo-level security/lint checks plus stack contract validation.
+- **Stack verification** (`.github/workflows/verify-stack.yml`): regenerate changed stacks, run preflight (`just install`, `just lint`, `just build`), then smoke-test via `blueprints-smoke-<stack>` push + PR CI.
+
+Entry workflows:
+
+- `ci.yml`: runs meta checks and dispatches stack verification only for changed stacks.
+- `weekly.yml`: runs meta checks and stack verification for all stacks on a schedule.
+
+For stack-specific contract examples and local repro commands, refer to each stack’s `stacks/<name>/verify/README.md`.
+
 ## Reporting Bugs
 
 Open a [GitHub issue](https://github.com/avishj/blueprints/issues/new) with steps to reproduce.
