@@ -82,12 +82,6 @@ def cmd_wait(args: argparse.Namespace) -> int:
         all_done = runs and all(r["status"] == "completed" for r in runs)
         if all_done and elapsed >= args.settle_window:
             break
-        if not runs and elapsed > args.settle_window * 2:
-            print(
-                f"::error::no workflow runs registered for {label} {args.sha} on {repo}",
-                file=sys.stderr,
-            )
-            return 1
         if time.time() > deadline:
             print(
                 f"::error::timed out waiting for {label} CI on {repo}@{args.sha}",
