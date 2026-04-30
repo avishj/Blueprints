@@ -74,3 +74,33 @@ runs:
       with:
         fetch-depth: ${{ inputs.fetch-depth }}
         persist-credentials: false
+
+    - name: Install uv
+      if: ${{ inputs.uv == 'true' }}
+      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+      with:
+        enable-cache: true
+
+    - name: Install just
+      if: ${{ inputs.just == 'true' }}
+      shell: bash
+      run: uv tool install rust-just==1.50.0
+
+    - name: Install pre-commit
+      if: ${{ inputs.pre-commit == 'true' }}
+      shell: bash
+      run: uv tool install pre-commit==4.6.0
+
+    - name: Install bun
+      uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2.2.0
+
+    - name: Regen template
+      if: ${{ inputs.regen == 'true' }}
+      shell: bash
+      env:
+        STACK: ${{ inputs.regen-stack }}
+        PRETEND: ${{ inputs.regen-pretend }}
+      run: |
+        args=(--defaults --trust --vcs-ref=HEAD --data-file "stacks/$STACK/verify/answers.yml")
+        [ "$PRETEND" = "true" ] && args+=(--pretend)
+        uvx copier@9.14.3 copy "${args[@]}" "stacks/$STACK" /tmp/out
