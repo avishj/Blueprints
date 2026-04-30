@@ -151,11 +151,11 @@ jobs:
         run: python .github/scripts/smoke.py --stack "$STACK" wait --kind pr --sha "$SHA"
 
       - name: Cleanup verify PR and branch
-        if: always() && steps.pr.outputs.branch != ''
+        if: always()
         env:
           STACK: ${{ inputs.stack }}
           PR_NUMBER: ${{ steps.pr.outputs.number }}
-          BRANCH: ${{ steps.pr.outputs.branch }}
+          BRANCH: ${{ steps.pr.outputs.branch || format('verify/{0}', github.run_id) }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
         run: >-
           python .github/scripts/smoke.py --stack "$STACK" cleanup
