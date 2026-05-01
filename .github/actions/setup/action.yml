@@ -57,8 +57,8 @@ runs:
         REGEN_STACK: ${{ inputs.regen-stack }}
       run: |
         fail=0
-        if [ "$UV" != "true" ] && { [ "$JUST" = "true" ] || [ "$PRE_COMMIT" = "true" ]; }; then
-          echo "::error::just and pre-commit require uv=true"
+        if [ "$UV" != "true" ] && { [ "$JUST" = "true" ] || [ "$PRE_COMMIT" = "true" ] || [ "$REGEN" = "true" ]; }; then
+          echo "::error::just, pre-commit, and regen require uv=true"
           fail=1
         fi
         if [ "$REGEN" = "true" ] && [ -z "$REGEN_STACK" ]; then
