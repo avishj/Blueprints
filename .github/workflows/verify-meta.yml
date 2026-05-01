@@ -1,0 +1,161 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+name: Verify Meta
+
+on:
+  workflow_call:
+
+permissions: {}
+
+jobs:
+  meta-security:
+    name: Meta Security
+    uses: ./.github/workflows/_security.yml
+    permissions:
+      security-events: write  # passed to _security.yml for SARIF upload
+
+  meta-lint:
+    name: Meta Lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: {}
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/.github/actions/setup@main
+        with:
+          just: "false"
+          pre-commit: "false"
+          bun: "false"
+
+      - name: Spell check
+        uses: crate-ci/typos@cf5f1c29a8ac336af8568821ec41919923b05a83  # v1.45.1
+
+      - name: Check links
+        if: '!cancelled()'
+        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411  # v2.8.0
+        with:
+          args: --exclude-path 'stacks/[^/]+/template' '**/*.md'
+          fail: true
+          jobSummary: true
+
+      - name: Validate schemas
+        if: '!cancelled()'
+        run: |
+          uvx check-jsonschema@0.37.1 --builtin-schema vendor.renovate renovate.json
+          uvx check-jsonschema@0.37.1 --builtin-schema vendor.github-workflows .github/workflows/*.yml
+          uvx check-jsonschema@0.37.1 --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
+
+      - name: YAML lint
+        if: '!cancelled()'
+        run: >-
+          uvx yamllint@1.38.0
+          -d '{extends: default, rules: {line-length: disable, truthy: disable}, ignore: "stacks/*/template/**"}'
+          .
+
+      - name: Run actionlint
+        if: '!cancelled()'
+        uses: raven-actions/actionlint@205b530c5d9fa8f44ae9ed59f341a0db994aa6f8  # v2.1.2
+        with:
+          matcher: true
+          shellcheck: true
+          flags: "-color"
+
+      # TODO: remove once raven-actions/actionlint does auto cleanup
+      - name: Clean up actionlint artifacts
+        if: '!cancelled()'
+        run: rm -rf node_modules package-lock.json
+
+      - name: Lint Markdown
+        if: '!cancelled()'
+        uses: DavidAnson/markdownlint-cli2-action@ce4853d43830c74c1753b39f3cf40f71c2031eb9  # v23.0.0
+
+  stack-contract:
+    name: Stack Contract (${{ matrix.stack }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: {}
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [astro-ts-react, python-cli]
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/.github/actions/setup@main
+        with:
+          just: "false"
+          pre-commit: "false"
+          regen: "true"
+          regen-stack: ${{ matrix.stack }}
+          regen-pretend: "true"
+          bun: "false"
+
+      - name: Validate stack contract
+        env:
+          STACK: ${{ matrix.stack }}
+        run: |
+          uv run --with pyyaml python <<'PY'
+          import os
+          import sys
+          from pathlib import Path
+
+          import yaml
+
+
+          stack_dir = Path("stacks") / os.environ["STACK"]
+          copier_path = stack_dir / "copier.yml"
+          shebang = "#!/usr/bin/env -S uv run --script"
+          errors: list[str] = []
+
+          def report(path: Path, message: str) -> None:
+              location = path.as_posix()
+              errors.append(f"::error file={location}::{location}: {message}")
+
+          for relative_path in (
+              "copier.yml",
+              "template",
+              "README.md",
+              "VERIFICATION.md",
+              "verify/answers.yml",
+              "verify/trigger.py",
+              "verify/README.md",
+          ):
+              path = stack_dir / relative_path
+              if not path.exists():
+                  report(path, "missing required file")
+
+          trigger_path = stack_dir / "verify/trigger.py"
+          if trigger_path.exists():
+              content = trigger_path.read_text(encoding="utf-8")
+              for message, valid in (
+                  ("script must be executable", os.access(trigger_path, os.X_OK)),
+                  ("script must start with the uv shebang", content.startswith(shebang)),
+                  ("script must include a PEP 723 block", "# /// script" in content),
+              ):
+                  if not valid:
+                      report(trigger_path, message)
+
+          if copier_path.exists():
+              content = copier_path.read_text(encoding="utf-8")
+              if "_subdirectory: template" not in content:
+                  report(copier_path, "_subdirectory must be 'template'")
+              if "_min_copier_version:" not in content:
+                  report(copier_path, "_min_copier_version is required")
+
+              data = yaml.safe_load(content) or {}
+              if not isinstance(data, dict):
+                  report(copier_path, "copier.yml must be a mapping")
+              else:
+                  for question_name, question in data.items():
+                      if question_name.startswith("_") or not isinstance(question, dict):
+                          continue
+                      for field in ("help", "type"):
+                          if field not in question:
+                              report(copier_path, f"question '{question_name}' is missing {field}")
+
+          if errors:
+              print("\n".join(errors))
+          sys.exit(1 if errors else 0)
+          PY

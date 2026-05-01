@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
 _subdirectory: template
 _templates_suffix: ".jinja"
 _min_copier_version: "9.14.1"
@@ -54,6 +59,7 @@ module_name:
   type: str
   default: "{{ project_name | lower | replace('-', '_') }}"
   when: false
+  help: "Derived Python module name"
   validator: "{% if not module_name.isidentifier() %}project_name '{{ project_name }}' produces an invalid Python identifier — must start with a letter or underscore and contain only letters, digits, underscores, or hyphens (hyphens are converted to underscores){% endif %}"
 
 env_prefix:
@@ -70,5 +76,6 @@ copyright_holder:
 # --- Post-scaffold tasks ---
 
 _tasks:
+  - "git init -q"
   - "uv sync"
-  - "pre-commit install"
+  - "uv run pre-commit install"

@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+
+SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # Astro TS React
 
 ## What is this stack for?
@@ -30,7 +36,7 @@ This stack is a Copier template.
 
 ```bash
 git clone https://github.com/avishj/blueprints /tmp/blueprints
-uvx copier copy /tmp/blueprints/stacks/astro-ts-react my-project --trust
+uvx copier@9.14.3 copy /tmp/blueprints/stacks/astro-ts-react my-project --trust
 rm -rf /tmp/blueprints
 ```
 

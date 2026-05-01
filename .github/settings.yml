@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+repository:
+  name: blueprints
+  description: Production-ready project templates powered by Copier
+  homepage: https://github.com/avishj/blueprints
+  topics: copier, templates, blueprints, python, astro, react
+
+  private: false
+  has_issues: true
+  has_projects: false
+  has_wiki: false
+
+  default_branch: main
+
+  allow_squash_merge: false
+  allow_merge_commit: true
+  allow_rebase_merge: false
+  allow_auto_merge: false
+  delete_branch_on_merge: false
+
+  enable_automated_security_fixes: true
+  enable_vulnerability_alerts: true
+
+labels:
+  - name: documentation
+    color: "0e8a16"
+    description: "Documentation improvements"
+  - name: ci
+    color: "6f42c1"
+    description: "CI/CD pipeline changes"
+  - name: dependencies
+    color: "0366d6"
+    description: "Dependency updates"
+  - name: "stack: python-cli"
+    color: "3776ab"
+    description: "Changes to the python-cli stack"
+  - name: "stack: astro-ts-react"
+    color: "ff5a1f"
+    description: "Changes to the astro-ts-react stack"
+
+branches:
+  - name: main
+    protection:
+      required_pull_request_reviews: null
+
+      required_status_checks:
+        strict: true
+        contexts:
+          - "CI Passed"
+
+      enforce_admins: true
+      required_linear_history: false
+      restrictions: null

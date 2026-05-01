@@ -1,0 +1,133 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+name: Verify Stack
+
+on:
+  workflow_call:
+    inputs:
+      stack:
+        description: 'Name of the stack to verify (e.g. python-cli)'
+        type: string
+        required: true
+    secrets:
+      SMOKE_TOKEN:
+        description: 'PAT with Contents/PRs R/W on the smoke repo'
+        required: true
+
+jobs:
+  preflight:
+    name: Preflight
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions: {}
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/.github/actions/setup@main
+        with:
+          pre-commit: "false"
+          regen: "true"
+          regen-stack: ${{ inputs.stack }}
+          bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}
+
+      - name: Run preflight commands
+        working-directory: /tmp/out
+        run: |
+          git init --quiet
+          git switch -c verify/preflight
+          just install
+          just lint
+          just build
+
+  smoke:
+    name: Smoke
+    needs: preflight
+    # Skip on fork PRs: SMOKE_TOKEN is unavailable to forked workflows.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: smoke  # scopes SMOKE_TOKEN to this job; gate via env protection rules
+    permissions:
+      pull-requests: write  # rolling smoke summary on the Blueprints PR
+    concurrency:
+      group: smoke-${{ inputs.stack }}
+      cancel-in-progress: false
+    steps:
+      - name: Setup
+        uses: avishj/blueprints/.github/actions/setup@main
+        with:
+          just: "false"
+          pre-commit: "false"
+          regen: "true"
+          regen-stack: ${{ inputs.stack }}
+          bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}
+
+      - name: Force-push regen to smoke main
+        id: push
+        working-directory: /tmp/out
+        env:
+          STACK: ${{ inputs.stack }}
+          REF: ${{ github.sha }}
+          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: |
+          gh auth setup-git
+          git init --quiet
+          git config user.name "blueprints-verify[bot]"
+          git config user.email "blueprints-verify@users.noreply.github.com"
+          git add -A
+          git commit --quiet -m "smoke: regen from $REF"
+          git remote add origin "https://github.com/avishj/blueprints-smoke-$STACK.git"
+          git push --force --quiet origin HEAD:main
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for smoke push CI
+        id: push-ci
+        env:
+          STACK: ${{ inputs.stack }}
+          SHA: ${{ steps.push.outputs.sha }}
+          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: python .github/scripts/smoke.py --stack "$STACK" wait --sha "$SHA"
+
+      - name: Open verify PR on smoke repo
+        id: pr
+        env:
+          STACK: ${{ inputs.stack }}
+          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: python .github/scripts/smoke.py --stack "$STACK" open-pr
+
+      - name: Wait for smoke PR CI
+        id: pr-ci
+        env:
+          STACK: ${{ inputs.stack }}
+          SHA: ${{ steps.pr.outputs.sha }}
+          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: python .github/scripts/smoke.py --stack "$STACK" wait --sha "$SHA"
+
+      - name: Cleanup verify branch
+        if: always()
+        env:
+          STACK: ${{ inputs.stack }}
+          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
+        run: python .github/scripts/smoke.py --stack "$STACK" cleanup
+
+      - name: Post smoke summary on Blueprints PR
+        if: always() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STACK: ${{ inputs.stack }}
+          REF: ${{ github.sha }}
+          PUSH_OUTCOME: ${{ steps.push-ci.outcome }}
+          PR_OUTCOME: ${{ steps.pr-ci.outcome }}
+          SMOKE_PR_URL: ${{ steps.pr.outputs.url }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BP_PR: ${{ github.event.pull_request.number }}
+        run: >-
+          python .github/scripts/smoke.py --stack "$STACK" comment
+          --ref "$REF"
+          --push-outcome "$PUSH_OUTCOME" --pr-outcome "$PR_OUTCOME"
+          --smoke-pr-url "$SMOKE_PR_URL" --run-url "$RUN_URL"
+          --blueprints-pr "$BP_PR"

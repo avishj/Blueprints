@@ -67,13 +67,13 @@ docker run --rm docker.io/{{ owner }}/{{ project_name }} --help
 ```bash
 git clone https://github.com/{{ owner }}/{{ project_name }}.git
 cd {{ project_name }}
-uv sync
-pre-commit install
+just install
 ```
 
 ### Common tasks
 
 ```bash
+just install # sync dependencies and install git hooks
 just lint    # run all pre-commit hooks (ruff, ty, complexipy, reuse, etc.)
 just test    # run all tests with coverage
 just build   # build sdist + wheel, twine check, entry point smoke test
@@ -100,7 +100,7 @@ Contributions are welcome. Please open an issue first to discuss what you would 
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feat/my-feature`)
-3. Make your changes and run `just ci` to verify
+3. Run `just install`, make your changes, and run `just ci` to verify
 4. Commit using [conventional commits](https://www.conventionalcommits.org/)
 5. Open a pull request
 

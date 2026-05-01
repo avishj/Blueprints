@@ -1,0 +1,21 @@
+version = 1
+
+[[annotations]]
+path = [
+    "**/*.json",
+    ".github/CODEOWNERS",
+    "AGENTS.md",
+]
+SPDX-FileCopyrightText = "2026 Avish Jha <avish.j@pm.me>"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "stacks/*/template/**"
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Avish Jha <avish.j@pm.me>"
+SPDX-License-Identifier = "AGPL-3.0-or-later"
+
+[[annotations]]
+path = "LICENSES/**"
+SPDX-FileCopyrightText = "Free Software Foundation"
+SPDX-License-Identifier = "AGPL-3.0-or-later"

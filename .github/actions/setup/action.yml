@@ -1,0 +1,111 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+name: Blueprints Setup
+description: Harden runner, optional checkout, optional toolchain install, and optional copier regen.
+
+inputs:
+  checkout:
+    description: Whether to check out the repository.
+    required: false
+    default: "true"
+  fetch-depth:
+    description: Checkout history depth. Use 0 for full history.
+    required: false
+    default: "1"
+  uv:
+    description: Whether to install uv. Required when just or pre-commit is true.
+    required: false
+    default: "true"
+  just:
+    description: Whether to install just. Requires uv.
+    required: false
+    default: "true"
+  pre-commit:
+    description: Whether to install pre-commit. Requires uv.
+    required: false
+    default: "true"
+  bun:
+    description: Whether to install bun.
+    required: false
+    default: "true"
+  regen:
+    description: Whether to run copier regen against a stack.
+    required: false
+    default: "false"
+  regen-stack:
+    description: Stack to regen (required when regen is true).
+    required: false
+    default: ""
+  regen-pretend:
+    description: Pass --pretend to copier (skips post-scaffold tasks).
+    required: false
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    - name: Validate inputs
+      shell: bash
+      env:
+        UV: ${{ inputs.uv }}
+        JUST: ${{ inputs.just }}
+        PRE_COMMIT: ${{ inputs.pre-commit }}
+        REGEN: ${{ inputs.regen }}
+        REGEN_STACK: ${{ inputs.regen-stack }}
+      run: |
+        fail=0
+        if [ "$UV" != "true" ] && { [ "$JUST" = "true" ] || [ "$PRE_COMMIT" = "true" ] || [ "$REGEN" = "true" ]; }; then
+          echo "::error::just, pre-commit, and regen require uv=true"
+          fail=1
+        fi
+        if [ "$REGEN" = "true" ] && [ -z "$REGEN_STACK" ]; then
+          echo "::error::regen=true requires regen-stack"
+          fail=1
+        fi
+        [ "$fail" = "0" ]
+
+    - name: Harden runner
+      uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40  # v2.19.0
+      with:
+        egress-policy: audit
+
+    - name: Checkout
+      if: ${{ inputs.checkout == 'true' }}
+      uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      with:
+        fetch-depth: ${{ inputs.fetch-depth }}
+        persist-credentials: false
+
+    - name: Install uv
+      if: ${{ inputs.uv == 'true' }}
+      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+      with:
+        enable-cache: true
+
+    - name: Install just
+      if: ${{ inputs.just == 'true' }}
+      shell: bash
+      run: uv tool install rust-just==1.50.0
+
+    - name: Install pre-commit
+      if: ${{ inputs.pre-commit == 'true' }}
+      shell: bash
+      run: uv tool install pre-commit==4.6.0
+
+    - name: Install bun
+      if: ${{ inputs.bun == 'true' }}
+      uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6  # v2.2.0
+
+    - name: Regen template
+      if: ${{ inputs.regen == 'true' }}
+      shell: bash
+      env:
+        STACK: ${{ inputs.regen-stack }}
+        PRETEND: ${{ inputs.regen-pretend }}
+      run: |
+        args=(--defaults --trust --vcs-ref=HEAD --data-file "stacks/$STACK/verify/answers.yml")
+        [ "$PRETEND" = "true" ] && args+=(--pretend)
+        uvx copier@9.14.3 copy "${args[@]}" "stacks/$STACK" /tmp/out

@@ -1,0 +1,34 @@
+# SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+---
+name: Weekly
+
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  verify-meta:
+    name: Verify Meta
+    uses: ./.github/workflows/verify-meta.yml
+    permissions:
+      security-events: write  # passed through to _security.yml for SARIF upload
+
+  verify-stack:
+    name: Verify Stack (${{ matrix.stack }})
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [astro-ts-react, python-cli]
+    uses: ./.github/workflows/verify-stack.yml
+    with:
+      stack: ${{ matrix.stack }}
+    permissions:
+      pull-requests: write  # smoke job posts rolling comment on the PR
+    secrets:
+      SMOKE_TOKEN: ${{ secrets.SMOKE_TOKEN }}
