@@ -117,7 +117,7 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
     branch = f"verify/{run_id}"
     workspace = Path(os.environ["GITHUB_WORKSPACE"])
     trigger = workspace / "stacks" / args.stack / "verify" / "trigger.py"
-    clone_dir = Path("/tmp/smoke-clone")
+    clone_dir = Path("/tmp/out")
 
     gh("repo", "clone", repo, str(clone_dir), "--", "--depth", "1")
 
