@@ -12,7 +12,7 @@ install:
     uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 install
 
 lint:
-    uvx pre-commit@4.6.0 run --all-files
+    uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 run --all-files
 
 {% raw %}
 test *args:
@@ -29,7 +29,7 @@ docs:
     uv run zensical serve
 
 ci:
-    uvx pre-commit@4.6.0 run --all-files
+    uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 run --all-files
     uv run pytest --cov --cov-report=term --cov-report=html --cov-fail-under=70 -n auto
     just build
     uv run zensical build
