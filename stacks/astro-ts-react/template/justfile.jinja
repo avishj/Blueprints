@@ -11,19 +11,19 @@ install:
     bun install --frozen-lockfile
 
 lint:
-    bunx astro check
-    bunx tsc --noEmit
+    bunx --bun astro check
+    bunx --bun tsc --noEmit
 
 {% raw %}
 test *args:
-    bunx vitest run {{ args }}
+    bunx --bun vitest run {{ args }}
 {% endraw %}
 
 build:
-    bunx astro build
+    bunx --bun astro build
 
 dev:
-    bunx astro dev
+    bunx --bun astro dev
 
 ci:
     just lint

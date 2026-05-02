@@ -16,15 +16,11 @@ inputs:
     required: false
     default: "1"
   uv:
-    description: Whether to install uv. Required when just or pre-commit is true.
+    description: Whether to install uv. Required when just or regen is true.
     required: false
     default: "true"
   just:
     description: Whether to install just. Requires uv.
-    required: false
-    default: "true"
-  pre-commit:
-    description: Whether to install pre-commit. Requires uv.
     required: false
     default: "true"
   bun:
@@ -52,13 +48,12 @@ runs:
       env:
         UV: ${{ inputs.uv }}
         JUST: ${{ inputs.just }}
-        PRE_COMMIT: ${{ inputs.pre-commit }}
         REGEN: ${{ inputs.regen }}
         REGEN_STACK: ${{ inputs.regen-stack }}
       run: |
         fail=0
-        if [ "$UV" != "true" ] && { [ "$JUST" = "true" ] || [ "$PRE_COMMIT" = "true" ] || [ "$REGEN" = "true" ]; }; then
-          echo "::error::just, pre-commit, and regen require uv=true"
+        if [ "$UV" != "true" ] && { [ "$JUST" = "true" ] || [ "$REGEN" = "true" ]; }; then
+          echo "::error::just and regen require uv=true"
           fail=1
         fi
         if [ "$REGEN" = "true" ] && [ -z "$REGEN_STACK" ]; then
@@ -89,11 +84,6 @@ runs:
       if: ${{ inputs.just == 'true' }}
       shell: bash
       run: uv tool install rust-just==1.50.0
-
-    - name: Install pre-commit
-      if: ${{ inputs.pre-commit == 'true' }}
-      shell: bash
-      run: uv tool install pre-commit==4.6.0
 
     - name: Install bun
       if: ${{ inputs.bun == 'true' }}

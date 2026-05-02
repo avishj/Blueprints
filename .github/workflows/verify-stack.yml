@@ -12,10 +12,6 @@ on:
         description: 'Name of the stack to verify (e.g. python-cli)'
         type: string
         required: true
-    secrets:
-      SMOKE_TOKEN:
-        description: 'PAT with Contents/PRs R/W on the smoke repo'
-        required: true
 
 jobs:
   preflight:
@@ -27,7 +23,6 @@ jobs:
       - name: Setup
         uses: avishj/blueprints/.github/actions/setup@main
         with:
-          pre-commit: "false"
           regen: "true"
           regen-stack: ${{ inputs.stack }}
           bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}
@@ -61,7 +56,6 @@ jobs:
         uses: avishj/blueprints/.github/actions/setup@main
         with:
           just: "false"
-          pre-commit: "false"
           regen: "true"
           regen-stack: ${{ inputs.stack }}
           bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}

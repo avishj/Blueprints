@@ -78,4 +78,4 @@ copyright_holder:
 _tasks:
   - "git init -q"
   - "uv sync"
-  - "uv run pre-commit install"
+  - "uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 install --install-hooks"

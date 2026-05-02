@@ -12,6 +12,5 @@ FROM mcr.microsoft.com/devcontainers/base:2.1.7@sha256:aa263c6fdd7c1bc990eead392
 COPY --from=uv /uv /uvx /usr/local/bin/
 COPY --from=bun /usr/local/bin/bun /usr/local/bin/bunx /usr/local/bin/
 
-# rust-just 1.50.0, pre-commit 4.6.0
-RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.50.0 \
-  && UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install pre-commit==4.6.0
+# rust-just 1.50.0
+RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.50.0
