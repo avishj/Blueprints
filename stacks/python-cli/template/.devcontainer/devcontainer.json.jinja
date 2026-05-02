@@ -2,7 +2,7 @@
   "name": "{{ project_name }} Dev",
   "build": { "dockerfile": "Dockerfile" },
   "updateContentCommand": "uv sync",
-  "postCreateCommand": "uv run pre-commit install",
+  "postCreateCommand": "uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 install",
   "remoteUser": "vscode",
   "forwardPorts": [8000],
   "portsAttributes": {
