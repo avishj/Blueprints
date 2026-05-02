@@ -1,7 +1,7 @@
 {
   "name": "Blueprints Dev",
   "build": { "dockerfile": "Dockerfile" },
-  "postCreateCommand": "pre-commit install --install-hooks",
+  "postCreateCommand": "uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 install --install-hooks",
   "remoteUser": "vscode",
   "customizations": {
     "vscode": {
