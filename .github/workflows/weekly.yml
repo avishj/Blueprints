@@ -30,5 +30,3 @@ jobs:
       stack: ${{ matrix.stack }}
     permissions:
       pull-requests: write  # smoke job posts rolling comment on the PR
-    secrets:
-      SMOKE_TOKEN: ${{ secrets.SMOKE_TOKEN }}

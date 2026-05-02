@@ -12,10 +12,6 @@ on:
         description: 'Name of the stack to verify (e.g. python-cli)'
         type: string
         required: true
-    secrets:
-      SMOKE_TOKEN:
-        description: 'PAT with Contents/PRs R/W on the smoke repo'
-        required: true
 
 jobs:
   preflight:
