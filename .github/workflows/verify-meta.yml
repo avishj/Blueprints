@@ -27,7 +27,6 @@ jobs:
         uses: avishj/blueprints/.github/actions/setup@main
         with:
           just: "false"
-          pre-commit: "false"
           bun: "false"
 
       - name: Spell check
@@ -86,7 +85,6 @@ jobs:
         uses: avishj/blueprints/.github/actions/setup@main
         with:
           just: "false"
-          pre-commit: "false"
           regen: "true"
           regen-stack: ${{ matrix.stack }}
           regen-pretend: "true"

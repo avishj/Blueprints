@@ -27,7 +27,6 @@ jobs:
       - name: Setup
         uses: avishj/blueprints/.github/actions/setup@main
         with:
-          pre-commit: "false"
           regen: "true"
           regen-stack: ${{ inputs.stack }}
           bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}
@@ -61,7 +60,6 @@ jobs:
         uses: avishj/blueprints/.github/actions/setup@main
         with:
           just: "false"
-          pre-commit: "false"
           regen: "true"
           regen-stack: ${{ inputs.stack }}
           bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}

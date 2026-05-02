@@ -23,7 +23,6 @@ jobs:
           fetch-depth: 0
           uv: "false"
           just: "false"
-          pre-commit: "false"
           bun: "false"
 
       - name: Run Gitleaks
@@ -43,7 +42,6 @@ jobs:
         with:
           uv: "false"
           just: "false"
-          pre-commit: "false"
           bun: "false"
 
       - name: Run zizmor
