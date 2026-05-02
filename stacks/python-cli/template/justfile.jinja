@@ -9,7 +9,7 @@ default:
 
 install:
     uv sync --frozen
-    uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 install
+    uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 install --install-hooks
 
 lint:
     uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 run --all-files
