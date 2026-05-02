@@ -358,7 +358,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 - [ ] `name` uses app name (not `myapp`)
 - [ ] `build.dockerfile` points to `Dockerfile` (no community features)
 - [ ] `updateContentCommand` is `uv sync`
-- [ ] `postCreateCommand` is `uv run pre-commit install`
+- [ ] `postCreateCommand` is `uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 install --install-hooks`
 - [ ] `forwardPorts` includes `8000`, `portsAttributes` labels it as `Zensical`
 - [ ] Extensions list matches `.vscode/extensions.json` minus `ms-vscode-remote.remote-containers`
 
@@ -389,7 +389,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 - [ ] `uv sync` — venv created, all deps installed
 - [ ] `uv lock` — `uv.lock` generated
-- [ ] `pre-commit install` — pre-commit and commit-msg hooks active
+- [ ] `pre-commit install --install-hooks` — pre-commit and commit-msg hooks active and hook environments are prebuilt
 
 **Quality gates (via justfile):**
 
