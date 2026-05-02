@@ -389,7 +389,7 @@ SPDX-License-Identifier: AGPL-3.0-or-later
 
 - [ ] `uv sync` — venv created, all deps installed
 - [ ] `uv lock` — `uv.lock` generated
-- [ ] `pre-commit install --install-hooks` — pre-commit and commit-msg hooks active and hook environments are prebuilt
+- [ ] `uvx --with pre-commit-uv==4.2.1 pre-commit@4.6.0 install --install-hooks` — pre-commit and commit-msg hooks active and hook environments are prebuilt
 
 **Quality gates (via justfile):**
 
