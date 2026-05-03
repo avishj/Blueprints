@@ -60,13 +60,6 @@ jobs:
           regen-stack: ${{ inputs.stack }}
           bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}
 
-      - name: Debug smoke env wiring
-        env:
-          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: |
-          echo "len=${#GH_TOKEN}"
-          echo "non_empty=$([ -n "$GH_TOKEN" ] && echo yes || echo no)"
-
       - name: Force-push regen to smoke main
         id: push
         working-directory: /tmp/out
