@@ -68,7 +68,7 @@ jobs:
           REF: ${{ github.sha }}
           GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
         run: |
-          gh auth setup-git
+          gh auth setup-git --hostname github.com --force
           git init --quiet
           git config user.name "blueprints-verify[bot]"
           git config user.email "blueprints-verify@users.noreply.github.com"
