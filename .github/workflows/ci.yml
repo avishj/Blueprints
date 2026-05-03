@@ -63,6 +63,7 @@ jobs:
     uses: ./.github/workflows/verify-stack.yml
     with:
       stack: ${{ matrix.stack }}
+    secrets: inherit  # required for env-scoped SMOKE_TOKEN to resolve in the called workflow
     permissions:
       pull-requests: write  # smoke job posts rolling comment on the PR
 
