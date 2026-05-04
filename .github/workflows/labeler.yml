@@ -24,7 +24,7 @@ jobs:
       pull-requests: write  # labeler adds/removes labels
     steps:
       - name: Setup
-        uses: avishj/blueprints/.github/actions/setup@main
+        uses: avishj/blueprints/.github/actions/setup@c07f64f83832b1f9e1fe0673b34396c31e34bf7d  # main
         with:
           checkout: "false"
           uv: "false"
