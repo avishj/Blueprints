@@ -24,7 +24,7 @@ jobs:
     permissions: {}
     steps:
       - name: Setup
-        uses: avishj/blueprints/.github/actions/setup@main
+        uses: avishj/blueprints/.github/actions/setup@c07f64f83832b1f9e1fe0673b34396c31e34bf7d  # main
         with:
           just: "false"
           bun: "false"
@@ -82,7 +82,7 @@ jobs:
         stack: [astro-ts-react, python-cli]
     steps:
       - name: Setup
-        uses: avishj/blueprints/.github/actions/setup@main
+        uses: avishj/blueprints/.github/actions/setup@c07f64f83832b1f9e1fe0673b34396c31e34bf7d  # main
         with:
           just: "false"
           regen: "true"

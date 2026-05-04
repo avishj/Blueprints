@@ -6,10 +6,14 @@
 name: PR Labeler
 
 on:
-  pull_request_target:
+  pull_request:
     types: [opened, synchronize, reopened]
 
 permissions: {}
+
+concurrency:
+  group: labeler-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 jobs:
   label:
@@ -17,10 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
-      pull-requests: write
+      pull-requests: write  # labeler adds/removes labels
     steps:
       - name: Setup
-        uses: avishj/blueprints/.github/actions/setup@main
+        uses: avishj/blueprints/.github/actions/setup@c07f64f83832b1f9e1fe0673b34396c31e34bf7d  # main
         with:
           checkout: "false"
           uv: "false"
