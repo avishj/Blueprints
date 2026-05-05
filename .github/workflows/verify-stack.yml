@@ -33,6 +33,7 @@ jobs:
           git init --quiet
           git switch -c verify/preflight
           just install
+          git add -A
           just lint
           just build
 
