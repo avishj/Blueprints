@@ -24,6 +24,7 @@ copier copy --defaults --vcs-ref=HEAD \
   stacks/python-cli /tmp/python-cli-out
 cd /tmp/python-cli-out
 git init --quiet && git switch -c verify/preflight
+git add -A
 just install && just lint && just build
 ```
 
