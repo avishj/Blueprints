@@ -61,7 +61,6 @@ jobs:
           bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}
 
       - name: Force-push regen to smoke main
-        id: push
         working-directory: /tmp/out
         env:
           STACK: ${{ inputs.stack }}
@@ -76,15 +75,6 @@ jobs:
           git commit --quiet -m "smoke: regen from $REF"
           git remote add origin "https://github.com/avishj/blueprints-smoke-$STACK.git"
           git push --force --quiet origin HEAD:main
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-      - name: Wait for smoke push CI
-        id: push-ci
-        env:
-          STACK: ${{ inputs.stack }}
-          SHA: ${{ steps.push.outputs.sha }}
-          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: python .github/scripts/smoke.py --stack "$STACK" wait --sha "$SHA"
 
       - name: Open verify PR on smoke repo
         id: pr
@@ -114,7 +104,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           STACK: ${{ inputs.stack }}
           REF: ${{ github.sha }}
-          PUSH_OUTCOME: ${{ steps.push-ci.outcome }}
           PR_OUTCOME: ${{ steps.pr-ci.outcome }}
           SMOKE_PR_URL: ${{ steps.pr.outputs.url }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -122,6 +111,6 @@ jobs:
         run: >-
           python .github/scripts/smoke.py --stack "$STACK" comment
           --ref "$REF"
-          --push-outcome "$PUSH_OUTCOME" --pr-outcome "$PR_OUTCOME"
+          --pr-outcome "$PR_OUTCOME"
           --smoke-pr-url "$SMOKE_PR_URL" --run-url "$RUN_URL"
           --blueprints-pr "$BP_PR"
