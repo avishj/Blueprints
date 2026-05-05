@@ -169,7 +169,6 @@ def cmd_comment(args: argparse.Namespace) -> int:
         marker,
         f"### Smoke: `{args.stack}`",
         "",
-        f"- {_outcome_icon(args.push_outcome)} push CI",
         f"- {_outcome_icon(args.pr_outcome)} PR CI",
         "",
         f"Verify run: {args.run_url}",
@@ -220,7 +219,6 @@ def _build_parser() -> argparse.ArgumentParser:
 
     p_comment = sub.add_parser("comment", help="Upsert the smoke summary comment on the Blueprints PR.")
     p_comment.add_argument("--ref", required=True)
-    p_comment.add_argument("--push-outcome", required=True, help="steps.push-ci.outcome")
     p_comment.add_argument("--pr-outcome", required=True, help="steps.pr-ci.outcome")
     p_comment.add_argument("--smoke-pr-url", default="", help="Empty when no PR was opened.")
     p_comment.add_argument("--run-url", required=True, help="URL of this verify run.")
