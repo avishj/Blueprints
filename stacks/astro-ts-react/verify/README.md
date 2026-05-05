@@ -24,6 +24,7 @@ copier copy --defaults --vcs-ref=HEAD \
   stacks/astro-ts-react /tmp/astro-ts-react-out
 cd /tmp/astro-ts-react-out
 git init --quiet && git switch -c verify/preflight
+git add -A
 just install && just lint && just build
 ```
 
