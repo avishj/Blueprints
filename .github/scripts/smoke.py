@@ -24,9 +24,6 @@ from typing import Any
 
 OK_CONCLUSIONS = frozenset({"success", "skipped", "neutral"})
 
-GIT_AUTHOR_NAME = "blueprints-verify[bot]"
-GIT_AUTHOR_EMAIL = "blueprints-verify@users.noreply.github.com"
-
 WAIT_TIMEOUT_S = 20 * 60
 POLL_INTERVAL_S = 15
 SETTLE_WINDOW_S = 60
@@ -111,24 +108,22 @@ def cmd_wait(args: argparse.Namespace) -> int:
 
 
 def cmd_open_pr(args: argparse.Namespace) -> int:
-    """Clone smoke repo, run the stack trigger, push a verify branch, open the PR."""
+    """Branch off the just-pushed regen, run the stack trigger, open the PR."""
     repo = smoke_repo(args.stack)
     run_id = os.environ["GITHUB_RUN_ID"]
     branch = f"verify/{run_id}"
     workspace = Path(os.environ["GITHUB_WORKSPACE"])
     trigger = workspace / "stacks" / args.stack / "verify" / "trigger.py"
-    clone_dir = Path("/tmp/out")
+    # /tmp/out already holds the regen tree pushed to smoke `main` by the
+    # previous workflow step, so we reuse it instead of recloning.
+    repo_dir = Path("/tmp/out")
 
-    gh("repo", "clone", repo, str(clone_dir), "--", "--depth", "1")
-
-    git("config", "user.name", GIT_AUTHOR_NAME, cwd=clone_dir)
-    git("config", "user.email", GIT_AUTHOR_EMAIL, cwd=clone_dir)
-    git("switch", "-c", branch, cwd=clone_dir)
+    git("switch", "-c", branch, cwd=repo_dir)
     trigger_env = {k: v for k, v in os.environ.items() if k not in {"GH_TOKEN", "GITHUB_TOKEN"}}
-    subprocess.run([str(trigger)], cwd=clone_dir, check=True, env=trigger_env)
-    git("add", "-A", cwd=clone_dir)
-    git("commit", "--quiet", "-m", f"verify: trigger run {run_id}", cwd=clone_dir)
-    git("push", "--quiet", "--set-upstream", "origin", branch, cwd=clone_dir)
+    subprocess.run([str(trigger)], cwd=repo_dir, check=True, env=trigger_env)
+    git("add", "-A", cwd=repo_dir)
+    git("commit", "--quiet", "-m", f"verify: trigger run {run_id}", cwd=repo_dir)
+    git("push", "--quiet", "--set-upstream", "origin", branch, cwd=repo_dir)
 
     pr_url = gh(
         "pr", "create",
@@ -138,7 +133,7 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
         "--title", f"verify: {run_id}",
         "--body", f"Automated verify PR from Blueprints run {run_id}.",
     ).strip()
-    sha = git("rev-parse", "HEAD", cwd=clone_dir).strip()
+    sha = git("rev-parse", "HEAD", cwd=repo_dir).strip()
 
     set_output("url", pr_url)
     set_output("sha", sha)
