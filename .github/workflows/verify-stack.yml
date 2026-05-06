@@ -73,6 +73,18 @@ jobs:
           git config user.name "blueprints-verify[bot]"
           git config user.email "blueprints-verify@users.noreply.github.com"
           rm -f .github/settings.yml
+          if [ -e lychee.toml ]; then
+            echo "::error::Generated project already contains lychee.toml; refusing to overwrite smoke-only config"
+            exit 1
+          fi
+          cat > lychee.toml <<EOF
+          # Smoke repos do not publish docs or container artifacts.
+          exclude = [
+              '^https://avishj\.github\.io/blueprints-smoke-${STACK}(/.*)?$',
+              '^https://github\.com/avishj/blueprints-smoke-${STACK}/pkgs/container/blueprints-smoke-${STACK}(/.*)?$',
+              '^https://hub\.docker\.com/r/avishj/blueprints-smoke-${STACK}(/.*)?$',
+          ]
+          EOF
           git add -A
           git commit --quiet -s -m "chore: smoke regen from $REF"
           git remote add origin "https://github.com/avishj/blueprints-smoke-$STACK.git"
