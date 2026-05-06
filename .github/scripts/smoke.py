@@ -122,7 +122,7 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
     trigger_env = {k: v for k, v in os.environ.items() if k not in {"GH_TOKEN", "GITHUB_TOKEN"}}
     subprocess.run([str(trigger)], cwd=repo_dir, check=True, env=trigger_env)
     git("add", "-A", cwd=repo_dir)
-    git("commit", "--quiet", "-m", f"verify: trigger run {run_id}", cwd=repo_dir)
+    git("commit", "--quiet", "-m", f"chore: trigger verify run {run_id}", cwd=repo_dir)
     git("push", "--quiet", "--set-upstream", "origin", branch, cwd=repo_dir)
 
     pr_url = gh(
