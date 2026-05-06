@@ -24,9 +24,6 @@ from typing import Any
 
 OK_CONCLUSIONS = frozenset({"success", "skipped", "neutral"})
 
-GIT_AUTHOR_NAME = "blueprints-verify[bot]"
-GIT_AUTHOR_EMAIL = "blueprints-verify@users.noreply.github.com"
-
 WAIT_TIMEOUT_S = 20 * 60
 POLL_INTERVAL_S = 15
 SETTLE_WINDOW_S = 60
@@ -75,11 +72,10 @@ def cmd_wait(args: argparse.Namespace) -> int:
     deadline = time.time() + WAIT_TIMEOUT_S
     started = time.time()
 
-    runs: list[dict[str, Any]] = []
     while True:
         runs = json.loads(gh(
             "run", "list", "--repo", repo, "--commit", args.sha,
-            "--json", "databaseId,status,conclusion,name,url",
+            "--json", "status,conclusion,name,url",
         ))
         elapsed = time.time() - started
         all_done = runs and all(r["status"] == "completed" for r in runs)
@@ -111,24 +107,22 @@ def cmd_wait(args: argparse.Namespace) -> int:
 
 
 def cmd_open_pr(args: argparse.Namespace) -> int:
-    """Clone smoke repo, run the stack trigger, push a verify branch, open the PR."""
+    """Branch off the just-pushed regen, run the stack trigger, open the PR."""
     repo = smoke_repo(args.stack)
     run_id = os.environ["GITHUB_RUN_ID"]
     branch = f"verify/{run_id}"
     workspace = Path(os.environ["GITHUB_WORKSPACE"])
     trigger = workspace / "stacks" / args.stack / "verify" / "trigger.py"
-    clone_dir = Path("/tmp/out")
+    # /tmp/out already holds the regen tree pushed to smoke `main` by the
+    # previous workflow step, so we reuse it instead of recloning.
+    repo_dir = Path("/tmp/out")
 
-    gh("repo", "clone", repo, str(clone_dir), "--", "--depth", "1")
-
-    git("config", "user.name", GIT_AUTHOR_NAME, cwd=clone_dir)
-    git("config", "user.email", GIT_AUTHOR_EMAIL, cwd=clone_dir)
-    git("switch", "-c", branch, cwd=clone_dir)
+    git("switch", "-c", branch, cwd=repo_dir)
     trigger_env = {k: v for k, v in os.environ.items() if k not in {"GH_TOKEN", "GITHUB_TOKEN"}}
-    subprocess.run([str(trigger)], cwd=clone_dir, check=True, env=trigger_env)
-    git("add", "-A", cwd=clone_dir)
-    git("commit", "--quiet", "-m", f"verify: trigger run {run_id}", cwd=clone_dir)
-    git("push", "--quiet", "--set-upstream", "origin", branch, cwd=clone_dir)
+    subprocess.run([str(trigger)], cwd=repo_dir, check=True, env=trigger_env)
+    git("add", "-A", cwd=repo_dir)
+    git("commit", "--quiet", "-s", "-m", f"chore: trigger verify run {run_id}", cwd=repo_dir)
+    git("push", "--quiet", "--set-upstream", "origin", branch, cwd=repo_dir)
 
     pr_url = gh(
         "pr", "create",
@@ -138,7 +132,7 @@ def cmd_open_pr(args: argparse.Namespace) -> int:
         "--title", f"verify: {run_id}",
         "--body", f"Automated verify PR from Blueprints run {run_id}.",
     ).strip()
-    sha = git("rev-parse", "HEAD", cwd=clone_dir).strip()
+    sha = git("rev-parse", "HEAD", cwd=repo_dir).strip()
 
     set_output("url", pr_url)
     set_output("sha", sha)
@@ -157,10 +151,6 @@ def cmd_cleanup(args: argparse.Namespace) -> int:
     return 0
 
 
-def _outcome_icon(outcome: str) -> str:
-    return "✅" if outcome == "success" else "❌"
-
-
 def cmd_comment(args: argparse.Namespace) -> int:
     """Render and idempotently upsert the rolling smoke comment on the Blueprints PR."""
     repo = os.environ["GITHUB_REPOSITORY"]
@@ -169,8 +159,7 @@ def cmd_comment(args: argparse.Namespace) -> int:
         marker,
         f"### Smoke: `{args.stack}`",
         "",
-        f"- {_outcome_icon(args.push_outcome)} push CI",
-        f"- {_outcome_icon(args.pr_outcome)} PR CI",
+        f"- {'✅' if args.pr_outcome == 'success' else '❌'} PR CI",
         "",
         f"Verify run: {args.run_url}",
         f"Smoke PR: {args.smoke_pr_url or '_not opened_'}",
@@ -220,7 +209,6 @@ def _build_parser() -> argparse.ArgumentParser:
 
     p_comment = sub.add_parser("comment", help="Upsert the smoke summary comment on the Blueprints PR.")
     p_comment.add_argument("--ref", required=True)
-    p_comment.add_argument("--push-outcome", required=True, help="steps.push-ci.outcome")
     p_comment.add_argument("--pr-outcome", required=True, help="steps.pr-ci.outcome")
     p_comment.add_argument("--smoke-pr-url", default="", help="Empty when no PR was opened.")
     p_comment.add_argument("--run-url", required=True, help="URL of this verify run.")

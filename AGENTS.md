@@ -4,4 +4,4 @@
 2. MUST ALWAYS run commands with rtk <command>, every command is guaranteed to be proxied through it including uv, gh, git, etc.
 3. MUST ALWAYS use skill before git add/commit.
 4. MUST ALWAYS add and commit in the same command (both need their own rtk).
-5. Pre-commit failure ALWAYS BLOCKS commit. Fix unless autofixed and retry commit.
+5. Pre-commit failure ALWAYS BLOCKS commit by default. Fix unless autofixed and retry commit. Bypass ONLY when authorized by user.

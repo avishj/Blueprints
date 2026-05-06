@@ -62,7 +62,6 @@ jobs:
           bun: ${{ inputs.stack == 'astro-ts-react' && 'true' || 'false' }}
 
       - name: Force-push regen to smoke main
-        id: push
         working-directory: /tmp/out
         env:
           STACK: ${{ inputs.stack }}
@@ -73,19 +72,27 @@ jobs:
           git init --quiet
           git config user.name "blueprints-verify[bot]"
           git config user.email "blueprints-verify@users.noreply.github.com"
+          rm -f .github/settings.yml
+          if [ -e lychee.toml ]; then
+            echo "::error::Generated project already contains lychee.toml; refusing to overwrite smoke-only config"
+            exit 1
+          fi
+          cat > lychee.toml <<EOF
+          # SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+          #
+          # SPDX-License-Identifier: AGPL-3.0-or-later
+
+          # Smoke repos do not publish docs or container artifacts.
+          exclude = [
+              '^https://avishj\.github\.io/blueprints-smoke-${STACK}(/.*)?$',
+              '^https://github\.com/avishj/blueprints-smoke-${STACK}/pkgs/container/blueprints-smoke-${STACK}(/.*)?$',
+              '^https://hub\.docker\.com/r/avishj/blueprints-smoke-${STACK}(/.*)?$',
+          ]
+          EOF
           git add -A
-          git commit --quiet -m "chore: smoke regen from $REF"
+          git commit --quiet -s -m "chore: smoke regen from $REF"
           git remote add origin "https://github.com/avishj/blueprints-smoke-$STACK.git"
           git push --force --quiet origin HEAD:main
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-      - name: Wait for smoke push CI
-        id: push-ci
-        env:
-          STACK: ${{ inputs.stack }}
-          SHA: ${{ steps.push.outputs.sha }}
-          GH_TOKEN: ${{ secrets.SMOKE_TOKEN }}
-        run: python .github/scripts/smoke.py --stack "$STACK" wait --sha "$SHA"
 
       - name: Open verify PR on smoke repo
         id: pr
@@ -115,7 +122,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           STACK: ${{ inputs.stack }}
           REF: ${{ github.sha }}
-          PUSH_OUTCOME: ${{ steps.push-ci.outcome }}
           PR_OUTCOME: ${{ steps.pr-ci.outcome }}
           SMOKE_PR_URL: ${{ steps.pr.outputs.url }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
@@ -123,6 +129,6 @@ jobs:
         run: >-
           python .github/scripts/smoke.py --stack "$STACK" comment
           --ref "$REF"
-          --push-outcome "$PUSH_OUTCOME" --pr-outcome "$PR_OUTCOME"
+          --pr-outcome "$PR_OUTCOME"
           --smoke-pr-url "$SMOKE_PR_URL" --run-url "$RUN_URL"
           --blueprints-pr "$BP_PR"

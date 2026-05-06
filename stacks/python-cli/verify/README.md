@@ -33,15 +33,14 @@ just install && just lint && just build
 On every Blueprints PR, `verify-stack.yml`:
 
 1. Regenerates the template, initializes a temporary `verify/preflight` git repo, and runs `just install`, `just lint`, `just build`.
-2. Force-pushes the regenerated project to `main` of `blueprints-smoke-python-cli` and waits for that repo's CI.
-3. Opens a trivial PR there using `trigger.py` and waits for PR CI.
+2. Force-pushes the regenerated project to `main` of `blueprints-smoke-python-cli` to reset the baseline (no CI is awaited on this push).
+3. Opens a trivial PR there using `trigger.py` and waits for PR CI — this is the smoke signal.
 4. Posts a summary back to the Blueprints PR.
 
 `weekly.yml` runs the same flow against `main` on a weekly cron to catch drift from upstream changes.
 
 ## Troubleshooting
 
-- **Push CI failed**: open the linked run on `avishj/blueprints-smoke-python-cli`. `main` there reflects the last verified PR.
 - **PR CI failed**: open the linked workflow run and use the Blueprints smoke summary comment to jump to the smoke PR URL. Cleanup runs `if: always()`, so the verify PR may already be closed after the run.
 - **Stale verify branches**: cleanup runs `if: always()`, so stale branches mean the cleanup step itself failed — check job logs.
 
