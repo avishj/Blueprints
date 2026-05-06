@@ -152,10 +152,6 @@ def cmd_cleanup(args: argparse.Namespace) -> int:
     return 0
 
 
-def _outcome_icon(outcome: str) -> str:
-    return "✅" if outcome == "success" else "❌"
-
-
 def cmd_comment(args: argparse.Namespace) -> int:
     """Render and idempotently upsert the rolling smoke comment on the Blueprints PR."""
     repo = os.environ["GITHUB_REPOSITORY"]
@@ -164,7 +160,7 @@ def cmd_comment(args: argparse.Namespace) -> int:
         marker,
         f"### Smoke: `{args.stack}`",
         "",
-        f"- {_outcome_icon(args.pr_outcome)} PR CI",
+        f"- {'✅' if args.pr_outcome == 'success' else '❌'} PR CI",
         "",
         f"Verify run: {args.run_url}",
         f"Smoke PR: {args.smoke_pr_url or '_not opened_'}",
