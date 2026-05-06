@@ -74,7 +74,7 @@ jobs:
           git config user.email "blueprints-verify@users.noreply.github.com"
           rm -f .github/settings.yml
           git add -A
-          git commit --quiet -m "chore: smoke regen from $REF"
+          git commit --quiet -s -m "chore: smoke regen from $REF"
           git remote add origin "https://github.com/avishj/blueprints-smoke-$STACK.git"
           git push --force --quiet origin HEAD:main
 
