@@ -78,6 +78,10 @@ jobs:
             exit 1
           fi
           cat > lychee.toml <<EOF
+          # SPDX-FileCopyrightText: 2026 Avish Jha <avish.j@pm.me>
+          #
+          # SPDX-License-Identifier: AGPL-3.0-or-later
+
           # Smoke repos do not publish docs or container artifacts.
           exclude = [
               '^https://avishj\.github\.io/blueprints-smoke-${STACK}(/.*)?$',
