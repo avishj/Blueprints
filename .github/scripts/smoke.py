@@ -72,7 +72,6 @@ def cmd_wait(args: argparse.Namespace) -> int:
     deadline = time.time() + WAIT_TIMEOUT_S
     started = time.time()
 
-    runs: list[dict[str, Any]] = []
     while True:
         runs = json.loads(gh(
             "run", "list", "--repo", repo, "--commit", args.sha,
