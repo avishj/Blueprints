@@ -76,7 +76,7 @@ def cmd_wait(args: argparse.Namespace) -> int:
     while True:
         runs = json.loads(gh(
             "run", "list", "--repo", repo, "--commit", args.sha,
-            "--json", "databaseId,status,conclusion,name,url",
+            "--json", "status,conclusion,name,url",
         ))
         elapsed = time.time() - started
         all_done = runs and all(r["status"] == "completed" for r in runs)
