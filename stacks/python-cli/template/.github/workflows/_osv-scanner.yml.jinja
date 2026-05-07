@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
@@ -110,7 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main

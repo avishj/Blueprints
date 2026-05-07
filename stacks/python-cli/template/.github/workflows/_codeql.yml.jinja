@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
     strategy:
       fail-fast: false
       matrix:
