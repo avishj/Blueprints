@@ -45,8 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      pages: write
-      id-token: write
+      pages: write  # deploy GitHub Pages
+      id-token: write  # authenticate Pages deploy
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
