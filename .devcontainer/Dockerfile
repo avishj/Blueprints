@@ -11,3 +11,6 @@ FROM mcr.microsoft.com/devcontainers/base:2.1.8-ubuntu24.04@sha256:7ee7da33a68d9
 COPY --from=uv /uv /uvx /usr/local/bin/
 
 USER vscode
+
+HEALTHCHECK --interval=5m --timeout=5s --start-period=10s --retries=3 \
+    CMD uv --version >/dev/null 2>&1 || exit 1

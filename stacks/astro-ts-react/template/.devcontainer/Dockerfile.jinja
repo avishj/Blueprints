@@ -16,3 +16,6 @@ COPY --from=bun /usr/local/bin/bun /usr/local/bin/bunx /usr/local/bin/
 RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.50.0
 
 USER vscode
+
+HEALTHCHECK --interval=5m --timeout=5s --start-period=10s --retries=3 \
+    CMD uv --version >/dev/null 2>&1 && bun --version >/dev/null 2>&1 && just --version >/dev/null 2>&1 || exit 1
