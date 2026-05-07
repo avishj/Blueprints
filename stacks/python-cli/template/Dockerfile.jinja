@@ -39,6 +39,6 @@ USER app
 WORKDIR /app
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
-    CMD {{ project_name }} --version >/dev/null 2>&1 || exit 1
+    CMD {{ project_name }} --version || exit 1
 
 ENTRYPOINT ["{{ project_name }}"]
