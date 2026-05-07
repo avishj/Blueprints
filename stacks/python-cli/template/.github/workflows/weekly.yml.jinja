@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      security-events: write
-      id-token: write
-      actions: read
+      security-events: write  # upload SARIF results
+      id-token: write  # publish Scorecard results
+      actions: read  # read workflow metadata
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
@@ -53,20 +53,20 @@ jobs:
     with:
       image-ref: ghcr.io/${{ github.repository }}:latest
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
 
   security:
     name: Security Scans
     uses: ./.github/workflows/_security.yml
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
     secrets: inherit
 
   codeql:
     name: CodeQL
     uses: ./.github/workflows/_codeql.yml
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
 
   osv-scanner:
     name: OSV-Scanner
@@ -74,5 +74,5 @@ jobs:
     with:
       scan-mode: weekly
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
 {% endraw %}

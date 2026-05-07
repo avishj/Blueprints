@@ -289,7 +289,7 @@ jobs:
     timeout-minutes: 10
     needs: [test]
     permissions:
-      pull-requests: read
+      pull-requests: read  # read PR metadata
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
@@ -353,14 +353,14 @@ jobs:
     name: Security Scans
     uses: ./.github/workflows/_security.yml
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
     secrets: inherit
 
   codeql:
     name: CodeQL
     uses: ./.github/workflows/_codeql.yml
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
 
   osv-scanner:
     name: OSV-Scanner
@@ -369,7 +369,7 @@ jobs:
     with:
       scan-mode: ci
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
 
   dependency-review:
     name: Dependency Review
@@ -377,7 +377,7 @@ jobs:
     timeout-minutes: 10
     if: github.event_name == 'pull_request'
     permissions:
-      pull-requests: write
+      pull-requests: write  # comment dependency summary
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
