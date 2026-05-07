@@ -12,3 +12,5 @@ COPY --from=uv /uv /uvx /usr/local/bin/
 
 # 1.50.0
 RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.50.0
+
+USER vscode
