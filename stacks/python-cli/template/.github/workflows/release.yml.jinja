@@ -58,8 +58,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
-      id-token: write
-      attestations: write
+      id-token: write  # sign provenance
+      attestations: write  # attest distributions
     outputs:
       version: ${{ steps.version.outputs.version }}
     steps:
@@ -128,7 +128,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      id-token: write
+      id-token: write  # publish to PyPI
     environment:
       name: pypi
 {% endraw %}
@@ -158,8 +158,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      id-token: write
-      attestations: write
+      id-token: write  # sign SBOM provenance
+      attestations: write  # attest SBOM
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
@@ -199,9 +199,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
-      packages: write
-      id-token: write
-      attestations: write
+      packages: write  # push GHCR image
+      id-token: write  # sign image provenance
+      attestations: write  # attest container image
     strategy:
       fail-fast: false
       matrix:
@@ -328,7 +328,7 @@ jobs:
     with:
       image-ref: ghcr.io/${{ github.repository }}:${{ needs.build.outputs.version }}
     permissions:
-      security-events: write
+      security-events: write  # upload SARIF results
 
   github-release:
     name: GitHub Release
@@ -344,7 +344,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
-      contents: write
+      contents: write  # create GitHub release
     steps:
       - name: Setup
         uses: avishj/blueprints/stacks/python-cli/actions/setup@main
