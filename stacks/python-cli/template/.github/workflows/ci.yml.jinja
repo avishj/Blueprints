@@ -220,22 +220,28 @@ jobs:
       - name: Set matrix prefix
         id: prefix
         shell: bash
-        run: echo "value=${{ matrix.os }}-py${{ matrix.python-version }}" >> "$GITHUB_OUTPUT"
+        env:
+          MATRIX_OS: ${{ matrix.os }}
+          PYTHON_VERSION: ${{ matrix.python-version }}
+        run: echo "value=${MATRIX_OS}-py${PYTHON_VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: Run unit tests
-        run: uv run pytest -m unit --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-unit.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-unit.xml -n auto
         env:
+          PREFIX: ${{ steps.prefix.outputs.value }}
           COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.unit
+        run: uv run pytest -m unit --cov --cov-report=xml:coverage-"${PREFIX}"-unit.xml --cov-report=term --junitxml=results-"${PREFIX}"-unit.xml -n auto
 
       - name: Run integration tests
-        run: uv run pytest -m integration --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-integration.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-integration.xml -n auto
         env:
+          PREFIX: ${{ steps.prefix.outputs.value }}
           COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.integration
+        run: uv run pytest -m integration --cov --cov-report=xml:coverage-"${PREFIX}"-integration.xml --cov-report=term --junitxml=results-"${PREFIX}"-integration.xml -n auto
 
       - name: Run e2e tests
-        run: uv run pytest -m e2e --cov --cov-report=xml:coverage-${{ steps.prefix.outputs.value }}-e2e.xml --cov-report=term --junitxml=results-${{ steps.prefix.outputs.value }}-e2e.xml -n auto
         env:
+          PREFIX: ${{ steps.prefix.outputs.value }}
           COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.e2e
+        run: uv run pytest -m e2e --cov --cov-report=xml:coverage-"${PREFIX}"-e2e.xml --cov-report=term --junitxml=results-"${PREFIX}"-e2e.xml -n auto
 
       - name: Check combined coverage
         run: |
@@ -402,8 +408,11 @@ jobs:
     permissions: {}
     steps:
       - name: Check results
+        env:
+          HAS_FAILURE: ${{ contains(needs.*.result, 'failure') }}
+          HAS_CANCELLED: ${{ contains(needs.*.result, 'cancelled') }}
         run: |
-          if [[ "${{ contains(needs.*.result, 'failure') }}" == "true" || "${{ contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+          if [[ "${HAS_FAILURE}" == "true" || "${HAS_CANCELLED}" == "true" ]]; then
             echo "::error::One or more jobs failed or were cancelled."
             exit 1
           fi
