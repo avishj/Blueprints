@@ -367,22 +367,26 @@ jobs:
       - name: Verify build attestations
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh attestation verify dist/* --repo "${{ github.repository }}"
+          REPOSITORY: ${{ github.repository }}
+        run: gh attestation verify dist/* --repo "${REPOSITORY}"
 
       - name: Collect image digests
         id: digests
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
+          REPOSITORY: ${{ github.repository }}
         run: |
-          V="${{ needs.build.outputs.version }}"
-          GHCR=$(docker buildx imagetools inspect "ghcr.io/${{ github.repository }}:$V" --format '{{json .Manifest}}' 2>/dev/null | jq -r '.digest // empty')
-          DH=$(curl -sf "https://hub.docker.com/v2/repositories/${{ github.repository }}/tags/$V" | jq -r '.digest // empty' 2>/dev/null)
+          GHCR=$(docker buildx imagetools inspect "ghcr.io/${REPOSITORY}:${VERSION}" --format '{{json .Manifest}}' 2>/dev/null | jq -r '.digest // empty')
+          DH=$(curl -sf "https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${VERSION}" | jq -r '.digest // empty' 2>/dev/null)
           echo "ghcr=${GHCR:-n/a}" >> "$GITHUB_OUTPUT"
           echo "dockerhub=${DH:-n/a}" >> "$GITHUB_OUTPUT"
 
       - name: Extract changelog
         id: changelog
+        env:
+          VERSION: ${{ needs.build.outputs.version }}
         run: |
-          V="${{ needs.build.outputs.version }}"
-          VE=$(printf '%s' "$V" | sed 's/\./\\./g')
+          VE=$(printf '%s' "${VERSION}" | sed 's/\./\\./g')
           awk "/^## .*${VE}([[:space:]]|$)/{found=1; next} /^## /{if(found) exit} found" CHANGELOG.md > notes.md
 
       - name: Generate checksums
@@ -393,11 +397,16 @@ jobs:
       - name: Create GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.build.outputs.version }}
+          REPOSITORY: ${{ github.repository }}
+          REF_NAME: ${{ github.ref_name }}
+          GHCR_DIGEST: ${{ steps.digests.outputs.ghcr }}
+          DOCKERHUB_DIGEST: ${{ steps.digests.outputs.dockerhub }}
         run: |
-          V="${{ needs.build.outputs.version }}"
+          V="${VERSION}"
 
-          GENERATED=$(gh api repos/${{ github.repository }}/releases/generate-notes \
-            -f tag_name="${{ github.ref_name }}" --jq '.body')
+          GENERATED=$(gh api "repos/${REPOSITORY}/releases/generate-notes" \
+            -f tag_name="${REF_NAME}" --jq '.body')
 
           cat >> notes.md <<EOF
 
@@ -423,12 +432,12 @@ jobs:
 
           ## Docker Images
 
-          - \`ghcr.io/${{ github.repository }}@${{ steps.digests.outputs.ghcr }}\`
-          - \`docker.io/${{ github.repository }}@${{ steps.digests.outputs.dockerhub }}\`
+          - \`ghcr.io/${REPOSITORY}@${GHCR_DIGEST}\`
+          - \`docker.io/${REPOSITORY}@${DOCKERHUB_DIGEST}\`
           EOF
 
-          gh release create "${{ github.ref_name }}" \
-            --repo "${{ github.repository }}" \
+          gh release create "${REF_NAME}" \
+            --repo "${REPOSITORY}" \
             --verify-tag \
             --notes-file notes.md \
             dist/* sbom/* SHA256SUMS
