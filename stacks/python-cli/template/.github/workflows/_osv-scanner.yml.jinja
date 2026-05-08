@@ -25,7 +25,7 @@ jobs:
       security-events: write  # upload SARIF results
     steps:
       - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           fetch-depth: 0
           setup-python: "false"
@@ -117,7 +117,7 @@ jobs:
       security-events: write  # upload SARIF results
     steps:
       - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           setup-python: "false"
       - name: Run scanner
