@@ -43,7 +43,7 @@ jobs:
       security-events: write  # upload SARIF results
     steps:
       - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           setup-python: "false"
 
@@ -71,7 +71,7 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           setup-python: "false"
           fetch-depth: 0
@@ -89,7 +89,7 @@ jobs:
       security-events: write  # upload SARIF results
     steps:
       - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           setup-python: "false"
 
