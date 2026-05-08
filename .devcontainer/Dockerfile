@@ -13,4 +13,4 @@ COPY --from=uv /uv /uvx /usr/local/bin/
 USER vscode
 
 HEALTHCHECK --interval=5m --timeout=5s --start-period=10s --retries=3 \
-    CMD uv --version || exit 1
+    CMD uv --version
