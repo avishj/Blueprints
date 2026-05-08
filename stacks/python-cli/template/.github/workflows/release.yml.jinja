@@ -65,7 +65,7 @@ jobs:
       version: ${{ steps.version.outputs.version }}
     steps:
       - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           setup-python: "false"
           fetch-depth: 0
@@ -162,7 +162,7 @@ jobs:
       attestations: write  # attest SBOM
     steps:
       - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           setup-python: "false"
 
@@ -224,7 +224,7 @@ jobs:
 
       - name: Setup
         if: '!steps.skip.outputs.published'
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           setup-python: "false"
 
@@ -347,7 +347,7 @@ jobs:
       contents: write  # create GitHub release
     steps:
       - name: Setup
-        uses: avishj/blueprints/stacks/python-cli/actions/setup@main
+        uses: avishj/blueprints/stacks/python-cli/actions/setup@19bdb966ebc356d5b517946bc707c4d9e07f8361
         with:
           setup-python: "false"
           sparse-checkout: CHANGELOG.md
