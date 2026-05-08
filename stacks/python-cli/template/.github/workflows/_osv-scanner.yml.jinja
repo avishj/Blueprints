@@ -95,9 +95,13 @@ jobs:
           sarif_file: results.sarif
       - name: Print Code Scanning PR URL
         if: ${{ !cancelled() }}
+        env:
+          SERVER_URL: ${{ github.server_url }}
+          REPOSITORY: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           echo "View the OSV-Scanner results for this PR in the 'Security' tab, using the following link:"
-          echo "${{ github.server_url }}/${{ github.repository }}/security/code-scanning?query=pr%3A${{ github.event.pull_request.number }}"
+          echo "${SERVER_URL}/${REPOSITORY}/security/code-scanning?query=pr%3A${PR_NUMBER}"
       - name: Error troubleshooter
         if: ${{ always() && steps.upload_artifact.outcome == 'failure' }}
         run: |
@@ -148,11 +152,13 @@ jobs:
           sarif_file: results.sarif
       - name: Print Code Scanning URL
         if: ${{ !cancelled() }}
+        env:
+          SERVER_URL: ${{ github.server_url }}
+          REPOSITORY: ${{ github.repository }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
         run: |
           echo "View the OSV-Scanner results in the 'Security' tab, using the following link:"
-          echo "${{ github.server_url }}/${{ github.repository }}/security/code-scanning?query=is%3Aopen+branch%3A${GITHUB_REF_NAME}+tool%3Aosv-scanner"
-        env:
-          GITHUB_REF_NAME: ${{ github.ref_name }}
+          echo "${SERVER_URL}/${REPOSITORY}/security/code-scanning?query=is%3Aopen+branch%3A${GITHUB_REF_NAME}+tool%3Aosv-scanner"
       - name: Error troubleshooter
         if: ${{ always() && steps.upload_artifact.outcome == 'failure' }}
         run: |
