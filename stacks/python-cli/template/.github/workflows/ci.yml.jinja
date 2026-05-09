@@ -360,7 +360,6 @@ jobs:
     uses: ./.github/workflows/_security.yml
     permissions:
       security-events: write  # upload SARIF results
-    secrets: inherit
 
   codeql:
     name: CodeQL
