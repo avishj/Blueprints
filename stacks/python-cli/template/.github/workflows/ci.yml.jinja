@@ -229,18 +229,21 @@ jobs:
         env:
           PREFIX: ${{ steps.prefix.outputs.value }}
           COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.unit
+        shell: bash
         run: uv run pytest -m unit --cov --cov-report=xml:coverage-"${PREFIX}"-unit.xml --cov-report=term --junitxml=results-"${PREFIX}"-unit.xml -n auto
 
       - name: Run integration tests
         env:
           PREFIX: ${{ steps.prefix.outputs.value }}
           COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.integration
+        shell: bash
         run: uv run pytest -m integration --cov --cov-report=xml:coverage-"${PREFIX}"-integration.xml --cov-report=term --junitxml=results-"${PREFIX}"-integration.xml -n auto
 
       - name: Run e2e tests
         env:
           PREFIX: ${{ steps.prefix.outputs.value }}
           COVERAGE_FILE: .coverage.${{ steps.prefix.outputs.value }}.e2e
+        shell: bash
         run: uv run pytest -m e2e --cov --cov-report=xml:coverage-"${PREFIX}"-e2e.xml --cov-report=term --junitxml=results-"${PREFIX}"-e2e.xml -n auto
 
       - name: Check combined coverage
