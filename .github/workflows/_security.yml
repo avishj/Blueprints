@@ -52,5 +52,5 @@ jobs:
           min-severity: informational
           min-confidence: low
           version: v1.23.1
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           advanced-security: true
