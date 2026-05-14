@@ -297,6 +297,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: [test]
+    environment: sonarcloud
     permissions:
       pull-requests: read  # read PR metadata
     steps:
