@@ -12,8 +12,8 @@ FROM mcr.microsoft.com/devcontainers/base:2.1.8@sha256:e389149057371298eaeb72e73
 COPY --from=uv /uv /uvx /usr/local/bin/
 COPY --from=bun /usr/local/bin/bun /usr/local/bin/bunx /usr/local/bin/
 
-# rust-just 1.50.0
-RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.50.0
+# rust-just 1.51.0
+RUN UV_TOOL_BIN_DIR=/usr/local/bin UV_TOOL_DIR=/opt/uv-tools uv tool install rust-just==1.51.0
 
 USER vscode
 
