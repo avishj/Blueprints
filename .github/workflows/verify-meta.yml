@@ -43,9 +43,9 @@ jobs:
       - name: Validate schemas
         if: '!cancelled()'
         run: |
-          uvx check-jsonschema@0.37.1 --builtin-schema vendor.renovate renovate.json
-          uvx check-jsonschema@0.37.1 --builtin-schema vendor.github-workflows .github/workflows/*.yml
-          uvx check-jsonschema@0.37.1 --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
+          uvx check-jsonschema@0.37.2 --builtin-schema vendor.renovate renovate.json
+          uvx check-jsonschema@0.37.2 --builtin-schema vendor.github-workflows .github/workflows/*.yml
+          uvx check-jsonschema@0.37.2 --schemafile https://www.schemastore.org/pull-request-labeler.json .github/labeler.yml
 
       - name: YAML lint
         if: '!cancelled()'
