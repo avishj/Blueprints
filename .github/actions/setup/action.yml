@@ -98,4 +98,4 @@ runs:
       run: |
         args=(--defaults --trust --vcs-ref=HEAD --data-file "stacks/$STACK/verify/answers.yml")
         [ "$PRETEND" = "true" ] && args+=(--pretend)
-        uvx copier@9.14.3 copy "${args[@]}" "stacks/$STACK" /tmp/out
+        uvx copier@9.15.1 copy "${args[@]}" "stacks/$STACK" /tmp/out
